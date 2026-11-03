@@ -1,0 +1,15 @@
+accuracy,reaction_time,score,mistakes,games_played,skill_level
+45,1.8,300,15,5,Beginner
+50,1.7,350,14,6,Beginner
+55,1.5,420,12,8,Beginner
+60,1.4,480,11,9,Beginner
+65,1.3,550,10,10,Intermediate
+68,1.2,600,9,12,Intermediate
+72,1.1,650,8,13,Intermediate
+75,1.0,700,7,15,Intermediate
+78,0.9,750,6,16,Intermediate
+80,0.8,800,5,18,Advanced
+85,0.7,850,4,19,Advanced
+88,0.6,900,3,21,Advanced
+92,0.5,1000,2,23,Advanced
+95,0.4,1100,1,25,Advanced

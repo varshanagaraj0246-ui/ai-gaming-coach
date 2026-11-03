@@ -1,1 +1,416 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+    <title>AI Gaming Coach - Game</title>
+
+    <style>
+
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #gameArea {
+            width: 800px;
+            height: 500px;
+            border: 3px solid white;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #player {
+            position: absolute;
+            font-size: 40px;
+            left: 380px;
+            top: 400px;
+        }
+
+        #enemy {
+            position: absolute;
+            font-size: 40px;
+            left: 100px;
+            top: 100px;
+        }
+
+        #bullet {
+            position: absolute;
+            width: 8px;
+            height: 15px;
+            background-color: yellow;
+            display: none;
+        }
+
+        #dashboardButton {
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>🎮 AI Gaming Coach</h1>
+
+    <p>
+        Use ← → ↑ ↓ to move | Press SPACE to shoot
+    </p>
+
+    <p>
+
+        ⭐ Score:
+        <span id="score">0</span>
+
+        &nbsp;&nbsp;&nbsp;
+
+        🔥 Kills:
+        <span id="kills">0</span>
+
+        &nbsp;&nbsp;&nbsp;
+
+        🎯 Shots:
+        <span id="shots">0</span>
+
+        &nbsp;&nbsp;&nbsp;
+
+        📊 Accuracy:
+        <span id="accuracy">0</span>%
+
+    </p>
+
+    <p>
+        ❤️ Health: <span id="health">3</span>
+    </p>
+
+
+    <div id="gameArea">
+
+        <div id="player">🧍</div>
+
+        <div id="enemy">👾</div>
+
+        <div id="bullet"></div>
+
+    </div>
+
+
+    <button id="dashboardButton"
+        onclick="window.location.href='dashboard.html'">
+
+        📊 VIEW MY DASHBOARD
+
+    </button>
+
+
+    <script>
+
+        // Get game elements
+
+        let player = document.getElementById("player");
+
+        let enemy = document.getElementById("enemy");
+
+        let bullet = document.getElementById("bullet");
+
+
+        // Player position
+
+        let x = 380;
+
+        let y = 400;
+
+
+        // Game data
+
+        let score = 0;
+
+        let kills = 0;
+
+        let shots = 0;
+
+        let health = 3;
+
+
+        // Move player
+
+        document.addEventListener("keydown", function(event) {
+
+            if (event.key === "ArrowLeft") {
+
+                x = x - 10;
+
+            }
+
+            if (event.key === "ArrowRight") {
+
+                x = x + 10;
+
+            }
+
+            if (event.key === "ArrowUp") {
+
+                y = y - 10;
+
+            }
+
+            if (event.key === "ArrowDown") {
+
+                y = y + 10;
+
+            }
+
+
+            // Keep player inside game area
+
+            if (x < 0) {
+                x = 0;
+            }
+
+            if (x > 760) {
+                x = 760;
+            }
+
+            if (y < 0) {
+                y = 0;
+            }
+
+            if (y > 460) {
+                y = 460;
+            }
+
+
+            player.style.left = x + "px";
+
+            player.style.top = y + "px";
+
+        });
+
+
+
+        // Enemy follows player
+
+        setInterval(function() {
+
+            let enemyX = parseInt(enemy.style.left);
+
+            let enemyY = parseInt(enemy.style.top);
+
+
+            if (enemyX < x) {
+
+                enemyX = enemyX + 2;
+
+            }
+
+            if (enemyX > x) {
+
+                enemyX = enemyX - 2;
+
+            }
+
+            if (enemyY < y) {
+
+                enemyY = enemyY + 2;
+
+            }
+
+            if (enemyY > y) {
+
+                enemyY = enemyY - 2;
+
+            }
+
+
+            enemy.style.left = enemyX + "px";
+
+            enemy.style.top = enemyY + "px";
+
+
+            // Enemy touches player
+
+            if (
+
+                Math.abs(enemyX - x) < 35 &&
+
+                Math.abs(enemyY - y) < 35
+
+            ) {
+
+                health = health - 1;
+
+                document.getElementById("health").innerText = health;
+
+
+                // Move enemy away
+
+                enemy.style.left =
+                    Math.floor(Math.random() * 700) + "px";
+
+                enemy.style.top =
+                    Math.floor(Math.random() * 300) + "px";
+
+
+          if (health <= 0) {
+
+    // Save game results
+    localStorage.setItem("score", score);
+    localStorage.setItem("kills", kills);
+    localStorage.setItem("shots", shots);
+
+    let accuracyValue = 0;
+
+    if (shots > 0) {
+        accuracyValue = Math.round((kills / shots) * 100);
+    }
+
+    localStorage.setItem("accuracy", accuracyValue);
+
+    localStorage.setItem("health", health);
+
+    alert("Game Over! Your score is " + score);
+
+    window.location.href = "dashboard.html";
+
+}
+
+            }
+
+        }, 100);
+
+
+
+        // Shooting
+
+        document.addEventListener("keydown", function(event) {
+
+            if (event.key === " ") {
+
+                shots = shots + 1;
+
+                document.getElementById("shots").innerText = shots;
+
+
+                // Start bullet
+
+                let bulletX = x + 15;
+
+                let bulletY = y;
+
+
+                bullet.style.left = bulletX + "px";
+
+                bullet.style.top = bulletY + "px";
+
+                bullet.style.display = "block";
+
+
+                // Move bullet
+
+                let shoot = setInterval(function() {
+
+                    bulletY = bulletY - 10;
+
+                    bullet.style.top = bulletY + "px";
+
+
+                    // Get enemy position
+
+                    let enemyX =
+                        parseInt(enemy.style.left);
+
+                    let enemyY =
+                        parseInt(enemy.style.top);
+
+
+                    // Check collision
+
+                    if (
+
+                        bulletY < enemyY + 40 &&
+
+                        bulletY > enemyY - 10 &&
+
+                        bulletX < enemyX + 40 &&
+
+                        bulletX + 8 > enemyX
+
+                    ) {
+
+                        // Enemy hit
+
+                        score = score + 10;
+
+                        kills = kills + 1;
+
+
+                        document.getElementById("score").innerText =
+                            score;
+
+                        document.getElementById("kills").innerText =
+                            kills;
+
+
+                        // Calculate accuracy
+
+                        let accuracyValue =
+                            (kills / shots) * 100;
+
+
+                        document.getElementById("accuracy").innerText =
+                            Math.round(accuracyValue);
+
+
+                        // Hide bullet
+
+                        bullet.style.display = "none";
+
+
+                        // Stop bullet
+
+                        clearInterval(shoot);
+
+
+                        // Move enemy to new position
+
+                        enemy.style.left =
+                            Math.floor(Math.random() * 700) + "px";
+
+                        enemy.style.top =
+                            Math.floor(Math.random() * 300) + "px";
+
+                    }
+
+
+                    // Bullet leaves screen
+
+                    if (bulletY < 0) {
+
+                        bullet.style.display = "none";
+
+                        clearInterval(shoot);
+
+                    }
+
+                }, 50);
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

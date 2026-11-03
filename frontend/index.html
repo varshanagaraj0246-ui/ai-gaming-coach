@@ -1,1 +1,615 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050711">
+<title>AI Gaming Coach | Combat Arena</title>
+
+<style>
+:root {
+    --bg:#050711;
+    --panel:rgba(8,16,34,.82);
+    --cyan:#00f5ff;
+    --blue:#1677ff;
+    --purple:#a855f7;
+    --pink:#ff3dba;
+    --white:#f4f8ff;
+    --muted:#93a4c2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    min-height:100vh;overflow-x:hidden;background:var(--bg);
+    color:var(--white);font-family:"Segoe UI",Arial,sans-serif
+}
+a{color:inherit;text-decoration:none}
+a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
+
+/* BACKGROUND */
+#spaceCanvas,#flightCanvas{
+    position:fixed;inset:0;width:100%;height:100%;
+    pointer-events:none
+}
+#spaceCanvas{z-index:0}
+#flightCanvas{z-index:2}
+.background{
+    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% 42%,rgba(0,105,255,.15),transparent 45%),
+      linear-gradient(180deg,#060815 0%,#080c1c 50%,#03050b 100%)
+}
+.ambient{
+    position:absolute;width:440px;height:440px;border-radius:50%;
+    filter:blur(100px);opacity:.19;
+    animation:ambientFloat 12s ease-in-out infinite alternate
+}
+.ambient.one{top:-220px;left:-140px;background:var(--blue)}
+.ambient.two{top:15%;right:-250px;background:var(--purple);animation-delay:-4s}
+.ambient.three{bottom:-300px;left:25%;background:var(--pink);animation-delay:-7s}
+@keyframes ambientFloat{
+    from{transform:translate(0,0) scale(.85)}
+    to{transform:translate(100px,90px) scale(1.25)}
+}
+.grid-floor{
+    position:absolute;left:-50%;width:200%;height:65%;bottom:-25%;
+    opacity:.22;
+    background-image:
+      linear-gradient(rgba(0,245,255,.19) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,245,255,.19) 1px,transparent 1px);
+    background-size:55px 42px;
+    transform:perspective(350px) rotateX(57deg);
+    transform-origin:top center;
+    mask-image:linear-gradient(to bottom,transparent,black 20%,black 80%,transparent);
+    animation:gridMove 5s linear infinite
+}
+@keyframes gridMove{to{background-position:0 42px}}
+.beam{
+    position:absolute;width:2px;height:70vh;opacity:0;
+    transform:rotate(35deg);transform-origin:top;
+    background:linear-gradient(to bottom,transparent,var(--cyan),transparent);
+    box-shadow:0 0 16px var(--cyan);
+    animation:beamTravel 8s linear infinite
+}
+.beam.b1{left:12%;top:-20%}
+.beam.b2{
+    left:85%;top:-20%;
+    background:linear-gradient(to bottom,transparent,var(--purple),transparent);
+    box-shadow:0 0 16px var(--purple);animation-delay:3s
+}
+.beam.b3{left:60%;top:-20%;animation-delay:5s}
+@keyframes beamTravel{
+    0%{opacity:0;transform:translateY(-30%) rotate(35deg)}
+    15%{opacity:.5}
+    70%{opacity:.22}
+    100%{opacity:0;transform:translateY(130vh) rotate(35deg)}
+}
+.scanlines{
+    position:absolute;inset:0;opacity:.12;
+    background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(120,190,255,.12) 4px)
+}
+
+/* ROAMING SPACESHIP */
+#spaceship{
+    position:fixed;z-index:3;left:0;top:0;
+    width:76px;height:76px;pointer-events:none;will-change:transform;
+    filter:drop-shadow(0 0 8px rgba(0,245,255,.65))
+}
+#spaceship svg{width:100%;height:100%;overflow:visible}
+.ship-halo{
+    position:absolute;inset:17px;border-radius:50%;
+    background:var(--cyan);filter:blur(24px);opacity:.3
+}
+
+/* NAVIGATION */
+.topbar{
+    position:relative;z-index:5;min-height:82px;padding:16px 6%;
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+    background:rgba(4,7,17,.78);
+    border-bottom:1px solid rgba(0,245,255,.17);
+    backdrop-filter:blur(18px);
+    animation:topbarEnter .8s ease both
+}
+@keyframes topbarEnter{
+    from{opacity:0;transform:translateY(-20px)}
+    to{opacity:1;transform:translateY(0)}
+}
+.brand{display:flex;align-items:center;gap:13px}
+.brand-logo{
+    width:45px;height:45px;display:grid;place-items:center;flex-shrink:0;
+    border:1px solid rgba(255,255,255,.2);border-radius:12px;
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+    font-size:24px;font-weight:900;
+    box-shadow:0 0 22px rgba(0,120,255,.45),inset 0 0 15px rgba(255,255,255,.12);
+    animation:logoPulse 3s ease-in-out infinite alternate
+}
+@keyframes logoPulse{
+    to{box-shadow:0 0 32px rgba(0,245,255,.4),0 0 45px rgba(168,85,247,.2)}
+}
+.brand-name{font-size:18px;font-weight:900;letter-spacing:1.6px}
+.brand-name span{color:var(--cyan)}
+.brand-caption{margin-top:5px;color:var(--muted);font-size:9px;letter-spacing:2px}
+.system-status{
+    display:flex;align-items:center;gap:9px;color:#68ffc0;
+    font-size:10px;font-weight:800;letter-spacing:1.5px
+}
+.status-dot{
+    width:8px;height:8px;border-radius:50%;background:#42ffb0;
+    box-shadow:0 0 12px #42ffb0;animation:statusBlink 1.5s ease-in-out infinite
+}
+@keyframes statusBlink{50%{opacity:.3;transform:scale(.7)}}
+
+/* MAIN HERO */
+main{
+    position:relative;z-index:1;width:min(1080px,90%);
+    min-height:calc(100vh - 150px);margin:auto;padding:25px 0 20px;
+    display:flex;flex-direction:column;justify-content:center
+}
+.hero{text-align:center;animation:heroReveal 1s ease both}
+@keyframes heroReveal{
+    from{opacity:0;transform:translateY(25px);filter:blur(5px)}
+    to{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+.eyebrow{
+    display:inline-flex;align-items:center;gap:10px;padding:10px 16px;
+    border:1px solid rgba(0,245,255,.32);background:rgba(0,170,255,.07);
+    color:var(--cyan);font-size:11px;font-weight:900;letter-spacing:3px;
+    box-shadow:0 0 25px rgba(0,170,255,.06)
+}
+.eyebrow:before{
+    content:"";width:7px;height:7px;border-radius:50%;
+    background:var(--cyan);box-shadow:0 0 10px var(--cyan)
+}
+h1{margin-top:18px;font-size:clamp(44px,7vw,80px);line-height:1.08;font-weight:950;letter-spacing:-2px}
+.gradient-title{
+    display:inline-block;
+    background:linear-gradient(105deg,#fff,var(--cyan),var(--blue),var(--purple),var(--pink),var(--cyan));
+    background-size:250% auto;background-clip:text;-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 20px rgba(0,170,255,.13));
+    animation:gradientFlow 6s linear infinite,titleFloat 4s ease-in-out infinite
+}
+@keyframes gradientFlow{to{background-position:250% center}}
+@keyframes titleFloat{50%{transform:translateY(-4px)}}
+.tagline{
+    margin-top:14px;color:var(--cyan);font-size:13px;font-weight:900;
+    letter-spacing:clamp(2px,.7vw,5px);line-height:1.8;
+    text-shadow:0 0 15px rgba(0,245,255,.3)
+}
+.description{
+    max-width:720px;margin:13px auto 0;color:#bdc9df;
+    font-size:15px;line-height:1.8
+}
+.description strong{color:white}
+
+/* Reduced middle spacing: spaceship still flies over the whole screen */
+.flight-area{
+    height:95px;width:100%;position:relative;
+    margin:0 auto;pointer-events:none
+}
+
+/* HUD PANELS */
+.hud-stats{
+    max-width:850px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px
+}
+.hud-card{
+    position:relative;overflow:hidden;padding:18px 10px;
+    background:linear-gradient(135deg,rgba(12,25,48,.85),rgba(5,9,22,.88));
+    border:1px solid rgba(0,245,255,.16);
+    transition:transform .3s,border-color .3s,box-shadow .3s
+}
+.hud-card:before{
+    content:"";position:absolute;left:0;top:0;width:45px;height:2px;
+    background:var(--cyan);box-shadow:0 0 10px var(--cyan)
+}
+.hud-card:hover{
+    transform:translateY(-4px);border-color:rgba(0,245,255,.55);
+    box-shadow:0 0 25px rgba(0,170,255,.1)
+}
+.hud-label{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:1.7px}
+.hud-value{margin-top:9px;color:var(--cyan);font-size:17px;font-weight:900;letter-spacing:1px}
+.hud-value.purple{color:#c49aff}
+.hud-value.pink{color:#ff83cf}
+
+/* MISSION BRIEFING */
+.instructions{
+    max-width:850px;margin:17px auto 0;padding:21px 24px;text-align:left;
+    background:var(--panel);border:1px solid rgba(0,245,255,.15);
+    border-left:3px solid var(--cyan);backdrop-filter:blur(14px);
+    transition:border-color .3s,box-shadow .3s
+}
+.instructions:hover{
+    border-color:rgba(0,245,255,.45);box-shadow:0 0 30px rgba(0,170,255,.07)
+}
+.instructions h2{margin-bottom:17px;font-size:16px;font-weight:900;letter-spacing:1.5px}
+.instructions h2 span{color:var(--cyan)}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.step{display:flex;align-items:flex-start;gap:11px}
+.step-number{
+    width:33px;height:33px;flex-shrink:0;display:grid;place-items:center;
+    color:var(--cyan);background:rgba(0,245,255,.07);
+    border:1px solid rgba(0,245,255,.35);font-size:12px;font-weight:900
+}
+.step p{color:#aab9d3;font-size:13px;line-height:1.8}
+.step strong{color:white;font-size:13px}
+
+/* BUTTONS */
+.actions{
+    display:flex;justify-content:center;align-items:center;flex-wrap:wrap;
+    gap:17px;margin-top:22px
+}
+.action-btn{
+    min-width:255px;min-height:60px;display:inline-flex;
+    justify-content:center;align-items:center;gap:12px;padding:16px 25px;
+    position:relative;overflow:hidden;font-size:13px;font-weight:950;
+    letter-spacing:1.5px;border:1px solid transparent;
+    transition:transform .25s,box-shadow .25s,border-color .25s
+}
+.action-btn:before{
+    content:"";position:absolute;top:0;left:-130%;width:75%;height:100%;
+    transform:skewX(-25deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent)
+}
+.action-btn:hover:before{animation:buttonSweep .7s ease}
+@keyframes buttonSweep{to{left:150%}}
+.action-btn:hover{transform:translateY(-4px)}
+.action-btn:active{transform:translateY(-1px)}
+.play-btn{
+    color:#020916;background:linear-gradient(110deg,var(--cyan),#299cff);
+    border-color:var(--cyan);
+    box-shadow:0 0 20px rgba(0,245,255,.22),inset 0 0 15px rgba(255,255,255,.15);
+    animation:playGlow 2.5s ease-in-out infinite alternate
+}
+.play-btn:hover{box-shadow:0 0 30px rgba(0,245,255,.45),0 0 55px rgba(0,100,255,.2)}
+@keyframes playGlow{
+    to{box-shadow:0 0 28px rgba(0,245,255,.35),inset 0 0 18px rgba(255,255,255,.2)}
+}
+.dashboard-btn{
+    color:white;
+    background:linear-gradient(120deg,rgba(168,85,247,.16),rgba(22,119,255,.09));
+    border-color:rgba(168,85,247,.65)
+}
+.dashboard-btn:hover{border-color:var(--purple);box-shadow:0 0 28px rgba(168,85,247,.25)}
+.btn-icon{font-size:21px}
+.return-note{margin:14px auto 0;max-width:720px;color:var(--muted);font-size:13px;line-height:1.8}
+.return-note strong{color:var(--cyan)}
+footer{
+    position:relative;z-index:1;width:min(1080px,90%);margin:0 auto;
+    padding:16px 0;display:flex;justify-content:space-between;gap:12px;
+    border-top:1px solid rgba(255,255,255,.09);color:#687b9c;
+    font-size:10px;letter-spacing:1.5px
+}
+.footer-accent{color:var(--cyan)}
+
+@media(max-width:650px){
+    .topbar{min-height:72px;padding:13px 5%}
+    .brand{gap:9px}
+    .brand-logo{width:38px;height:38px;font-size:20px}
+    .brand-name{font-size:14px;letter-spacing:1px}
+    .brand-caption{font-size:8px;letter-spacing:1px}
+    .system-status{font-size:8px;letter-spacing:.5px}
+    main{width:90%;padding-top:22px}
+    h1{font-size:clamp(37px,9vw,54px);letter-spacing:-1px}
+    .tagline{font-size:10px;letter-spacing:2px}
+    .description{font-size:14px}
+    .flight-area{height:75px}
+    #spaceship{width:62px;height:62px}
+    .hud-stats{gap:7px}
+    .hud-card{padding:14px 5px}
+    .hud-label{font-size:8px;letter-spacing:.7px}
+    .hud-value{font-size:12px}
+    .instructions{padding:19px 15px}
+    .instructions h2{font-size:15px}
+    .steps{grid-template-columns:1fr;gap:14px}
+    .step p{font-size:13px}
+    .actions{flex-direction:column;gap:12px}
+    .action-btn{width:100%;min-width:0}
+    footer{flex-direction:column;align-items:center;text-align:center;line-height:1.8}
+}
+@media(max-width:360px){
+    .system-status{font-size:7px}
+    .brand-caption{letter-spacing:0}
+    h1{font-size:34px}
+}
+@media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
+    #spaceCanvas,#flightCanvas,#spaceship{display:none}
+}
+</style>
+</head>
+
+<body>
+<div class="background" aria-hidden="true">
+    <div class="ambient one"></div>
+    <div class="ambient two"></div>
+    <div class="ambient three"></div>
+    <div class="grid-floor"></div>
+    <div class="beam b1"></div>
+    <div class="beam b2"></div>
+    <div class="beam b3"></div>
+    <div class="scanlines"></div>
+</div>
+
+<canvas id="spaceCanvas" aria-hidden="true"></canvas>
+<canvas id="flightCanvas" aria-hidden="true"></canvas>
+
+<!-- Spaceship -->
+<div id="spaceship" aria-hidden="true">
+    <div class="ship-halo"></div>
+    <svg viewBox="0 0 100 100">
+        <defs>
+            <linearGradient id="hull" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fff"/>
+                <stop offset=".35" stop-color="#83faff"/>
+                <stop offset=".7" stop-color="#2189ff"/>
+                <stop offset="1" stop-color="#713dff"/>
+            </linearGradient>
+            <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#00f5ff"/>
+                <stop offset="1" stop-color="#a855f7"/>
+            </linearGradient>
+            <radialGradient id="cockpit">
+                <stop offset="0" stop-color="#fff"/>
+                <stop offset=".35" stop-color="#00f5ff"/>
+                <stop offset="1" stop-color="#1677ff"/>
+            </radialGradient>
+            <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff"/>
+                <stop offset=".35" stop-color="#00f5ff"/>
+                <stop offset="1" stop-color="#a855f7" stop-opacity="0"/>
+            </linearGradient>
+        </defs>
+        <path d="M40 64 L43 91 L51 73 Z" fill="url(#flame)">
+            <animate attributeName="d" values="M40 64 L43 91 L51 73 Z;M40 64 L46 98 L51 73 Z;M40 64 L43 91 L51 73 Z" dur=".22s" repeatCount="indefinite"/>
+        </path>
+        <path d="M51 69 L56 94 L62 65 Z" fill="url(#flame)">
+            <animate attributeName="d" values="M51 69 L56 94 L62 65 Z;M51 69 L60 100 L62 65 Z;M51 69 L56 94 L62 65 Z" dur=".3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M48 49 L8 68 L28 39 L42 27 Z" fill="url(#wing)" stroke="#8afaff" stroke-width="1.5"/>
+        <path d="M54 48 L90 58 L72 30 L60 25 Z" fill="url(#wing)" stroke="#8afaff" stroke-width="1.5"/>
+        <path d="M49 7 Q57 21 62 37 L65 58 L52 75 L38 58 L39 37 Q42 20 49 7Z" fill="url(#hull)" stroke="#d5ffff" stroke-width="1.5"/>
+        <path d="M50 23 Q57 31 57 43 L50 51 L44 42 Q44 31 50 23Z" fill="url(#cockpit)" stroke="#fff" stroke-width="1"/>
+        <path d="M42 54 L51 63 L59 54" fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/>
+        <path d="M24 49 L35 43 M66 42 L77 48" stroke="#fff" stroke-width="1.5" opacity=".8"/>
+        <circle cx="32" cy="57" r="2" fill="#00f5ff"/>
+        <circle cx="69" cy="53" r="2" fill="#ff3dba"/>
+        <path d="M49 7 L50 1 L52 8" fill="#fff"/>
+    </svg>
+</div>
+
+<header class="topbar">
+    <a class="brand" href="/" aria-label="AI Gaming Coach home">
+        <div class="brand-logo">✦</div>
+        <div>
+            <div class="brand-name">AI GAMING <span>COACH</span></div>
+            <div class="brand-caption">NEXT-GEN COMBAT TRAINING</div>
+        </div>
+    </a>
+    <div class="system-status"><span class="status-dot"></span> ARENA READY</div>
+</header>
+
+<main>
+<section class="hero">
+    <div class="eyebrow">COMBAT SIMULATION // INITIALIZED</div>
+    <h1>ENTER THE<br><span class="gradient-title">BATTLE ARENA</span></h1>
+    <p class="tagline">PLAY SMARTER. AIM BETTER. DOMINATE.</p>
+
+    <p class="description">
+        Welcome to your personal combat training system.
+        Enter the arena, test your skills, defeat enemies, and
+        <strong>level up your gameplay.</strong>
+        Review your match performance from your AI coach dashboard.
+    </p>
+
+    <!-- Reduced spacing for the moving spaceship -->
+    <div class="flight-area" aria-hidden="true"></div>
+
+    <section class="hud-stats" aria-label="Game features">
+        <div class="hud-card">
+            <div class="hud-label">GAME MODE</div>
+            <div class="hud-value">COMBAT</div>
+        </div>
+        <div class="hud-card">
+            <div class="hud-label">TRAINING AI</div>
+            <div class="hud-value purple">ASSISTED</div>
+        </div>
+        <div class="hud-card">
+            <div class="hud-label">MISSION STATUS</div>
+            <div class="hud-value pink">READY</div>
+        </div>
+    </section>
+
+    <section class="instructions">
+        <h2><span>//</span> MISSION BRIEFING</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">01</div>
+                <p><strong>SELECT YOUR LEVEL</strong><br>Choose your preferred difficulty before playing.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">02</div>
+                <p><strong>ENTER THE ARENA</strong><br>Move with the arrow keys and shoot with Space.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">03</div>
+                <p><strong>ANALYZE YOUR MATCH</strong><br>Open your dashboard to review available results.</p>
+            </div>
+        </div>
+    </section>
+
+    <nav class="actions" aria-label="Main navigation">
+        <a class="action-btn play-btn" href="/game/">
+            <span class="btn-icon" aria-hidden="true">▶</span> PLAY GAME
+        </a>
+        <a class="action-btn dashboard-btn" href="/dashboard.html">
+            <span class="btn-icon" aria-hidden="true">◈</span> VIEW MY DASHBOARD
+        </a>
+    </nav>
+
+    <p class="return-note">
+        Finished playing? Return to the welcome page and select
+        <strong>VIEW MY DASHBOARD</strong> to review your gameplay performance.
+    </p>
+</section>
+</main>
+
+<footer>
+    <span>AI GAMING COACH <span class="footer-accent">//</span> ARENA SYSTEM</span>
+    <span>COMBAT TRAINING SIMULATION</span>
+</footer>
+
+<script>
+/* ANIMATED STARFIELD */
+(function(){
+    const canvas=document.getElementById("spaceCanvas");
+    const ctx=canvas.getContext("2d");
+    const reduced=window.matchMedia("(prefers-reduced-motion: reduce)");
+    let w=0,h=0,stars=[],frame=0,last=0;
+
+    function resize(){
+        const dpr=Math.min(devicePixelRatio||1,2);
+        w=innerWidth;h=innerHeight;
+        canvas.width=w*dpr;canvas.height=h*dpr;
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        stars=Array.from({length:Math.min(180,Math.max(50,Math.floor(w*h/8000)) )},()=>({
+            x:Math.random()*w,y:Math.random()*h,
+            r:Math.random()*1.5+.3,s:Math.random()*.45+.12,
+            a:Math.random()*.6+.25,p:Math.random()*6.28,
+            c:Math.random()>.8?"168,85,247":"0,245,255"
+        }));
+    }
+    function draw(t){
+        frame=0;
+        if(document.hidden||reduced.matches)return;
+        if(t-last<30){frame=requestAnimationFrame(draw);return}
+        last=t;ctx.clearRect(0,0,w,h);
+        for(const s of stars){
+            s.y-=s.s*.5;s.p+=.018;
+            if(s.y<-4){s.y=h+4;s.x=Math.random()*w}
+            ctx.beginPath();
+            ctx.fillStyle=`rgba(${s.c},${s.a*(.65+Math.sin(s.p)*.35)})`;
+            ctx.shadowBlur=s.r>1.2?8:2;
+            ctx.shadowColor=s.c==="0,245,255"?"#00f5ff":"#a855f7";
+            ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+        }
+        ctx.shadowBlur=0;frame=requestAnimationFrame(draw);
+    }
+    function start(){
+        if(!document.hidden&&!reduced.matches&&!frame)
+            frame=requestAnimationFrame(draw);
+    }
+    function stop(){
+        if(frame)cancelAnimationFrame(frame);
+        frame=0;
+    }
+    document.addEventListener("visibilitychange",()=>document.hidden?stop():start());
+    reduced.addEventListener("change",()=>{stop();if(!reduced.matches)start()});
+    window.addEventListener("resize",resize);
+    resize();start();
+})();
+
+/* SPACESHIP FLIES AROUND THE SCREEN */
+(function(){
+    const ship=document.getElementById("spaceship");
+    const canvas=document.getElementById("flightCanvas");
+    const ctx=canvas.getContext("2d");
+    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let w=innerWidth,h=innerHeight,dpr=1;
+    let x=w*.18,y=h*.35;
+    let targetX=w*.8,targetY=h*.45;
+    let angle=0,trail=[],lastTarget=0,frame=0,lastTime=0;
+
+    function resize(){
+        dpr=Math.min(devicePixelRatio||1,2);
+        w=innerWidth;h=innerHeight;
+        canvas.width=Math.round(w*dpr);
+        canvas.height=Math.round(h*dpr);
+        canvas.style.width=w+"px";
+        canvas.style.height=h+"px";
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        x=Math.min(x,w-60);y=Math.min(y,h-60);
+        targetX=Math.min(targetX,w-60);
+        targetY=Math.min(targetY,h-60);
+    }
+
+    function newDestination(){
+        const margin=35;
+        targetX=margin+Math.random()*Math.max(1,w-margin*2);
+        targetY=margin+Math.random()*Math.max(1,h-margin*2);
+        lastTarget=performance.now();
+    }
+
+    function drawTrail(){
+        ctx.clearRect(0,0,w,h);
+        for(let i=1;i<trail.length;i++){
+            const a=trail[i-1],b=trail[i],alpha=i/trail.length;
+            ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+            ctx.strokeStyle=`rgba(0,245,255,${alpha*.48})`;
+            ctx.lineWidth=alpha*4;ctx.shadowBlur=12;ctx.shadowColor="#00f5ff";ctx.stroke();
+            ctx.beginPath();ctx.arc(b.x,b.y,alpha*2.3,0,Math.PI*2);
+            ctx.fillStyle=`rgba(168,85,247,${alpha*.55})`;ctx.fill();
+        }
+        ctx.shadowBlur=0;
+    }
+
+    function animate(time){
+        frame=0;
+        if(document.hidden||reduce.matches)return;
+        if(!lastTime)lastTime=time;
+        const dt=Math.min((time-lastTime)/16.67,2);
+        lastTime=time;
+
+        const dx=targetX-x,dy=targetY-y;
+        const distance=Math.hypot(dx,dy);
+        if(distance<24||time-lastTarget>6500)newDestination();
+
+        const desiredAngle=Math.atan2(dy,dx);
+        const diff=((desiredAngle-angle+Math.PI*3)%(Math.PI*2))-Math.PI;
+        angle+=diff*Math.min(.075*dt,.18);
+
+        const speed=Math.min(2.5*dt,distance*.035);
+        x+=Math.cos(angle)*speed;
+        y+=Math.sin(angle)*speed;
+        x=Math.max(12,Math.min(w-12,x));
+        y=Math.max(12,Math.min(h-12,y));
+
+        trail.push({x:x-Math.cos(angle)*22,y:y-Math.sin(angle)*22});
+        if(trail.length>32)trail.shift();
+
+        ship.style.transform=
+            `translate3d(${x-38}px,${y-38}px,0) rotate(${angle*180/Math.PI+90}deg)`;
+
+        drawTrail();
+        frame=requestAnimationFrame(animate);
+    }
+
+    function start(){
+        if(!document.hidden&&!reduce.matches&&!frame){
+            lastTime=0;frame=requestAnimationFrame(animate);
+        }
+    }
+    function stop(){
+        if(frame)cancelAnimationFrame(frame);
+        frame=0;
+    }
+
+    document.addEventListener("visibilitychange",()=>document.hidden?stop():start());
+    reduce.addEventListener("change",()=>{
+        if(reduce.matches){
+            stop();ctx.clearRect(0,0,w,h);ship.style.display="none";
+        }else{
+            ship.style.display="block";start();
+        }
+    });
+    window.addEventListener("resize",resize);
+
+    resize();newDestination();
+    if(!reduce.matches)start();
+    else ship.style.display="none";
+})();
+</script>
+</body>
+</html>

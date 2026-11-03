@@ -1,1 +1,2894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>AI Gaming Coach</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --black:#04060b;
+    --black2:#08101b;
+    --blue:#1677ff;
+    --blue2:#00aaff;
+    --cyan:#20eaff;
+    --purple:#9b5cff;
+    --pink:#ff3f9f;
+    --green:#29f19c;
+    --orange:#ff9b42;
+    --yellow:#ffd84d;
+    --white:#f5f8ff;
+    --text:#c9d5e8;
+    --muted:#8491a8;
+    --border:rgba(255,255,255,.11);
+}
+
+body{
+    min-height:100vh;
+    color:var(--white);
+    font-family:"Segoe UI",Arial,sans-serif;
+
+    background:
+        radial-gradient(circle at 15% 20%,rgba(0,145,255,.22),transparent 27%),
+        radial-gradient(circle at 85% 15%,rgba(151,62,255,.18),transparent 25%),
+        radial-gradient(circle at 70% 85%,rgba(255,40,150,.10),transparent 28%),
+        linear-gradient(135deg,#03050a 0%,#07111f 45%,#03050a 100%);
+
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.28;
+
+    background-image:
+        linear-gradient(rgba(0,170,255,.07) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,170,255,.07) 1px,transparent 1px);
+
+    background-size:55px 55px;
+    animation:gridMove 15s linear infinite;
+}
+
+@keyframes gridMove{
+    from{transform:translate(0,0);}
+    to{transform:translate(55px,55px);}
+}
+
+.light{
+    position:fixed;
+    width:420px;
+    height:420px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.20;
+    pointer-events:none;
+}
+
+.light.one{
+    background:#006eff;
+    top:-150px;
+    left:-120px;
+    animation:moveOne 9s ease-in-out infinite alternate;
+}
+
+.light.two{
+    background:#a000ff;
+    right:-150px;
+    top:25%;
+    animation:moveTwo 11s ease-in-out infinite alternate;
+}
+
+.light.three{
+    background:#ff168c;
+    bottom:-200px;
+    left:35%;
+    animation:moveThree 13s ease-in-out infinite alternate;
+}
+
+@keyframes moveOne{
+    to{transform:translate(160px,120px) scale(1.3);}
+}
+
+@keyframes moveTwo{
+    to{transform:translate(-150px,80px) scale(1.2);}
+}
+
+@keyframes moveThree{
+    to{transform:translate(120px,-100px) scale(1.25);}
+}
+
+/* HEADER */
+
+header{
+    height:82px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 5%;
+    position:relative;
+    z-index:5;
+
+    background:rgba(3,6,12,.82);
+    border-bottom:1px solid rgba(0,170,255,.16);
+    backdrop-filter:blur(18px);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    font-size:23px;
+    border-radius:13px;
+    color:white;
+
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+
+    box-shadow:
+        0 0 25px rgba(0,130,255,.55),
+        0 0 55px rgba(150,60,255,.20);
+
+    animation:logoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow{
+    to{
+        box-shadow:
+            0 0 35px rgba(0,180,255,.85),
+            0 0 80px rgba(150,60,255,.35);
+
+        transform:rotate(8deg) scale(1.05);
+    }
+}
+
+.brand-title{
+    position:relative;
+    font-size:21px;
+    font-weight:950;
+    letter-spacing:2px;
+    color:white;
+}
+
+.brand-title span{
+    color:var(--cyan);
+    position:relative;
+    display:inline-block;
+    animation:titlePulse 2.5s ease-in-out infinite;
+}
+
+.brand-title span::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-5px;
+    width:100%;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        var(--cyan),
+        var(--purple),
+        transparent
+    );
+
+    box-shadow:0 0 12px var(--cyan);
+    animation:titleScan 2.2s ease-in-out infinite;
+}
+
+@keyframes titlePulse{
+    50%{
+        text-shadow:
+            0 0 8px var(--cyan),
+            0 0 22px rgba(0,170,255,.65);
+    }
+}
+
+@keyframes titleScan{
+    0%,100%{
+        transform:scaleX(.25);
+        opacity:.25;
+    }
+
+    50%{
+        transform:scaleX(1);
+        opacity:1;
+    }
+}
+
+.brand-sub{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:10px;
+    letter-spacing:3px;
+}
+
+.online{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--green);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+.online-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 15px var(--green);
+    animation:blink 1.2s infinite;
+}
+
+@keyframes blink{
+    50%{
+        opacity:.25;
+        transform:scale(.65);
+    }
+}
+
+/* MAIN */
+
+main{
+    width:min(1450px,92%);
+    margin:auto;
+    padding:45px 0 80px;
+}
+
+/* HERO */
+
+.hero{
+    min-height:310px;
+    display:grid;
+    grid-template-columns:1fr 430px;
+    align-items:center;
+    gap:30px;
+}
+
+.hero-label{
+    color:var(--cyan);
+    font-size:12px;
+    letter-spacing:4px;
+    font-weight:900;
+}
+
+.player{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.player-name{
+    font-size:clamp(45px,6vw,76px);
+    line-height:1;
+    font-weight:950;
+    letter-spacing:-3px;
+    text-shadow:0 0 35px rgba(0,170,255,.25);
+}
+
+.player-number{
+    padding:9px 15px;
+    border-radius:10px;
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:2px;
+    color:var(--cyan);
+
+    border:1px solid rgba(32,234,255,.45);
+    background:rgba(0,170,255,.08);
+    box-shadow:0 0 22px rgba(0,170,255,.13);
+}
+
+.hero-text{
+    max-width:680px;
+    margin-top:22px;
+    color:var(--text);
+    font-size:16px;
+    line-height:1.8;
+}
+
+/* AI CORE */
+
+.ai-core{
+    height:300px;
+    position:relative;
+    display:grid;
+    place-items:center;
+}
+
+.core-ring{
+    position:absolute;
+    border-radius:50%;
+    border:2px solid rgba(0,190,255,.45);
+}
+
+.core-ring.r1{
+    width:270px;
+    height:270px;
+    border-left-color:var(--cyan);
+    border-right-color:transparent;
+    animation:spin 7s linear infinite;
+}
+
+.core-ring.r2{
+    width:215px;
+    height:215px;
+    border-top-color:var(--purple);
+    border-bottom-color:transparent;
+    animation:spinReverse 5s linear infinite;
+}
+
+.core-ring.r3{
+    width:155px;
+    height:155px;
+    border:2px dashed rgba(255,63,159,.75);
+    animation:spin 10s linear infinite;
+}
+
+.core-energy{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #ffffff 0%,
+            var(--cyan) 12%,
+            var(--blue) 35%,
+            var(--purple) 60%,
+            transparent 72%
+        );
+
+    box-shadow:
+        0 0 30px var(--cyan),
+        0 0 80px var(--blue),
+        0 0 130px rgba(155,92,255,.55);
+
+    animation:energyPulse 1.7s ease-in-out infinite alternate;
+}
+
+@keyframes energyPulse{
+    to{
+        transform:scale(1.32);
+
+        box-shadow:
+            0 0 45px var(--cyan),
+            0 0 110px var(--blue),
+            0 0 170px rgba(155,92,255,.65);
+    }
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+@keyframes spinReverse{
+    to{transform:rotate(-360deg);}
+}
+
+.scan-line{
+    position:absolute;
+    width:300px;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        var(--cyan),
+        transparent
+    );
+
+    box-shadow:0 0 20px var(--cyan);
+    animation:scan 2.8s ease-in-out infinite;
+}
+
+@keyframes scan{
+    0%,100%{
+        transform:translateY(-120px) rotate(25deg);
+        opacity:0;
+    }
+
+    25%,75%{
+        opacity:1;
+    }
+
+    50%{
+        transform:translateY(120px) rotate(25deg);
+    }
+}
+
+/* SECTIONS */
+
+.section{
+    margin-top:60px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.section-title h2{
+    font-size:28px;
+    font-weight:900;
+}
+
+.section-title span{
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:3px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:
+        1.25fr
+        1fr
+        1fr
+        1fr
+        1.25fr;
+
+    gap:18px;
+}
+
+.stat{
+    min-height:150px;
+    position:relative;
+    padding:25px;
+    overflow:hidden;
+
+    border:1px solid var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(12,22,40,.92),
+            rgba(3,7,14,.90)
+        );
+
+    transition:transform .3s,border-color .3s;
+
+    clip-path:
+        polygon(
+            0 0,
+            94% 0,
+            100% 15%,
+            100% 100%,
+            6% 100%,
+            0 85%
+        );
+}
+
+.stat:hover{
+    transform:translateY(-7px) scale(1.02);
+    border-color:rgba(0,190,255,.55);
+}
+
+.stat::after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    right:-45px;
+    bottom:-45px;
+    background:var(--blue);
+    filter:blur(35px);
+    opacity:.18;
+    animation:statGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes statGlow{
+    to{
+        transform:scale(1.7);
+        opacity:.30;
+    }
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.stat-value{
+    margin-top:15px;
+    font-size:39px;
+    font-weight:950;
+}
+
+.stat-unit{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.stat:nth-child(1) .stat-value{color:var(--cyan);}
+.stat:nth-child(2) .stat-value{color:var(--green);}
+.stat:nth-child(3) .stat-value{color:var(--pink);}
+.stat:nth-child(4) .stat-value{color:var(--yellow);}
+.stat:nth-child(5) .stat-value{color:var(--orange);}
+
+/* GRAPH */
+
+.performance{
+    position:relative;
+    min-height:500px;
+    padding:28px;
+    overflow:hidden;
+
+    border:1px solid rgba(0,170,255,.16);
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(4,15,30,.92),
+            rgba(2,5,12,.94)
+        );
+}
+
+.performance::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(rgba(0,170,255,.05) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,170,255,.05) 1px,transparent 1px);
+
+    background-size:50px 50px;
+    animation:gridMove 12s linear infinite;
+}
+
+.graph-heading{
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:5px 5px 18px;
+}
+
+.graph-heading strong{
+    font-size:17px;
+}
+
+.graph-heading span{
+    color:var(--cyan);
+    font-size:12px;
+    letter-spacing:1px;
+}
+
+.graph{
+    height:390px;
+    position:relative;
+    margin-top:10px;
+
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-around;
+
+    padding:35px 30px 55px;
+}
+
+.guide{
+    position:absolute;
+    left:25px;
+    right:25px;
+    height:1px;
+    background:rgba(255,255,255,.09);
+    z-index:1;
+}
+
+.g1{top:8%;}
+.g2{top:28%;}
+.g3{top:48%;}
+.g4{top:68%;}
+.g5{top:88%;}
+
+.y-label{
+    display:block;
+    position:absolute;
+    left:0;
+    color:var(--muted);
+    font-size:10px;
+    z-index:3;
+}
+
+.y1{top:6%;}
+.y2{top:26%;}
+.y3{top:46%;}
+.y4{top:66%;}
+.y5{top:86%;}
+
+.game{
+    width:19%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+
+    position:relative;
+    z-index:2;
+}
+
+.bar-area{
+    width:72px;
+    height:260px;
+    display:flex;
+    align-items:flex-end;
+    position:relative;
+}
+
+.bar{
+    width:100%;
+    height:50%;
+    position:relative;
+
+    background:
+        linear-gradient(
+            to top,
+            var(--blue),
+            var(--cyan),
+            var(--purple)
+        );
+
+    border-radius:9px 9px 2px 2px;
+
+    box-shadow:
+        0 0 18px rgba(0,170,255,.45),
+        inset 0 0 20px rgba(255,255,255,.12);
+
+    transform-origin:bottom;
+    animation:barRise 1.4s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes barRise{
+    from{transform:scaleY(0);}
+    to{transform:scaleY(1);}
+}
+
+.bar::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:-12px;
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    transform:translateX(-50%);
+    background:white;
+    box-shadow:0 0 20px var(--cyan);
+    animation:pointPulse 1.5s infinite;
+}
+
+@keyframes pointPulse{
+    50%{
+        transform:translateX(-50%) scale(1.5);
+        opacity:.6;
+    }
+}
+
+.bar-value{
+    position:absolute;
+    top:-42px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:17px;
+    font-weight:900;
+    color:var(--cyan);
+}
+
+.game-name{
+    margin-top:18px;
+    font-size:15px;
+    font-weight:900;
+}
+
+.game-info{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:12px;
+    text-align:center;
+    line-height:1.6;
+}
+
+.difficulty-tag{
+    display:inline-block;
+    margin-top:7px;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:800;
+    color:white;
+
+    background:rgba(0,120,255,.16);
+    border:1px solid rgba(0,170,255,.25);
+}
+
+/* LOWER GRID */
+
+.lower-grid{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.core-panel{
+    min-height:390px;
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+
+    border:1px solid var(--border);
+    background:rgba(5,10,20,.82);
+}
+
+.core-panel::before{
+    content:"";
+    position:absolute;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+
+    border:1px solid rgba(0,200,255,.18);
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+    animation:bottomRadar 5s linear infinite;
+}
+
+@keyframes bottomRadar{
+    0%{
+        transform:translate(-50%,-50%) scale(.65);
+        opacity:.1;
+    }
+
+    50%{opacity:.8;}
+
+    100%{
+        transform:translate(-50%,-50%) scale(1.7);
+        opacity:0;
+    }
+}
+
+.core-content{
+    display:flex;
+    align-items:center;
+    gap:35px;
+    position:relative;
+    z-index:2;
+}
+
+.score-circle{
+    width:205px;
+    height:205px;
+    flex-shrink:0;
+    border-radius:50%;
+
+    display:grid;
+    place-items:center;
+    position:relative;
+
+    background:
+        conic-gradient(
+            var(--cyan) 0deg,
+            var(--purple) 220deg,
+            var(--pink) 290deg,
+            rgba(255,255,255,.07) 290deg
+        );
+
+    animation:
+        circleAppear 1.4s ease,
+        circlePulse 3s ease-in-out infinite;
+}
+
+@keyframes circleAppear{
+    from{
+        transform:scale(.5) rotate(-90deg);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1) rotate(0);
+        opacity:1;
+    }
+}
+
+@keyframes circlePulse{
+    50%{
+        filter:drop-shadow(0 0 18px rgba(0,190,255,.35));
+    }
+}
+
+.score-circle::before{
+    content:"";
+    position:absolute;
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    background:#070c16;
+    box-shadow:inset 0 0 35px rgba(0,0,0,.8);
+}
+
+.score-content{
+    position:relative;
+    z-index:2;
+    text-align:center;
+}
+
+.score-number{
+    font-size:48px;
+    font-weight:950;
+    color:white;
+}
+
+.score-label{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+.skill{
+    font-size:32px;
+    font-weight:950;
+    color:var(--cyan);
+    animation:skillGlow 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes skillGlow{
+    to{text-shadow:0 0 12px var(--cyan);}
+}
+
+.skill-desc{
+    max-width:260px;
+    margin-top:10px;
+    color:var(--text);
+    font-size:14px;
+    line-height:1.7;
+}
+
+/* COACH */
+
+.coach{
+    min-height:390px;
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(27,9,48,.85),
+            rgba(5,9,19,.92)
+        );
+
+    border:1px solid rgba(155,92,255,.28);
+}
+
+.coach::before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    right:-65px;
+    top:-65px;
+
+    border:2px solid rgba(155,92,255,.25);
+
+    box-shadow:0 0 50px rgba(155,92,255,.15);
+    animation:coachOrbit 6s linear infinite;
+}
+
+@keyframes coachOrbit{
+    to{transform:rotate(360deg);}
+}
+
+.coach::after{
+    content:"AI";
+    position:absolute;
+    right:-35px;
+    bottom:-60px;
+    font-size:190px;
+    font-weight:950;
+    color:rgba(155,92,255,.035);
+    pointer-events:none;
+}
+
+.coach-message{
+    margin-top:22px;
+    padding:18px;
+
+    border-left:4px solid var(--purple);
+
+    background:rgba(155,92,255,.08);
+
+    color:var(--text);
+    font-size:15px;
+    line-height:1.7;
+
+    position:relative;
+    z-index:2;
+
+    animation:messageGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes messageGlow{
+    to{
+        box-shadow:-8px 0 30px rgba(155,92,255,.12);
+    }
+}
+
+.ranking{
+    margin-top:25px;
+    display:grid;
+    gap:15px;
+    position:relative;
+    z-index:2;
+}
+
+.rank-row{
+    display:grid;
+    grid-template-columns:42px 120px 1fr 50px;
+    align-items:center;
+    gap:12px;
+}
+
+.rank-number{
+    color:var(--purple);
+    font-size:15px;
+    font-weight:900;
+}
+
+.rank-name{
+    font-size:14px;
+    font-weight:800;
+}
+
+.rank-track{
+    height:9px;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    overflow:hidden;
+}
+
+.rank-fill{
+    height:100%;
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--cyan),
+            var(--purple)
+        );
+
+    animation:rankLoad 1.5s ease;
+}
+
+@keyframes rankLoad{
+    from{width:0 !important;}
+}
+
+.rank-score{
+    color:var(--cyan);
+    font-size:14px;
+    font-weight:900;
+    text-align:right;
+}
+
+/* DIFFICULTY */
+
+.difficulty{
+    margin-top:25px;
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+
+    border:1px solid rgba(255,216,77,.20);
+
+    background:
+        linear-gradient(
+            110deg,
+            rgba(35,27,8,.8),
+            rgba(7,10,17,.9)
+        );
+}
+
+.difficulty::before{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:2px;
+    left:-350px;
+    top:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--yellow),
+            transparent
+        );
+
+    box-shadow:0 0 20px var(--yellow);
+    animation:difficultyScan 4s linear infinite;
+}
+
+@keyframes difficultyScan{
+    to{left:100%;}
+}
+
+.difficulty-current{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.difficulty-current h3{
+    font-size:25px;
+    color:var(--yellow);
+    animation:difficultyPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes difficultyPulse{
+    to{text-shadow:0 0 15px rgba(255,216,77,.7);}
+}
+
+.difficulty-current p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+#difficultyDescription{
+    color:var(--orange);
+    font-size:14px;
+    font-weight:800;
+}
+
+.difficulty-levels{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+}
+
+.level{
+    padding:15px 8px;
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    transition:.3s;
+}
+
+.level.active{
+    color:#05070d;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--yellow),
+            var(--orange)
+        );
+
+    box-shadow:0 0 25px rgba(255,170,50,.35);
+    transform:translateY(-5px);
+
+    animation:activeDifficulty 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes activeDifficulty{
+    to{
+        box-shadow:0 0 38px rgba(255,170,50,.55);
+    }
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:50px;
+    padding-top:25px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+    justify-content:space-between;
+
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:2px;
+
+    position:relative;
+}
+
+footer::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:-1px;
+    width:120px;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        var(--cyan),
+        transparent
+    );
+
+    animation:footerScan 3s linear infinite;
+}
+
+@keyframes footerScan{
+    50%{left:70%;}
+    100%{left:0;}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+    }
+
+    .ai-core{
+        height:260px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .lower-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+
+    header{
+        padding:0 20px;
+    }
+
+    .online{
+        display:none;
+    }
+
+    main{
+        width:90%;
+    }
+
+    .player{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .stat-value{
+        font-size:35px;
+    }
+
+    .graph{
+        padding:20px 5px 45px;
+    }
+
+    .bar-area{
+        width:45px;
+    }
+
+    .game-info{
+        font-size:10px;
+    }
+
+    .core-content{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .difficulty-levels{
+        grid-template-columns:1fr;
+    }
+
+    footer{
+        flex-direction:column;
+        gap:12px;
+    }
+
+}
+
+/* Back to Home Button */
+.back-home-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px 18px;
+  border: 1px solid rgba(32, 234, 255, 0.65);
+  border-radius: 10px;
+
+  background: rgba(4, 10, 22, 0.92);
+  color: #20eaff;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-decoration: none;
+
+  box-shadow: 0 0 15px rgba(32, 234, 255, 0.12);
+  transition: all 0.25s ease;
+}
+
+.back-home-button:hover {
+  color: #ffffff;
+  background: rgba(22, 119, 255, 0.25);
+  border-color: #20eaff;
+  box-shadow: 0 0 22px rgba(32, 234, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .back-home-button {
+    top: 10px;
+    left: 10px;
+    padding: 10px 12px;
+    font-size: 10px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<a href="/" class="back-home-button">← BACK TO HOME</a>
+
+<div class="light one"></div>
+<div class="light two"></div>
+<div class="light three"></div>
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo">◈</div>
+
+        <div>
+
+            <div class="brand-title">
+                AI <span>GAMING COACH</span>
+            </div>
+
+            <div class="brand-sub">
+                PLAYER PERFORMANCE INTELLIGENCE
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="online">
+
+        <span class="online-dot"></span>
+
+        AI SYSTEM ONLINE
+
+    </div>
+
+</header>
+
+<main>
+
+<section class="hero">
+
+    <div>
+
+        <div class="hero-label">
+            ACTIVE PLAYER PROFILE
+        </div>
+
+        <div class="player">
+
+            <div id="playerName" class="player-name">
+                PLAYER
+            </div>
+
+            <div id="playerId" class="player-number">
+                P001
+            </div>
+
+        </div>
+
+        <p class="hero-text">
+
+            Real-time AI analysis of your gameplay,
+            including accuracy, combat performance,
+            reaction speed, survival and progression.
+
+        </p>
+
+    </div>
+
+    <div class="ai-core">
+
+        <div class="core-ring r1"></div>
+        <div class="core-ring r2"></div>
+        <div class="core-ring r3"></div>
+        <div class="scan-line"></div>
+        <div class="core-energy"></div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>Combat Statistics</h2>
+
+        <span>LIVE PLAYER DATA</span>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-label">SCORE</div>
+
+            <div id="score" class="stat-value">--</div>
+
+            <div class="stat-unit">
+                CURRENT SCORE
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-label">KILLS</div>
+
+            <div id="kills" class="stat-value">--</div>
+
+            <div class="stat-unit">
+                ELIMINATIONS
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-label">DEATHS</div>
+
+            <div id="deaths" class="stat-value">--</div>
+
+            <div class="stat-unit">
+                LOSSES
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-label">ACCURACY</div>
+
+            <div id="accuracy" class="stat-value">--</div>
+
+            <div class="stat-unit">
+                AIM PRECISION
+            </div>
+
+        </div>
+
+        <div class="stat">
+
+            <div class="stat-label">REACTION TIME</div>
+
+            <div id="reaction" class="stat-value">--</div>
+
+            <div class="stat-unit">
+                RESPONSE SPEED
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>Gameplay Statistics</h2>
+
+        <span>LAST 4 GAMES • SCALE 0–100</span>
+
+    </div>
+
+    <div class="performance">
+
+        <div class="graph-heading">
+
+            <strong>Performance Score</strong>
+
+            <span>MAXIMUM = 100</span>
+
+        </div>
+
+        <div class="graph">
+
+            <div class="guide g1"></div>
+            <div class="guide g2"></div>
+            <div class="guide g3"></div>
+            <div class="guide g4"></div>
+            <div class="guide g5"></div>
+
+            <div class="game">
+
+                <div class="bar-area">
+
+                    <div id="bar1" class="bar" style="height:8%">
+
+                        <div id="barValue1" class="bar-value">
+                            --
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="game-name">GAME 01</div>
+
+                <div class="game-info">
+
+                    Score:
+                    <span id="gameScore1">--</span>
+
+                    <br>
+
+                    Accuracy:
+                    <span id="gameAccuracy1">--</span>
+
+                    <br>
+
+                    <span id="gameDifficulty1" class="difficulty-tag">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="game">
+
+                <div class="bar-area">
+
+                    <div id="bar2" class="bar" style="height:8%">
+
+                        <div id="barValue2" class="bar-value">
+                            --
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="game-name">GAME 02</div>
+
+                <div class="game-info">
+
+                    Score:
+                    <span id="gameScore2">--</span>
+
+                    <br>
+
+                    Accuracy:
+                    <span id="gameAccuracy2">--</span>
+
+                    <br>
+
+                    <span id="gameDifficulty2" class="difficulty-tag">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="game">
+
+                <div class="bar-area">
+
+                    <div id="bar3" class="bar" style="height:8%">
+
+                        <div id="barValue3" class="bar-value">
+                            --
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="game-name">GAME 03</div>
+
+                <div class="game-info">
+
+                    Score:
+                    <span id="gameScore3">--</span>
+
+                    <br>
+
+                    Accuracy:
+                    <span id="gameAccuracy3">--</span>
+
+                    <br>
+
+                    <span id="gameDifficulty3" class="difficulty-tag">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="game">
+
+                <div class="bar-area">
+
+                    <div id="bar4" class="bar" style="height:8%">
+
+                        <div id="barValue4" class="bar-value">
+                            --
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="game-name">GAME 04</div>
+
+                <div class="game-info">
+
+                    Score:
+                    <span id="gameScore4">--</span>
+
+                    <br>
+
+                    Accuracy:
+                    <span id="gameAccuracy4">--</span>
+
+                    <br>
+
+                    <span id="gameDifficulty4" class="difficulty-tag">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="lower-grid">
+
+    <div class="core-panel">
+
+        <div class="section-title">
+
+            <h2>Performance</h2>
+
+            <span>AI EVALUATION</span>
+
+        </div>
+
+        <div class="core-content">
+
+            <div class="score-circle">
+
+                <div class="score-content">
+
+                    <div id="performanceScore" class="score-number">
+                        --
+                    </div>
+
+                    <div class="score-label">
+                        PERFORMANCE
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div id="skillLevel" class="skill">
+                    WAITING
+                </div>
+
+                <p id="skillDescription" class="skill-desc">
+                    Your AI coach will evaluate your recent gameplay.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="coach">
+
+        <div class="section-title">
+
+            <h2>AI Coach</h2>
+
+            <span>YOUR GAMEPLAY GUIDE</span>
+
+        </div>
+
+        <div id="coachMessage" class="coach-message">
+
+            Waiting for your latest gameplay analysis...
+
+        </div>
+
+        <div class="ranking">
+
+            <div class="rank-row">
+
+                <div class="rank-number">#01</div>
+
+                <div class="rank-name">Aim</div>
+
+                <div class="rank-track">
+
+                    <div id="aimBar"
+                         class="rank-fill"
+                         style="width:0%">
+                    </div>
+
+                </div>
+
+                <div id="aimScore" class="rank-score">
+                    0
+                </div>
+
+            </div>
+
+            <div class="rank-row">
+
+                <div class="rank-number">#02</div>
+
+                <div class="rank-name">Reaction</div>
+
+                <div class="rank-track">
+
+                    <div id="reactionBar"
+                         class="rank-fill"
+                         style="width:0%">
+                    </div>
+
+                </div>
+
+                <div id="reactionScore" class="rank-score">
+                    0
+                </div>
+
+            </div>
+
+            <div class="rank-row">
+
+                <div class="rank-number">#03</div>
+
+                <div class="rank-name">Combat</div>
+
+                <div class="rank-track">
+
+                    <div id="combatBar"
+                         class="rank-fill"
+                         style="width:0%">
+                    </div>
+
+                </div>
+
+                <div id="combatScore" class="rank-score">
+                    0
+                </div>
+
+            </div>
+
+            <div class="rank-row">
+
+                <div class="rank-number">#04</div>
+
+                <div class="rank-name">Survival</div>
+
+                <div class="rank-track">
+
+                    <div id="survivalBar"
+                         class="rank-fill"
+                         style="width:0%">
+                    </div>
+
+                </div>
+
+                <div id="survivalScore" class="rank-score">
+                    0
+                </div>
+
+            </div>
+
+            <div class="rank-row">
+
+                <div class="rank-number">#05</div>
+
+                <div class="rank-name">Decision Making</div>
+
+                <div class="rank-track">
+
+                    <div id="decisionBar"
+                         class="rank-fill"
+                         style="width:0%">
+                    </div>
+
+                </div>
+
+                <div id="decisionScore" class="rank-score">
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="difficulty">
+
+    <div class="difficulty-current">
+
+        <div>
+
+            <h3 id="recommendedDifficulty">
+                MEDIUM
+            </h3>
+
+            <p>
+                Recommended difficulty for your next game
+            </p>
+
+        </div>
+
+        <div id="difficultyDescription">
+            Level 2 / 5
+        </div>
+
+    </div>
+
+    <div class="difficulty-levels">
+
+        <div class="level" data-level="1">
+            EASY
+        </div>
+
+        <div class="level active" data-level="2">
+            MEDIUM
+        </div>
+
+        <div class="level" data-level="3">
+            HARD
+        </div>
+
+        <div class="level" data-level="4">
+            EXPERT
+        </div>
+
+        <div class="level" data-level="5">
+            EXTREME
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <span>AI GAMING COACH</span>
+
+    <span>
+        PLAYER INTELLIGENCE SYSTEM • v1.0
+    </span>
+
+</footer>
+
+</main>
+
+<script>
+
+/* =========================================================
+   DASHBOARD CONFIGURATION
+========================================================= */
+
+const API_BASE = "http://127.0.0.1:5000";
+
+
+/* =========================================================
+   FETCH SESSIONS
+========================================================= */
+
+async function getSessions(){
+
+    const response =
+        await fetch(
+            API_BASE + "/api/sessions",
+            {
+                cache:"no-store"
+            }
+        );
+
+    if(!response.ok){
+        throw new Error(
+            "Sessions API returned " +
+            response.status
+        );
+    }
+
+    const data =
+        await response.json();
+
+    if(!data.success){
+        throw new Error(
+            data.message ||
+            "Unable to load sessions"
+        );
+    }
+
+    return Array.isArray(data.sessions)
+        ? data.sessions
+        : [];
+}
+
+
+/* =========================================================
+   NUMBER HELPERS
+========================================================= */
+
+function number(value, fallback=0){
+
+    const n = Number(value);
+
+    return Number.isFinite(n)
+        ? n
+        : fallback;
+}
+
+
+function clamp(value,min,max){
+
+    return Math.min(
+        max,
+        Math.max(min,value)
+    );
+
+}
+
+
+/* =========================================================
+   REACTION TIME
+========================================================= */
+
+function getReactionTime(game){
+
+    let value =
+        game.reaction_time ??
+        game.reactionTime ??
+        game.response_time ??
+        game.responseTime;
+
+    value = Number(value);
+
+    /*
+     * If the backend/game did not provide a usable
+     * reaction time, calculate a reasonable estimate
+     * from combat performance.
+     *
+     * This prevents the dashboard from staying "--".
+     */
+
+    if(
+        !Number.isFinite(value) ||
+        value <= 0
+    ){
+
+        const accuracy =
+            clamp(
+                number(game.accuracy,50),
+                0,
+                100
+            );
+
+        const kills =
+            Math.max(
+                0,
+                number(game.kills,0)
+            );
+
+        const deaths =
+            Math.max(
+                0,
+                number(game.deaths,0)
+            );
+
+        /*
+         * Better accuracy and more kills
+         * produce faster estimated response.
+         */
+
+        value =
+            0.90
+            - accuracy * 0.0025
+            - Math.min(kills,20) * 0.012
+            + Math.min(deaths,10) * 0.025;
+
+    }
+
+    return clamp(
+        value,
+        0.18,
+        1.50
+    );
+
+}
+
+
+function formatReaction(game){
+
+    const value =
+        getReactionTime(game);
+
+    return value.toFixed(2) + "s";
+
+}
+
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+function updatePlayer(game){
+
+    document.getElementById(
+        "playerId"
+    ).textContent =
+        game.player_id ||
+        game.playerId ||
+        "P001";
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStatistics(game){
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        number(game.score,0);
+
+    document.getElementById(
+        "kills"
+    ).textContent =
+        number(game.kills,0);
+
+    document.getElementById(
+        "deaths"
+    ).textContent =
+        number(game.deaths,0);
+
+    document.getElementById(
+        "accuracy"
+    ).textContent =
+        clamp(
+            number(game.accuracy,0),
+            0,
+            100
+        ).toFixed(1) + "%";
+
+    document.getElementById(
+        "reaction"
+    ).textContent =
+        formatReaction(game);
+
+}
+
+
+/* =========================================================
+   GRAPH
+========================================================= */
+
+function getPerformanceValue(game){
+
+    /*
+     * The graph is intentionally normalized to 0–100.
+     *
+     * If score is already 0–100, use it directly.
+     *
+     * If the score is larger, normalize it using
+     * combat statistics instead of allowing the bar
+     * to disappear beyond the graph.
+     */
+
+    let score =
+        Number(game.score);
+
+    if(
+        Number.isFinite(score) &&
+        score >= 0 &&
+        score <= 100
+    ){
+
+        return score;
+
+    }
+
+    const accuracy =
+        clamp(
+            number(game.accuracy,0),
+            0,
+            100
+        );
+
+    const kills =
+        clamp(
+            number(game.kills,0),
+            0,
+            20
+        );
+
+    const deaths =
+        clamp(
+            number(game.deaths,0),
+            0,
+            10
+        );
+
+    const reaction =
+        getReactionTime(game);
+
+    const reactionScore =
+        clamp(
+            100 -
+            ((reaction - 0.18) /
+            (1.50 - 0.18)) *
+            100,
+            0,
+            100
+        );
+
+    return clamp(
+        accuracy * 0.45 +
+        (kills / 20) * 100 * 0.25 +
+        Math.max(0,100 - deaths * 10) * 0.15 +
+        reactionScore * 0.15,
+        0,
+        100
+    );
+
+}
+
+
+function updateGames(games){
+
+    for(let i=1;i<=4;i++){
+
+        const bar =
+            document.getElementById(
+                "bar" + i
+            );
+
+        const value =
+            document.getElementById(
+                "barValue" + i
+            );
+
+        const scoreElement =
+            document.getElementById(
+                "gameScore" + i
+            );
+
+        const accuracyElement =
+            document.getElementById(
+                "gameAccuracy" + i
+            );
+
+        const difficultyElement =
+            document.getElementById(
+                "gameDifficulty" + i
+            );
+
+        if(bar){
+            bar.style.height = "0%";
+        }
+
+        if(value){
+            value.textContent = "--";
+        }
+
+        if(scoreElement){
+            scoreElement.textContent = "--";
+        }
+
+        if(accuracyElement){
+            accuracyElement.textContent = "--";
+        }
+
+        if(difficultyElement){
+            difficultyElement.textContent = "--";
+        }
+
+    }
+
+
+    games.forEach(
+        (game,index)=>{
+
+            if(index >= 4){
+                return;
+            }
+
+            const n =
+                index + 1;
+
+            const performance =
+                getPerformanceValue(game);
+
+            const bar =
+                document.getElementById(
+                    "bar" + n
+                );
+
+            const value =
+                document.getElementById(
+                    "barValue" + n
+                );
+
+            const scoreElement =
+                document.getElementById(
+                    "gameScore" + n
+                );
+
+            const accuracyElement =
+                document.getElementById(
+                    "gameAccuracy" + n
+                );
+
+            const difficultyElement =
+                document.getElementById(
+                    "gameDifficulty" + n
+                );
+
+            if(bar){
+
+                bar.style.height =
+                    performance + "%";
+
+            }
+
+            if(value){
+
+                value.textContent =
+                    Math.round(performance);
+
+            }
+
+            if(scoreElement){
+
+                scoreElement.textContent =
+                    game.score ?? 0;
+
+            }
+
+            if(accuracyElement){
+
+                accuracyElement.textContent =
+                    number(
+                        game.accuracy,
+                        0
+                    ).toFixed(1) + "%";
+
+            }
+
+            if(difficultyElement){
+
+                difficultyElement.textContent =
+                    formatDifficulty(
+                        game.difficulty
+                    );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DIFFICULTY
+========================================================= */
+
+function formatDifficulty(value){
+
+    if(value === null || value === undefined){
+        return "MEDIUM";
+    }
+
+    const text =
+        String(value).toLowerCase();
+
+    if(text.includes("easy")){
+        return "EASY";
+    }
+
+    if(text.includes("medium")){
+        return "MEDIUM";
+    }
+
+    if(text.includes("hard")){
+        return "HARD";
+    }
+
+    if(text.includes("expert")){
+        return "EXPERT";
+    }
+
+    if(text.includes("extreme")){
+        return "EXTREME";
+    }
+
+    const n =
+        Number(value);
+
+    if(Number.isFinite(n)){
+
+        if(n < 1.5) return "EASY";
+        if(n < 2.5) return "MEDIUM";
+        if(n < 3.5) return "HARD";
+        if(n < 4.5) return "EXPERT";
+
+        return "EXTREME";
+
+    }
+
+    return "MEDIUM";
+
+}
+
+
+/* =========================================================
+   PERFORMANCE ANALYSIS
+========================================================= */
+
+function calculatePerformance(game){
+
+    const accuracy =
+        clamp(
+            number(game.accuracy,50),
+            0,
+            100
+        );
+
+    const kills =
+        clamp(
+            number(game.kills,0),
+            0,
+            20
+        );
+
+    const deaths =
+        clamp(
+            number(game.deaths,0),
+            0,
+            10
+        );
+
+    const reaction =
+        getReactionTime(game);
+
+    const reactionScore =
+        clamp(
+            100 -
+            ((reaction - 0.18) /
+            (1.50 - 0.18)) * 100,
+            0,
+            100
+        );
+
+    const combatScore =
+        clamp(
+            kills * 10 -
+            deaths * 5 +
+            50,
+            0,
+            100
+        );
+
+    const survivalScore =
+        clamp(
+            100 -
+            deaths * 12,
+            0,
+            100
+        );
+
+    const performance =
+        Math.round(
+            accuracy * .35 +
+            reactionScore * .20 +
+            combatScore * .25 +
+            survivalScore * .20
+        );
+
+    return {
+        performance:
+            clamp(
+                performance,
+                0,
+                100
+            ),
+
+        accuracy,
+        reactionScore,
+        combatScore,
+        survivalScore
+    };
+
+}
+
+
+/* =========================================================
+   SKILL LEVEL
+========================================================= */
+
+function getSkillLevel(score){
+
+    if(score >= 90){
+        return "ELITE";
+    }
+
+    if(score >= 75){
+        return "ADVANCED";
+    }
+
+    if(score >= 60){
+        return "INTERMEDIATE";
+    }
+
+    if(score >= 40){
+        return "DEVELOPING";
+    }
+
+    return "BEGINNER";
+
+}
+
+
+/* =========================================================
+   AI COACH RECOMMENDATIONS
+========================================================= */
+
+function createRecommendations(game,stats){
+
+    const recommendations = [];
+
+    const reaction =
+        getReactionTime(game);
+
+    const accuracy =
+        stats.accuracy;
+
+    const deaths =
+        number(game.deaths,0);
+
+    const kills =
+        number(game.kills,0);
+
+
+    if(accuracy < 55){
+
+        recommendations.push(
+            "Focus on aim precision and controlled shots."
+        );
+
+    }
+    else if(accuracy < 75){
+
+        recommendations.push(
+            "Your aim is improving — keep working on precision."
+        );
+
+    }
+    else{
+
+        recommendations.push(
+            "Your aim is strong — maintain your accuracy."
+        );
+
+    }
+
+
+    if(reaction > 0.75){
+
+        recommendations.push(
+            "Work on reaction speed by responding earlier to enemy movement."
+        );
+
+    }
+    else if(reaction > 0.50){
+
+        recommendations.push(
+            "Your reaction speed is decent — try to make your first response faster."
+        );
+
+    }
+    else{
+
+        recommendations.push(
+            "Excellent reaction speed — keep anticipating enemy movement."
+        );
+
+    }
+
+
+    if(deaths > kills){
+
+        recommendations.push(
+            "Focus on survival and avoid unnecessary fights."
+        );
+
+    }
+    else if(deaths >= 3){
+
+        recommendations.push(
+            "Use cover more often to reduce unnecessary deaths."
+        );
+
+    }
+    else{
+
+        recommendations.push(
+            "Your survival is solid — continue taking smart fights."
+        );
+
+    }
+
+
+    if(kills >= 8){
+
+        recommendations.push(
+            "Strong combat performance — keep choosing favorable engagements."
+        );
+
+    }
+
+
+    return recommendations.slice(0,3);
+
+}
+
+
+/* =========================================================
+   UPDATE COACH
+========================================================= */
+
+function updateCoach(game){
+
+    const stats =
+        calculatePerformance(game);
+
+    const performance =
+        stats.performance;
+
+    const skill =
+        game.skill_level ||
+        game.skillLevel ||
+        getSkillLevel(
+            performance
+        );
+
+    document.getElementById(
+        "performanceScore"
+    ).textContent =
+        performance;
+
+    document.getElementById(
+        "skillLevel"
+    ).textContent =
+        String(skill).toUpperCase();
+
+
+    document.getElementById(
+        "skillDescription"
+    ).textContent =
+        "Overall gameplay performance is " +
+        performance +
+        "/100 based on accuracy, combat, survival and reaction speed.";
+
+
+    const recommendations =
+        createRecommendations(
+            game,
+            stats
+        );
+
+
+    document.getElementById(
+        "coachMessage"
+    ).textContent =
+        recommendations.join(" • ");
+
+
+    const aim =
+        Math.round(
+            stats.accuracy
+        );
+
+    const reaction =
+        Math.round(
+            stats.reactionScore
+        );
+
+    const combat =
+        Math.round(
+            stats.combatScore
+        );
+
+    const survival =
+        Math.round(
+            stats.survivalScore
+        );
+
+    const decision =
+        Math.round(
+            clamp(
+                performance - 5,
+                0,
+                100
+            )
+        );
+
+
+    setRanking("aim",aim);
+    setRanking("reaction",reaction);
+    setRanking("combat",combat);
+    setRanking("survival",survival);
+    setRanking("decision",decision);
+
+
+    /*
+     * Use backend AI difficulty if available.
+     * Otherwise calculate it from performance.
+     */
+
+    const backendDifficulty =
+        game.difficulty ||
+        game.recommended_difficulty;
+
+    if(backendDifficulty){
+
+        updateDifficulty(
+            backendDifficulty
+        );
+
+    }
+    else{
+
+        if(performance >= 85){
+            updateDifficulty("EXTREME");
+        }
+        else if(performance >= 70){
+            updateDifficulty("EXPERT");
+        }
+        else if(performance >= 55){
+            updateDifficulty("HARD");
+        }
+        else if(performance >= 40){
+            updateDifficulty("MEDIUM");
+        }
+        else{
+            updateDifficulty("EASY");
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   RANKING
+========================================================= */
+
+function setRanking(name,value){
+
+    value =
+        Math.round(
+            clamp(
+                number(value,0),
+                0,
+                100
+            )
+        );
+
+    const bar =
+        document.getElementById(
+            name + "Bar"
+        );
+
+    const score =
+        document.getElementById(
+            name + "Score"
+        );
+
+    if(bar){
+        bar.style.width =
+            value + "%";
+    }
+
+    if(score){
+        score.textContent =
+            value;
+    }
+
+}
+
+
+/* =========================================================
+   DIFFICULTY UI
+========================================================= */
+
+function updateDifficulty(difficulty){
+
+    const text =
+        String(
+            difficulty || "MEDIUM"
+        ).toLowerCase();
+
+    let level = 2;
+    let name = "MEDIUM";
+
+
+    if(
+        text.includes("easy") ||
+        text.includes("warm")
+    ){
+
+        level = 1;
+        name = "EASY";
+
+    }
+    else if(
+        text.includes("medium") ||
+        text.includes("tactical")
+    ){
+
+        level = 2;
+        name = "MEDIUM";
+
+    }
+    else if(
+        text.includes("hard") ||
+        text.includes("advanced")
+    ){
+
+        level = 3;
+        name = "HARD";
+
+    }
+    else if(
+        text.includes("expert") ||
+        text.includes("elite")
+    ){
+
+        level = 4;
+        name = "EXPERT";
+
+    }
+    else if(
+        text.includes("extreme") ||
+        text.includes("nightmare")
+    ){
+
+        level = 5;
+        name = "EXTREME";
+
+    }
+
+
+    document.getElementById(
+        "recommendedDifficulty"
+    ).textContent =
+        name;
+
+    document.getElementById(
+        "difficultyDescription"
+    ).textContent =
+        "Level " +
+        level +
+        " / 5";
+
+
+    document
+        .querySelectorAll(".level")
+        .forEach(
+            element=>{
+
+                element.classList.toggle(
+                    "active",
+                    Number(
+                        element.dataset.level
+                    ) === level
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   MAIN DASHBOARD UPDATE
+========================================================= */
+
+async function loadDashboard(){
+
+    try{
+
+        const sessions =
+            await getSessions();
+
+
+        if(
+            !sessions ||
+            sessions.length === 0
+        ){
+
+            document.getElementById(
+                "skillLevel"
+            ).textContent =
+                "WAITING";
+
+            document.getElementById(
+                "coachMessage"
+            ).textContent =
+                "Play a game to generate your first AI coaching report.";
+
+            return;
+
+        }
+
+
+        /*
+         * Use newest four sessions for graph.
+         */
+
+        const games =
+            sessions.slice(-4);
+
+
+        const latest =
+            games[games.length - 1];
+
+
+        updatePlayer(
+            latest
+        );
+
+        updateStatistics(
+            latest
+        );
+
+        updateGames(
+            games
+        );
+
+        updateCoach(
+            latest
+        );
+
+
+        console.log(
+            "Dashboard updated:",
+            latest
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Dashboard update error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadDashboard();
+
+
+/*
+ * Refresh every 2 seconds so a newly completed
+ * game appears automatically.
+ */
+
+setInterval(
+    loadDashboard,
+    2000
+);
+
+</script>
+
+</body>
+</html>
