@@ -1,8 +1,15 @@
+
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
   const dataSentRef = useRef(false)
+
+  // REACTION TIME REFERENCES
+  const gameStartedAtRef = useRef(null)
+  const firstShotRecordedRef = useRef(false)
+
+  const [reactionTime, setReactionTime] = useState(null)
 
   const [playerX, setPlayerX] = useState(375)
   const [playerY, setPlayerY] = useState(275)
@@ -52,8 +59,13 @@ function App() {
   }
 
   const startGame = () => {
-    // Allow the new game to send its data once
+    // Reset session submission status
     dataSentRef.current = false
+
+    // RESET REACTION TIME FOR THE NEW GAME
+    gameStartedAtRef.current = performance.now()
+    firstShotRecordedRef.current = false
+    setReactionTime(null)
 
     const speeds = difficultySpeeds[difficulty]
 
@@ -110,6 +122,32 @@ function App() {
       }
 
       if (event.code === 'Space') {
+
+        // CALCULATE FIRST-SHOT REACTION TIME ONLY ONCE
+        if (
+          !firstShotRecordedRef.current &&
+          gameStartedAtRef.current !== null
+        ) {
+          const elapsedMilliseconds =
+            performance.now() - gameStartedAtRef.current
+
+          const reactionSeconds =
+            elapsedMilliseconds / 1000
+
+          const calculatedReactionTime =
+            Number(reactionSeconds.toFixed(2))
+
+          setReactionTime(calculatedReactionTime)
+
+          firstShotRecordedRef.current = true
+
+          console.log(
+            'FIRST-SHOT REACTION TIME:',
+            calculatedReactionTime,
+            'seconds'
+          )
+        }
+
         const newBullet = {
           x: playerX + 17,
           y: playerY - 15
@@ -288,7 +326,11 @@ function App() {
       accuracy: accuracy,
       kills: enemiesDefeated,
       deaths: playerHits,
-      reaction_time: 0,
+
+      // FIRST-SHOT REACTION TIME IN SECONDS
+      // null means the player did not fire any shot
+      reaction_time: reactionTime,
+
       survival_time: 60 - time,
       damage_received: playerHits,
       difficulty: difficulty,
@@ -339,7 +381,8 @@ function App() {
     enemiesDefeated,
     playerHits,
     time,
-    difficulty
+    difficulty,
+    reactionTime
   ])
 
   const isColliding = (bullet, enemy) => {
@@ -437,39 +480,39 @@ function App() {
           </button>
 
           <div className="mission-briefing">
-  <div className="mission-header">
-    <span className="mission-status-dot"></span>
-    <h2>MISSION BRIEFING</h2>
-    <span className="mission-tag">OPERATION: SURVIVAL</span>
-  </div>
+            <div className="mission-header">
+              <span className="mission-status-dot"></span>
+              <h2>MISSION BRIEFING</h2>
+              <span className="mission-tag">OPERATION: SURVIVAL</span>
+            </div>
 
-  <div className="mission-instruction">
-    <span className="mission-number">01</span>
-    <span className="mission-action">MOVE</span>
-    <span className="mission-detail">
-      Navigate using arrow keys
-    </span>
-    <kbd>↑ ↓ ← →</kbd>
-  </div>
+            <div className="mission-instruction">
+              <span className="mission-number">01</span>
+              <span className="mission-action">MOVE</span>
+              <span className="mission-detail">
+                Navigate using arrow keys
+              </span>
+              <kbd>↑ ↓ ← →</kbd>
+            </div>
 
-  <div className="mission-instruction">
-    <span className="mission-number">02</span>
-    <span className="mission-action">ATTACK</span>
-    <span className="mission-detail">
-      Fire at enemy targets
-    </span>
-    <kbd>SPACE</kbd>
-  </div>
+            <div className="mission-instruction">
+              <span className="mission-number">02</span>
+              <span className="mission-action">ATTACK</span>
+              <span className="mission-detail">
+                Fire at enemy targets
+              </span>
+              <kbd>SPACE</kbd>
+            </div>
 
-  <div className="mission-instruction">
-    <span className="mission-number">03</span>
-    <span className="mission-action">SURVIVE</span>
-    <span className="mission-detail">
-      Protect your health and defeat enemies
-    </span>
-    <span className="mission-objective">OBJECTIVE</span>
-  </div>
-</div>
+            <div className="mission-instruction">
+              <span className="mission-number">03</span>
+              <span className="mission-action">SURVIVE</span>
+              <span className="mission-detail">
+                Protect your health and defeat enemies
+              </span>
+              <span className="mission-objective">OBJECTIVE</span>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -687,7 +730,7 @@ function App() {
                   ↻ PLAY AGAIN
                 </button>
 
-                {/* NEW: HOME AND DASHBOARD NAVIGATION */}
+                {/* HOME AND DASHBOARD NAVIGATION */}
                 <div
                   style={{
                     display: 'flex',
@@ -742,7 +785,7 @@ function App() {
                     📊 VIEW DASHBOARD
                   </a>
                 </div>
-                {/* END OF NEW NAVIGATION BUTTONS */}
+                {/* END HOME AND DASHBOARD NAVIGATION */}
               </div>
             </div>
           )}

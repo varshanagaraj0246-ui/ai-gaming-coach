@@ -3,16 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AI Gaming Coach</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 :root{
     --black:#04060b;
@@ -35,13 +29,11 @@ body{
     min-height:100vh;
     color:var(--white);
     font-family:"Segoe UI",Arial,sans-serif;
-
     background:
         radial-gradient(circle at 15% 20%,rgba(0,145,255,.22),transparent 27%),
         radial-gradient(circle at 85% 15%,rgba(151,62,255,.18),transparent 25%),
         radial-gradient(circle at 70% 85%,rgba(255,40,150,.10),transparent 28%),
         linear-gradient(135deg,#03050a 0%,#07111f 45%,#03050a 100%);
-
     overflow-x:hidden;
 }
 
@@ -51,11 +43,9 @@ body::before{
     inset:0;
     pointer-events:none;
     opacity:.28;
-
     background-image:
         linear-gradient(rgba(0,170,255,.07) 1px,transparent 1px),
         linear-gradient(90deg,rgba(0,170,255,.07) 1px,transparent 1px);
-
     background-size:55px 55px;
     animation:gridMove 15s linear infinite;
 }
@@ -74,21 +64,18 @@ body::before{
     opacity:.20;
     pointer-events:none;
 }
-
 .light.one{
     background:#006eff;
     top:-150px;
     left:-120px;
     animation:moveOne 9s ease-in-out infinite alternate;
 }
-
 .light.two{
     background:#a000ff;
     right:-150px;
     top:25%;
     animation:moveTwo 11s ease-in-out infinite alternate;
 }
-
 .light.three{
     background:#ff168c;
     bottom:-200px;
@@ -96,19 +83,9 @@ body::before{
     animation:moveThree 13s ease-in-out infinite alternate;
 }
 
-@keyframes moveOne{
-    to{transform:translate(160px,120px) scale(1.3);}
-}
-
-@keyframes moveTwo{
-    to{transform:translate(-150px,80px) scale(1.2);}
-}
-
-@keyframes moveThree{
-    to{transform:translate(120px,-100px) scale(1.25);}
-}
-
-/* HEADER */
+@keyframes moveOne{to{transform:translate(160px,120px) scale(1.3);}}
+@keyframes moveTwo{to{transform:translate(-150px,80px) scale(1.2);}}
+@keyframes moveThree{to{transform:translate(120px,-100px) scale(1.25);}}
 
 header{
     height:82px;
@@ -118,143 +95,59 @@ header{
     padding:0 5%;
     position:relative;
     z-index:5;
-
     background:rgba(3,6,12,.82);
     border-bottom:1px solid rgba(0,170,255,.16);
     backdrop-filter:blur(18px);
 }
 
-.brand{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
+.brand{display:flex;align-items:center;gap:15px;}
 
 .logo{
-    width:48px;
-    height:48px;
-    display:grid;
-    place-items:center;
-    font-size:23px;
-    border-radius:13px;
+    width:48px;height:48px;
+    display:grid;place-items:center;
+    font-size:23px;border-radius:13px;
     color:white;
-
     background:linear-gradient(135deg,var(--blue),var(--purple));
-
-    box-shadow:
-        0 0 25px rgba(0,130,255,.55),
-        0 0 55px rgba(150,60,255,.20);
-
+    box-shadow:0 0 25px rgba(0,130,255,.55),0 0 55px rgba(150,60,255,.20);
     animation:logoGlow 2s ease-in-out infinite alternate;
 }
 
 @keyframes logoGlow{
     to{
-        box-shadow:
-            0 0 35px rgba(0,180,255,.85),
-            0 0 80px rgba(150,60,255,.35);
-
+        box-shadow:0 0 35px rgba(0,180,255,.85),0 0 80px rgba(150,60,255,.35);
         transform:rotate(8deg) scale(1.05);
     }
 }
 
 .brand-title{
-    position:relative;
-    font-size:21px;
-    font-weight:950;
-    letter-spacing:2px;
-    color:white;
+    font-size:21px;font-weight:950;
+    letter-spacing:2px;color:white;
 }
-
-.brand-title span{
-    color:var(--cyan);
-    position:relative;
-    display:inline-block;
-    animation:titlePulse 2.5s ease-in-out infinite;
-}
-
-.brand-title span::after{
-    content:"";
-    position:absolute;
-    left:0;
-    bottom:-5px;
-    width:100%;
-    height:2px;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        var(--cyan),
-        var(--purple),
-        transparent
-    );
-
-    box-shadow:0 0 12px var(--cyan);
-    animation:titleScan 2.2s ease-in-out infinite;
-}
-
-@keyframes titlePulse{
-    50%{
-        text-shadow:
-            0 0 8px var(--cyan),
-            0 0 22px rgba(0,170,255,.65);
-    }
-}
-
-@keyframes titleScan{
-    0%,100%{
-        transform:scaleX(.25);
-        opacity:.25;
-    }
-
-    50%{
-        transform:scaleX(1);
-        opacity:1;
-    }
-}
+.brand-title span{color:var(--cyan);}
 
 .brand-sub{
-    margin-top:5px;
-    color:var(--muted);
-    font-size:10px;
-    letter-spacing:3px;
+    margin-top:5px;color:var(--muted);
+    font-size:10px;letter-spacing:3px;
 }
 
 .online{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    color:var(--green);
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:2px;
+    display:flex;align-items:center;gap:10px;
+    color:var(--green);font-size:12px;
+    font-weight:800;letter-spacing:2px;
 }
-
 .online-dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
+    width:10px;height:10px;border-radius:50%;
     background:var(--green);
     box-shadow:0 0 15px var(--green);
     animation:blink 1.2s infinite;
 }
-
-@keyframes blink{
-    50%{
-        opacity:.25;
-        transform:scale(.65);
-    }
-}
-
-/* MAIN */
+@keyframes blink{50%{opacity:.25;transform:scale(.65);}}
 
 main{
     width:min(1450px,92%);
     margin:auto;
     padding:45px 0 80px;
 }
-
-/* HERO */
 
 .hero{
     min-height:310px;
@@ -265,1023 +158,812 @@ main{
 }
 
 .hero-label{
-    color:var(--cyan);
-    font-size:12px;
-    letter-spacing:4px;
-    font-weight:900;
+    color:var(--cyan);font-size:12px;
+    letter-spacing:4px;font-weight:900;
 }
 
 .player{
-    margin-top:12px;
-    display:flex;
-    align-items:center;
-    gap:18px;
+    margin-top:12px;display:flex;
+    flex-direction:column;align-items:flex-start;gap:10px;
 }
-
+.player-id{
+    font-size:22px;line-height:1.2;
+    font-weight:800;letter-spacing:1px;
+    color:var(--cyan);overflow-wrap:anywhere;
+}
 .player-name{
-    font-size:clamp(45px,6vw,76px);
-    line-height:1;
-    font-weight:950;
-    letter-spacing:-3px;
+    font-size:clamp(48px,6.5vw,82px);
+    line-height:1.05;font-weight:950;
+    letter-spacing:-3px;color:var(--white);
     text-shadow:0 0 35px rgba(0,170,255,.25);
+    overflow-wrap:anywhere;
 }
-
-.player-number{
-    padding:9px 15px;
-    border-radius:10px;
-    font-size:20px;
-    font-weight:900;
-    letter-spacing:2px;
-    color:var(--cyan);
-
-    border:1px solid rgba(32,234,255,.45);
-    background:rgba(0,170,255,.08);
-    box-shadow:0 0 22px rgba(0,170,255,.13);
-}
-
 .hero-text{
-    max-width:680px;
-    margin-top:22px;
-    color:var(--text);
-    font-size:16px;
-    line-height:1.8;
+    max-width:680px;margin-top:22px;
+    color:var(--text);font-size:16px;line-height:1.8;
 }
 
-/* AI CORE */
+.player-details{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(150px,210px));
+    gap:15px;margin-top:25px;
+}
+.player-detail{
+    padding:17px 20px;min-height:85px;
+    border:1px solid rgba(32,234,255,.20);
+    background:linear-gradient(145deg,rgba(12,22,40,.92),rgba(3,7,14,.90));
+    border-radius:10px;position:relative;overflow:hidden;
+}
+.detail-label{
+    display:block;color:var(--muted);
+    font-size:10px;font-weight:800;letter-spacing:2px;
+}
+.detail-value{
+    display:block;margin-top:10px;
+    font-size:27px;font-weight:950;color:var(--cyan);
+}
 
 .ai-core{
-    height:300px;
-    position:relative;
-    display:grid;
-    place-items:center;
+    height:300px;position:relative;
+    display:grid;place-items:center;
 }
-
 .core-ring{
-    position:absolute;
-    border-radius:50%;
+    position:absolute;border-radius:50%;
     border:2px solid rgba(0,190,255,.45);
 }
-
 .core-ring.r1{
-    width:270px;
-    height:270px;
+    width:270px;height:270px;
     border-left-color:var(--cyan);
     border-right-color:transparent;
     animation:spin 7s linear infinite;
 }
-
 .core-ring.r2{
-    width:215px;
-    height:215px;
+    width:215px;height:215px;
     border-top-color:var(--purple);
     border-bottom-color:transparent;
     animation:spinReverse 5s linear infinite;
 }
-
 .core-ring.r3{
-    width:155px;
-    height:155px;
+    width:155px;height:155px;
     border:2px dashed rgba(255,63,159,.75);
     animation:spin 10s linear infinite;
 }
-
 .core-energy{
-    width:100px;
-    height:100px;
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            #ffffff 0%,
-            var(--cyan) 12%,
-            var(--blue) 35%,
-            var(--purple) 60%,
-            transparent 72%
-        );
-
-    box-shadow:
-        0 0 30px var(--cyan),
-        0 0 80px var(--blue),
-        0 0 130px rgba(155,92,255,.55);
-
+    width:100px;height:100px;border-radius:50%;
+    background:radial-gradient(circle,#ffffff 0%,var(--cyan) 12%,var(--blue) 35%,var(--purple) 60%,transparent 72%);
+    box-shadow:0 0 30px var(--cyan),0 0 80px var(--blue),0 0 130px rgba(155,92,255,.55);
     animation:energyPulse 1.7s ease-in-out infinite alternate;
 }
-
 @keyframes energyPulse{
-    to{
-        transform:scale(1.32);
-
-        box-shadow:
-            0 0 45px var(--cyan),
-            0 0 110px var(--blue),
-            0 0 170px rgba(155,92,255,.65);
-    }
+    to{transform:scale(1.32);box-shadow:0 0 45px var(--cyan),0 0 110px var(--blue),0 0 170px rgba(155,92,255,.65);}
 }
-
-@keyframes spin{
-    to{transform:rotate(360deg);}
-}
-
-@keyframes spinReverse{
-    to{transform:rotate(-360deg);}
-}
-
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes spinReverse{to{transform:rotate(-360deg);}}
 .scan-line{
-    position:absolute;
-    width:300px;
-    height:2px;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        var(--cyan),
-        transparent
-    );
-
+    position:absolute;width:300px;height:2px;
+    background:linear-gradient(90deg,transparent,var(--cyan),transparent);
     box-shadow:0 0 20px var(--cyan);
     animation:scan 2.8s ease-in-out infinite;
 }
-
 @keyframes scan{
-    0%,100%{
-        transform:translateY(-120px) rotate(25deg);
-        opacity:0;
-    }
-
-    25%,75%{
-        opacity:1;
-    }
-
-    50%{
-        transform:translateY(120px) rotate(25deg);
-    }
+    0%,100%{transform:translateY(-120px) rotate(25deg);opacity:0;}
+    25%,75%{opacity:1;}
+    50%{transform:translateY(120px) rotate(25deg);}
 }
 
-/* SECTIONS */
-
-.section{
-    margin-top:60px;
-}
-
+.section{margin-top:60px;}
 .section-title{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:25px;
+    display:flex;align-items:center;
+    gap:15px;margin-bottom:25px;
 }
-
-.section-title h2{
-    font-size:28px;
-    font-weight:900;
-}
-
-.section-title span{
-    color:var(--muted);
-    font-size:11px;
-    letter-spacing:3px;
-}
-
-/* STATS */
+.section-title h2{font-size:28px;font-weight:900;}
+.section-title span{color:var(--muted);font-size:11px;letter-spacing:3px;}
 
 .stats{
     display:grid;
-    grid-template-columns:
-        1.25fr
-        1fr
-        1fr
-        1fr
-        1.25fr;
-
+    grid-template-columns:1.25fr 1fr 1fr 1fr 1.25fr;
     gap:18px;
 }
-
 .stat{
-    min-height:150px;
-    position:relative;
-    padding:25px;
-    overflow:hidden;
-
+    min-height:150px;position:relative;
+    padding:25px;overflow:hidden;
     border:1px solid var(--border);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(12,22,40,.92),
-            rgba(3,7,14,.90)
-        );
-
+    background:linear-gradient(145deg,rgba(12,22,40,.92),rgba(3,7,14,.90));
     transition:transform .3s,border-color .3s;
-
-    clip-path:
-        polygon(
-            0 0,
-            94% 0,
-            100% 15%,
-            100% 100%,
-            6% 100%,
-            0 85%
-        );
+    clip-path:polygon(0 0,94% 0,100% 15%,100% 100%,6% 100%,0 85%);
 }
-
-.stat:hover{
-    transform:translateY(-7px) scale(1.02);
-    border-color:rgba(0,190,255,.55);
-}
-
-.stat::after{
-    content:"";
-    position:absolute;
-    width:100px;
-    height:100px;
-    border-radius:50%;
-    right:-45px;
-    bottom:-45px;
-    background:var(--blue);
-    filter:blur(35px);
-    opacity:.18;
-    animation:statGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes statGlow{
-    to{
-        transform:scale(1.7);
-        opacity:.30;
-    }
-}
-
-.stat-label{
-    color:var(--muted);
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:2px;
-}
-
-.stat-value{
-    margin-top:15px;
-    font-size:39px;
-    font-weight:950;
-}
-
-.stat-unit{
-    color:var(--muted);
-    font-size:13px;
-}
-
+.stat:hover{transform:translateY(-7px) scale(1.02);border-color:rgba(0,190,255,.55);}
+.stat-label{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:2px;}
+.stat-value{margin-top:15px;font-size:39px;font-weight:950;}
+.stat-unit{color:var(--muted);font-size:13px;}
 .stat:nth-child(1) .stat-value{color:var(--cyan);}
 .stat:nth-child(2) .stat-value{color:var(--green);}
 .stat:nth-child(3) .stat-value{color:var(--pink);}
 .stat:nth-child(4) .stat-value{color:var(--yellow);}
 .stat:nth-child(5) .stat-value{color:var(--orange);}
 
-/* GRAPH */
-
 .performance{
-    position:relative;
-    min-height:500px;
-    padding:28px;
-    overflow:hidden;
-
+    position:relative;min-height:500px;
+    padding:28px;overflow:hidden;
     border:1px solid rgba(0,170,255,.16);
-
-    background:
-        linear-gradient(
-            150deg,
-            rgba(4,15,30,.92),
-            rgba(2,5,12,.94)
-        );
+    background:linear-gradient(150deg,rgba(4,15,30,.92),rgba(2,5,12,.94));
 }
-
 .performance::before{
-    content:"";
-    position:absolute;
-    inset:0;
-
+    content:"";position:absolute;inset:0;
     background:
         linear-gradient(rgba(0,170,255,.05) 1px,transparent 1px),
         linear-gradient(90deg,rgba(0,170,255,.05) 1px,transparent 1px);
-
     background-size:50px 50px;
     animation:gridMove 12s linear infinite;
 }
-
 .graph-heading{
-    position:relative;
-    z-index:2;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:5px 5px 18px;
+    position:relative;z-index:2;
+    display:flex;justify-content:space-between;
+    align-items:center;padding:5px 5px 18px;
 }
-
-.graph-heading strong{
-    font-size:17px;
-}
-
-.graph-heading span{
-    color:var(--cyan);
-    font-size:12px;
-    letter-spacing:1px;
-}
-
+.graph-heading strong{font-size:17px;}
+.graph-heading span{color:var(--cyan);font-size:12px;letter-spacing:1px;}
 .graph{
-    height:390px;
-    position:relative;
-    margin-top:10px;
-
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-around;
-
-    padding:35px 30px 55px;
+    height:390px;position:relative;margin-top:10px;
+    display:flex;align-items:flex-end;
+    justify-content:space-around;padding:35px 30px 55px;
 }
-
 .guide{
-    position:absolute;
-    left:25px;
-    right:25px;
-    height:1px;
-    background:rgba(255,255,255,.09);
-    z-index:1;
+    position:absolute;left:25px;right:25px;
+    height:1px;background:rgba(255,255,255,.09);z-index:1;
 }
-
-.g1{top:8%;}
-.g2{top:28%;}
-.g3{top:48%;}
-.g4{top:68%;}
-.g5{top:88%;}
-
-.y-label{
-    display:block;
-    position:absolute;
-    left:0;
-    color:var(--muted);
-    font-size:10px;
-    z-index:3;
-}
-
-.y1{top:6%;}
-.y2{top:26%;}
-.y3{top:46%;}
-.y4{top:66%;}
-.y5{top:86%;}
-
+.g1{top:8%;}.g2{top:28%;}.g3{top:48%;}.g4{top:68%;}.g5{top:88%;}
 .game{
-    width:19%;
-    height:100%;
-
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    align-items:center;
-
-    position:relative;
-    z-index:2;
+    width:19%;height:100%;display:flex;
+    flex-direction:column;justify-content:flex-end;
+    align-items:center;position:relative;z-index:2;
 }
-
 .bar-area{
-    width:72px;
-    height:260px;
-    display:flex;
-    align-items:flex-end;
-    position:relative;
+    width:72px;height:260px;
+    display:flex;align-items:flex-end;position:relative;
 }
-
 .bar{
-    width:100%;
-    height:50%;
-    position:relative;
-
-    background:
-        linear-gradient(
-            to top,
-            var(--blue),
-            var(--cyan),
-            var(--purple)
-        );
-
+    width:100%;height:50%;position:relative;
+    background:linear-gradient(to top,var(--blue),var(--cyan),var(--purple));
     border-radius:9px 9px 2px 2px;
-
-    box-shadow:
-        0 0 18px rgba(0,170,255,.45),
-        inset 0 0 20px rgba(255,255,255,.12);
-
+    box-shadow:0 0 18px rgba(0,170,255,.45),inset 0 0 20px rgba(255,255,255,.12);
     transform-origin:bottom;
     animation:barRise 1.4s cubic-bezier(.2,.8,.2,1);
 }
-
-@keyframes barRise{
-    from{transform:scaleY(0);}
-    to{transform:scaleY(1);}
-}
-
+@keyframes barRise{from{transform:scaleY(0);}to{transform:scaleY(1);}}
 .bar::before{
-    content:"";
-    position:absolute;
-    left:50%;
-    top:-12px;
-    width:15px;
-    height:15px;
-    border-radius:50%;
-    transform:translateX(-50%);
-    background:white;
+    content:"";position:absolute;left:50%;top:-12px;
+    width:15px;height:15px;border-radius:50%;
+    transform:translateX(-50%);background:white;
     box-shadow:0 0 20px var(--cyan);
     animation:pointPulse 1.5s infinite;
 }
-
-@keyframes pointPulse{
-    50%{
-        transform:translateX(-50%) scale(1.5);
-        opacity:.6;
-    }
-}
-
+@keyframes pointPulse{50%{transform:translateX(-50%) scale(1.5);opacity:.6;}}
 .bar-value{
-    position:absolute;
-    top:-42px;
-    left:50%;
+    position:absolute;top:-42px;left:50%;
     transform:translateX(-50%);
-    font-size:17px;
-    font-weight:900;
-    color:var(--cyan);
+    font-size:17px;font-weight:900;color:var(--cyan);
 }
-
-.game-name{
-    margin-top:18px;
-    font-size:15px;
-    font-weight:900;
-}
-
-.game-info{
-    margin-top:6px;
-    color:var(--muted);
-    font-size:12px;
-    text-align:center;
-    line-height:1.6;
-}
-
+.game-name{margin-top:18px;font-size:15px;font-weight:900;}
+.game-info{margin-top:6px;color:var(--muted);font-size:12px;text-align:center;line-height:1.6;}
 .difficulty-tag{
-    display:inline-block;
-    margin-top:7px;
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:10px;
-    font-weight:800;
-    color:white;
-
+    display:inline-block;margin-top:7px;padding:5px 10px;
+    border-radius:20px;font-size:10px;font-weight:800;color:white;
     background:rgba(0,120,255,.16);
     border:1px solid rgba(0,170,255,.25);
 }
 
-/* LOWER GRID */
-
 .lower-grid{
-    margin-top:25px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
+    margin-top:25px;display:grid;
+    grid-template-columns:1fr 1fr;gap:25px;
 }
+
+/* PERFORMANCE EVALUATION ANIMATIONS */
 
 .core-panel{
-    min-height:390px;
-    padding:30px;
-    position:relative;
-    overflow:hidden;
-
-    border:1px solid var(--border);
+    min-height:390px;padding:30px;
+    position:relative;overflow:hidden;
+    border:1px solid rgba(0,234,255,.2);
     background:rgba(5,10,20,.82);
+    transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+    animation:panelEntrance .8s ease both;
 }
-
+.core-panel:hover{
+    transform:translateY(-6px);
+    border-color:rgba(32,234,255,.65);
+    box-shadow:0 0 28px rgba(0,234,255,.12);
+}
 .core-panel::before{
     content:"";
     position:absolute;
-    width:240px;
-    height:240px;
-    border-radius:50%;
-
-    border:1px solid rgba(0,200,255,.18);
-
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-    animation:bottomRadar 5s linear infinite;
+    inset:-100% -50%;
+    background:linear-gradient(110deg,transparent 42%,rgba(32,234,255,.07) 50%,transparent 58%);
+    animation:performanceSweep 7s linear infinite;
+    pointer-events:none;
 }
-
-@keyframes bottomRadar{
-    0%{
-        transform:translate(-50%,-50%) scale(.65);
-        opacity:.1;
-    }
-
-    50%{opacity:.8;}
-
-    100%{
-        transform:translate(-50%,-50%) scale(1.7);
-        opacity:0;
-    }
+@keyframes performanceSweep{
+    from{transform:translateX(-40%) translateY(-15%);}
+    to{transform:translateX(40%) translateY(15%);}
 }
-
+@keyframes panelEntrance{
+    from{opacity:0;transform:translateY(25px);}
+    to{opacity:1;transform:translateY(0);}
+}
 .core-content{
-    display:flex;
-    align-items:center;
-    gap:35px;
-    position:relative;
-    z-index:2;
+    display:flex;align-items:center;gap:35px;
+    position:relative;z-index:2;
+    animation:performanceContent 1s ease both;
 }
-
+@keyframes performanceContent{
+    from{opacity:0;transform:translateY(25px);}
+    to{opacity:1;transform:translateY(0);}
+}
 .score-circle{
-    width:205px;
-    height:205px;
-    flex-shrink:0;
-    border-radius:50%;
-
-    display:grid;
-    place-items:center;
+    --progress:0deg;
+    width:205px;height:205px;flex-shrink:0;
+    border-radius:50%;display:grid;place-items:center;
     position:relative;
-
-    background:
-        conic-gradient(
-            var(--cyan) 0deg,
-            var(--purple) 220deg,
-            var(--pink) 290deg,
-            rgba(255,255,255,.07) 290deg
-        );
-
-    animation:
-        circleAppear 1.4s ease,
-        circlePulse 3s ease-in-out infinite;
+    background:conic-gradient(
+        from -90deg,
+        var(--cyan) 0deg,
+        var(--blue) calc(var(--progress) * .55),
+        var(--purple) var(--progress),
+        rgba(255,255,255,.07) var(--progress),
+        rgba(255,255,255,.07) 360deg
+    );
+    box-shadow:0 0 22px rgba(0,234,255,.22),0 0 45px rgba(155,92,255,.12);
+    animation:circleAppear 1.4s cubic-bezier(.2,.8,.2,1),circleGlow 3s ease-in-out 1.4s infinite alternate;
 }
-
-@keyframes circleAppear{
-    from{
-        transform:scale(.5) rotate(-90deg);
-        opacity:0;
-    }
-
-    to{
-        transform:scale(1) rotate(0);
-        opacity:1;
-    }
-}
-
-@keyframes circlePulse{
-    50%{
-        filter:drop-shadow(0 0 18px rgba(0,190,255,.35));
-    }
-}
-
 .score-circle::before{
-    content:"";
-    position:absolute;
-    width:160px;
-    height:160px;
-    border-radius:50%;
-    background:#070c16;
-    box-shadow:inset 0 0 35px rgba(0,0,0,.8);
+    content:"";position:absolute;
+    width:174px;height:174px;border-radius:50%;
+    background:radial-gradient(circle at 50% 35%,#101d32,#070c16 75%);
+    box-shadow:inset 0 0 35px rgba(0,0,0,.8),0 0 20px rgba(0,170,255,.12);
+    z-index:1;
 }
-
-.score-content{
-    position:relative;
-    z-index:2;
-    text-align:center;
+.score-circle::after{
+    content:"";position:absolute;inset:-9px;
+    border:1px solid rgba(32,234,255,.25);
+    border-radius:50%;animation:circleOrbit 5s linear infinite;
 }
-
+@keyframes circleAppear{
+    from{transform:scale(.5) rotate(-90deg);opacity:0;}
+    to{transform:scale(1) rotate(0);opacity:1;}
+}
+@keyframes circleGlow{
+    from{filter:brightness(1);}
+    to{filter:brightness(1.3);box-shadow:0 0 32px rgba(0,234,255,.4),0 0 65px rgba(155,92,255,.22);}
+}
+@keyframes circleOrbit{
+    0%{transform:rotate(0deg) scale(1);}
+    50%{transform:rotate(180deg) scale(1.05);}
+    100%{transform:rotate(360deg) scale(1);}
+}
+.circle-light{
+    position:absolute;inset:0;border-radius:50%;
+    overflow:hidden;pointer-events:none;z-index:2;
+}
+.circle-light::before{
+    content:"";position:absolute;
+    width:50%;height:50%;top:0;left:25%;
+    background:linear-gradient(180deg,rgba(255,255,255,.24),transparent);
+    filter:blur(12px);animation:lightRotate 4s linear infinite;
+    transform-origin:50% 100%;
+}
+@keyframes lightRotate{to{transform:rotate(360deg);}}
+.score-content{position:relative;z-index:3;text-align:center;}
 .score-number{
-    font-size:48px;
-    font-weight:950;
-    color:white;
+    font-size:48px;font-weight:950;color:white;
+    text-shadow:0 0 15px rgba(32,234,255,.55);
 }
-
-.score-label{
-    margin-top:3px;
-    color:var(--muted);
-    font-size:11px;
-    letter-spacing:2px;
+.score-label{margin-top:3px;color:var(--muted);font-size:11px;letter-spacing:2px;}
+.score-status{
+    margin-top:8px;color:var(--cyan);
+    font-size:10px;font-weight:800;letter-spacing:2px;
+    animation:statusBlink 2s ease-in-out infinite;
 }
-
+@keyframes statusBlink{50%{opacity:.55;}}
 .skill{
-    font-size:32px;
-    font-weight:950;
-    color:var(--cyan);
+    font-size:32px;font-weight:950;color:var(--cyan);
     animation:skillGlow 2.2s ease-in-out infinite alternate;
+    transition:color .4s ease,text-shadow .4s ease;
 }
-
 @keyframes skillGlow{
-    to{text-shadow:0 0 12px var(--cyan);}
+    to{text-shadow:0 0 12px var(--cyan),0 0 25px rgba(0,234,255,.4);}
 }
-
 .skill-desc{
-    max-width:260px;
-    margin-top:10px;
-    color:var(--text);
-    font-size:14px;
-    line-height:1.7;
+    max-width:260px;margin-top:10px;
+    color:var(--text);font-size:14px;line-height:1.7;
+    animation:descriptionFade 1s ease both;
+}
+@keyframes descriptionFade{
+    from{opacity:0;transform:translateX(15px);}
+    to{opacity:1;transform:translateX(0);}
 }
 
-/* COACH */
+/* AI COACH ANIMATIONS */
 
 .coach{
-    min-height:390px;
-    padding:30px;
-    position:relative;
-    overflow:hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(27,9,48,.85),
-            rgba(5,9,19,.92)
-        );
-
+    min-height:390px;padding:30px;
+    position:relative;overflow:hidden;
+    background:linear-gradient(145deg,rgba(27,9,48,.85),rgba(5,9,19,.92));
     border:1px solid rgba(155,92,255,.28);
+    transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+    animation:panelEntrance .9s ease both;
 }
-
+.coach:hover{
+    transform:translateY(-6px);
+    border-color:rgba(155,92,255,.7);
+    box-shadow:0 0 30px rgba(155,92,255,.16);
+}
 .coach::before{
     content:"";
     position:absolute;
-    width:190px;
-    height:190px;
-    border-radius:50%;
-    right:-65px;
-    top:-65px;
-
+    width:190px;height:190px;border-radius:50%;
+    right:-65px;top:-65px;
     border:2px solid rgba(155,92,255,.25);
-
     box-shadow:0 0 50px rgba(155,92,255,.15);
     animation:coachOrbit 6s linear infinite;
 }
-
-@keyframes coachOrbit{
-    to{transform:rotate(360deg);}
-}
-
+@keyframes coachOrbit{to{transform:rotate(360deg);}}
 .coach::after{
-    content:"AI";
-    position:absolute;
-    right:-35px;
-    bottom:-60px;
-    font-size:190px;
-    font-weight:950;
-    color:rgba(155,92,255,.035);
+    content:"AI";position:absolute;
+    right:-35px;bottom:-60px;font-size:190px;
+    font-weight:950;color:rgba(155,92,255,.035);
     pointer-events:none;
+    animation:aiWatermark 5s ease-in-out infinite alternate;
+}
+@keyframes aiWatermark{
+    from{transform:translateY(0) scale(1);opacity:.5;}
+    to{transform:translateY(-12px) scale(1.04);opacity:1;}
+}
+.coach-feedback{
+    margin-top:22px;display:grid;
+    grid-template-columns:1fr 1fr;gap:15px;
+    position:relative;z-index:2;
+}
+.coach-feedback-box{
+    min-height:155px;padding:17px;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:12px;background:rgba(5,9,19,.48);
+    transition:transform .3s ease,background .3s ease,border-color .3s ease;
+    animation:feedbackEntrance .7s ease both;
+}
+.coach-feedback-box:nth-child(1){animation-delay:.15s;}
+.coach-feedback-box:nth-child(2){animation-delay:.35s;}
+@keyframes feedbackEntrance{
+    from{opacity:0;transform:translateY(22px);}
+    to{opacity:1;transform:translateY(0);}
+}
+.coach-feedback-box:hover{
+    transform:translateY(-5px);
+    background:rgba(20,20,40,.7);
+    border-color:rgba(155,92,255,.4);
+}
+.coach-feedback-box h3{
+    margin-bottom:13px;font-size:12px;letter-spacing:1px;
+    animation:headingGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes headingGlow{
+    from{text-shadow:0 0 0 transparent;}
+    to{text-shadow:0 0 12px currentColor;}
+}
+.coach-feedback-box.good h3{color:var(--green);}
+.coach-feedback-box.improve h3{color:var(--orange);}
+.coach-feedback-box ul{list-style:none;display:grid;gap:10px;}
+.coach-feedback-box li{
+    position:relative;padding-left:17px;
+    color:var(--text);font-size:13px;line-height:1.6;
+    overflow-wrap:anywhere;
+    animation:pointEntrance .5s ease both;
+}
+@keyframes pointEntrance{
+    from{opacity:0;transform:translateX(-10px);}
+    to{opacity:1;transform:translateX(0);}
+}
+.coach-feedback-box li::before{
+    content:"";position:absolute;left:0;top:7px;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 9px var(--green);
+    animation:bulletPulse 1.8s ease-in-out infinite;
+}
+@keyframes bulletPulse{
+    50%{transform:scale(1.5);opacity:.65;}
+}
+.coach-feedback-box.improve li::before{
+    background:var(--orange);
+    box-shadow:0 0 9px var(--orange);
 }
 
-.coach-message{
-    margin-top:22px;
-    padding:18px;
-
-    border-left:4px solid var(--purple);
-
-    background:rgba(155,92,255,.08);
-
-    color:var(--text);
-    font-size:15px;
-    line-height:1.7;
-
-    position:relative;
-    z-index:2;
-
-    animation:messageGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes messageGlow{
-    to{
-        box-shadow:-8px 0 30px rgba(155,92,255,.12);
-    }
-}
-
-.ranking{
-    margin-top:25px;
-    display:grid;
-    gap:15px;
-    position:relative;
-    z-index:2;
-}
-
-.rank-row{
-    display:grid;
-    grid-template-columns:42px 120px 1fr 50px;
-    align-items:center;
-    gap:12px;
-}
-
-.rank-number{
-    color:var(--purple);
-    font-size:15px;
-    font-weight:900;
-}
-
-.rank-name{
-    font-size:14px;
-    font-weight:800;
-}
-
-.rank-track{
-    height:9px;
-    border-radius:20px;
-    background:rgba(255,255,255,.08);
-    overflow:hidden;
-}
-
-.rank-fill{
-    height:100%;
-    border-radius:20px;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--blue),
-            var(--cyan),
-            var(--purple)
-        );
-
-    animation:rankLoad 1.5s ease;
-}
-
-@keyframes rankLoad{
-    from{width:0 !important;}
-}
-
-.rank-score{
-    color:var(--cyan);
-    font-size:14px;
-    font-weight:900;
-    text-align:right;
-}
-
-/* DIFFICULTY */
+/* LEVEL RECOMMENDATION SECTION */
 
 .difficulty{
     margin-top:25px;
     padding:30px;
     position:relative;
     overflow:hidden;
-
-    border:1px solid rgba(255,216,77,.20);
-
-    background:
-        linear-gradient(
-            110deg,
-            rgba(35,27,8,.8),
-            rgba(7,10,17,.9)
-        );
+    border:1px solid rgba(255,216,77,.25);
+    background:linear-gradient(110deg,rgba(35,27,8,.8),rgba(7,10,17,.9));
+    isolation:isolate;
+    transition:border-color .4s ease,box-shadow .4s ease;
+    animation:difficultyEntrance .9s ease both;
 }
+
+.difficulty:hover{
+    border-color:rgba(255,216,77,.65);
+    box-shadow:0 0 30px rgba(255,190,50,.13);
+}
+
+@keyframes difficultyEntrance{
+    from{opacity:0;transform:translateY(25px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* Soft golden light inside the recommendation box */
 
 .difficulty::before{
     content:"";
     position:absolute;
-    width:350px;
-    height:2px;
-    left:-350px;
+    inset:-100% -50%;
+    z-index:-1;
+    background:linear-gradient(
+        110deg,
+        transparent 40%,
+        rgba(255,216,77,.14) 50%,
+        transparent 60%
+    );
+    animation:difficultySweep 6s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes difficultySweep{
+    from{transform:translateX(-40%) rotate(0deg);}
+    to{transform:translateX(40%) rotate(0deg);}
+}
+
+/* Soft inner border glow */
+
+.difficulty::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border:1px solid rgba(255,216,77,.08);
+    pointer-events:none;
+    animation:difficultyBorderGlow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes difficultyBorderGlow{
+    from{box-shadow:inset 0 0 8px rgba(255,216,77,.03);}
+    to{box-shadow:inset 0 0 30px rgba(255,216,77,.16);}
+}
+
+/* Small glowing light following the outer boundary */
+
+.difficulty-border-light{
+    position:absolute;
     top:0;
+    left:0;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    z-index:5;
+    pointer-events:none;
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            var(--yellow),
-            transparent
-        );
+    background:#ffffff;
 
-    box-shadow:0 0 20px var(--yellow);
-    animation:difficultyScan 4s linear infinite;
+    box-shadow:
+        0 0 5px #ffffff,
+        0 0 11px var(--yellow),
+        0 0 20px var(--orange),
+        0 0 28px rgba(255,216,77,.7);
+
+    offset-path:inset(0 round 0px);
+    offset-distance:0%;
+    offset-rotate:0deg;
+
+    animation:difficultyBorderTravel 5s linear infinite;
 }
 
-@keyframes difficultyScan{
-    to{left:100%;}
+@keyframes difficultyBorderTravel{
+    from{offset-distance:0%;}
+    to{offset-distance:100%;}
 }
+
+/* Recommendation heading */
 
 .difficulty-current{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    position:relative;
+    z-index:2;
 }
 
 .difficulty-current h3{
     font-size:25px;
     color:var(--yellow);
-    animation:difficultyPulse 2s ease-in-out infinite alternate;
+    animation:recommendedPulse 2s ease-in-out infinite alternate;
+    transform-origin:left center;
 }
 
-@keyframes difficultyPulse{
-    to{text-shadow:0 0 15px rgba(255,216,77,.7);}
+@keyframes recommendedPulse{
+    from{
+        text-shadow:0 0 5px rgba(255,216,77,.2);
+        transform:scale(1);
+    }
+    to{
+        text-shadow:0 0 18px rgba(255,216,77,.85),0 0 35px rgba(255,155,66,.35);
+        transform:scale(1.06);
+    }
 }
 
 .difficulty-current p{
     color:var(--muted);
     font-size:13px;
+    animation:recommendTextFade 1.2s ease both;
+}
+
+@keyframes recommendTextFade{
+    from{opacity:0;transform:translateX(-12px);}
+    to{opacity:1;transform:translateX(0);}
 }
 
 #difficultyDescription{
     color:var(--orange);
-    font-size:14px;
-    font-weight:800;
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:1px;
+    text-align:right;
+    animation:levelDescriptionPulse 2.5s ease-in-out infinite alternate;
 }
+
+@keyframes levelDescriptionPulse{
+    from{opacity:.7;text-shadow:0 0 3px rgba(255,155,66,.2);}
+    to{opacity:1;text-shadow:0 0 13px rgba(255,155,66,.75);}
+}
+
+/* All five difficulty levels */
 
 .difficulty-levels{
     margin-top:25px;
     display:grid;
     grid-template-columns:repeat(5,1fr);
     gap:8px;
+    position:relative;
+    z-index:2;
 }
 
 .level{
     padding:15px 8px;
     text-align:center;
-
     border:1px solid rgba(255,255,255,.08);
-
     color:var(--muted);
     font-size:12px;
     font-weight:800;
-    transition:.3s;
+    transition:all .35s ease;
+    position:relative;
+    overflow:hidden;
+    opacity:1;
+    animation:levelTileEntrance .65s ease forwards;
 }
 
-.level.active{
-    color:#05070d;
+.level:nth-child(1){animation-delay:.15s;}
+.level:nth-child(2){animation-delay:.3s;}
+.level:nth-child(3){animation-delay:.45s;}
+.level:nth-child(4){animation-delay:.6s;}
+.level:nth-child(5){animation-delay:.75s;}
 
-    background:
-        linear-gradient(
-            90deg,
-            var(--yellow),
-            var(--orange)
-        );
-
-    box-shadow:0 0 25px rgba(255,170,50,.35);
-    transform:translateY(-5px);
-
-    animation:activeDifficulty 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes activeDifficulty{
+@keyframes levelTileEntrance{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.92);
+    }
     to{
-        box-shadow:0 0 38px rgba(255,170,50,.55);
+        opacity:1;
+        transform:translateY(0) scale(1);
     }
 }
 
-/* FOOTER */
+/* Scanning light on each level tile */
+
+.level::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:80%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.4),
+        transparent
+    );
+    transform:skewX(-20deg);
+    transition:left .55s ease;
+}
+
+.level:hover::before{
+    left:140%;
+}
+
+.level:hover{
+    color:white;
+    border-color:rgba(255,216,77,.65);
+    transform:translateY(-5px) scale(1.03);
+    box-shadow:0 0 18px rgba(255,190,50,.15);
+}
+
+/* AI-recommended level is highlighted dynamically */
+
+.level.active{
+    color:#05070d;
+    background:linear-gradient(135deg,#ffe878,var(--yellow),var(--orange));
+    border:2px solid #fff0a6;
+    box-shadow:0 0 18px rgba(255,170,50,.65),0 0 34px rgba(255,216,77,.28);
+    transform:translateY(-5px) scale(1.04);
+    animation:activeDifficulty 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes activeDifficulty{
+    from{
+        box-shadow:0 0 12px rgba(255,170,50,.25);
+        filter:brightness(1);
+    }
+    to{
+        box-shadow:0 0 35px rgba(255,170,50,.7),0 0 55px rgba(255,216,77,.2);
+        filter:brightness(1.13);
+    }
+}
+
+/* Actual played difficulty remains plain */
+
+#playedDifficultyText{
+    margin-top:22px;
+    color:var(--text);
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:1px;
+    padding:0;
+    display:block;
+    border:none;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    position:relative;
+    z-index:2;
+    animation:none;
+}
+
+/* BOTTOM FOOTER ANIMATIONS */
 
 footer{
     margin-top:50px;
     padding-top:25px;
-
     border-top:1px solid var(--border);
-
     display:flex;
     justify-content:space-between;
-
     color:var(--muted);
     font-size:11px;
     letter-spacing:2px;
-
     position:relative;
+    animation:footerEntrance 1.2s ease both;
+    animation-delay:.3s;
 }
+
+@keyframes footerEntrance{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Moving glowing line above footer */
 
 footer::before{
     content:"";
     position:absolute;
-    left:0;
     top:-1px;
-    width:120px;
+    left:0;
+    width:22%;
     height:2px;
-
     background:linear-gradient(
         90deg,
+        transparent,
         var(--cyan),
+        var(--purple),
         transparent
     );
-
-    animation:footerScan 3s linear infinite;
+    box-shadow:0 0 12px var(--cyan);
+    animation:footerLineMove 5s ease-in-out infinite alternate;
 }
 
-@keyframes footerScan{
-    50%{left:70%;}
-    100%{left:0;}
+@keyframes footerLineMove{
+    from{left:0;width:15%;}
+    to{left:85%;width:15%;}
 }
 
-/* RESPONSIVE */
+footer span{
+    transition:color .3s ease,text-shadow .3s ease;
+    animation:footerTextGlow 3s ease-in-out infinite alternate;
+}
+
+footer span:nth-child(2){
+    animation-delay:1.2s;
+}
+
+@keyframes footerTextGlow{
+    from{
+        color:var(--muted);
+        text-shadow:0 0 0 transparent;
+    }
+    to{
+        color:#b7c8df;
+        text-shadow:0 0 10px rgba(32,234,255,.25);
+    }
+}
+
+.back-home-button{
+    position:fixed;top:20px;left:20px;z-index:9999;
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:12px 18px;
+    border:1px solid rgba(32,234,255,.65);
+    border-radius:10px;background:rgba(4,10,22,.92);
+    color:#20eaff;font-size:12px;font-weight:800;
+    letter-spacing:1px;text-decoration:none;
+    box-shadow:0 0 15px rgba(32,234,255,.12);
+    transition:all .25s ease;
+}
+.back-home-button:hover{
+    color:#fff;background:rgba(22,119,255,.25);
+    border-color:#20eaff;
+    box-shadow:0 0 22px rgba(32,234,255,.35);
+    transform:translateY(-2px);
+}
 
 @media(max-width:1000px){
-
-    .hero{
-        grid-template-columns:1fr;
-    }
-
-    .ai-core{
-        height:260px;
-    }
-
-    .stats{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .lower-grid{
-        grid-template-columns:1fr;
-    }
+    .hero{grid-template-columns:1fr;}
+    .ai-core{height:260px;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .lower-grid{grid-template-columns:1fr;}
 }
 
 @media(max-width:650px){
-
-    header{
-        padding:0 20px;
-    }
-
-    .online{
-        display:none;
-    }
-
-    main{
-        width:90%;
-    }
-
-    .player{
-        flex-direction:column;
-        align-items:flex-start;
-    }
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .stat-value{
-        font-size:35px;
-    }
-
-    .graph{
-        padding:20px 5px 45px;
-    }
-
-    .bar-area{
-        width:45px;
-    }
-
-    .game-info{
-        font-size:10px;
-    }
-
-    .core-content{
-        flex-direction:column;
-        align-items:flex-start;
-    }
-
-    .difficulty-levels{
-        grid-template-columns:1fr;
-    }
-
-    footer{
-        flex-direction:column;
-        gap:12px;
-    }
-
+    header{padding:0 20px;}
+    .online{display:none;}
+    main{width:90%;}
+    .player-id{font-size:18px;}
+    .player-name{font-size:42px;}
+    .player-details{grid-template-columns:1fr 1fr;}
+    .stats{grid-template-columns:1fr;}
+    .stat-value{font-size:35px;}
+    .graph{padding:20px 5px 45px;}
+    .bar-area{width:45px;}
+    .game-info{font-size:10px;}
+    .core-content{flex-direction:column;align-items:flex-start;}
+    .difficulty-levels{grid-template-columns:1fr;}
+    footer{flex-direction:column;gap:12px;}
+    .coach-feedback{grid-template-columns:1fr;}
+    .back-home-button{top:10px;left:10px;padding:10px 12px;font-size:10px;}
+    .score-circle{width:190px;height:190px;}
+    .score-circle::before{width:160px;height:160px;}
+    .section-title{flex-wrap:wrap;}
+    .difficulty-current{gap:15px;align-items:flex-start;flex-direction:column;}
+    .difficulty-current h3{font-size:23px;}
 }
 
-/* Back to Home Button */
-.back-home-button {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 9999;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 12px 18px;
-  border: 1px solid rgba(32, 234, 255, 0.65);
-  border-radius: 10px;
-
-  background: rgba(4, 10, 22, 0.92);
-  color: #20eaff;
-
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-decoration: none;
-
-  box-shadow: 0 0 15px rgba(32, 234, 255, 0.12);
-  transition: all 0.25s ease;
+@media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+    }
 }
-
-.back-home-button:hover {
-  color: #ffffff;
-  background: rgba(22, 119, 255, 0.25);
-  border-color: #20eaff;
-  box-shadow: 0 0 22px rgba(32, 234, 255, 0.35);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 600px) {
-  .back-home-button {
-    top: 10px;
-    left: 10px;
-    padding: 10px 12px;
-    font-size: 10px;
-  }
-}
-
 </style>
 </head>
 
@@ -1294,177 +976,110 @@ footer::before{
 <div class="light three"></div>
 
 <header>
-
     <div class="brand">
-
         <div class="logo">◈</div>
-
         <div>
-
-            <div class="brand-title">
-                AI <span>GAMING COACH</span>
-            </div>
-
-            <div class="brand-sub">
-                PLAYER PERFORMANCE INTELLIGENCE
-            </div>
-
+            <div class="brand-title">AI <span>GAMING COACH</span></div>
+            <div class="brand-sub">PLAYER PERFORMANCE INTELLIGENCE</div>
         </div>
-
     </div>
 
     <div class="online">
-
         <span class="online-dot"></span>
-
         AI SYSTEM ONLINE
-
     </div>
-
 </header>
 
 <main>
 
 <section class="hero">
-
     <div>
-
-        <div class="hero-label">
-            ACTIVE PLAYER PROFILE
-        </div>
+        <div class="hero-label">PLAYER ID</div>
 
         <div class="player">
-
-            <div id="playerName" class="player-name">
-                PLAYER
-            </div>
-
-            <div id="playerId" class="player-number">
-                P001
-            </div>
-
+            <div id="playerId" class="player-id">ID NOT AVAILABLE</div>
+            <div id="playerName" class="player-name">Player name not available</div>
         </div>
 
         <p class="hero-text">
-
-            Real-time AI analysis of your gameplay,
-            including accuracy, combat performance,
-            reaction speed, survival and progression.
-
+            View your gaming activity, total games played
+            and your highest score.
         </p>
 
+        <div class="player-details">
+            <div class="player-detail">
+                <span class="detail-label">TOTAL GAMES PLAYED</span>
+                <span id="totalGames" class="detail-value">0</span>
+            </div>
+
+            <div class="player-detail">
+                <span class="detail-label">BEST SCORE</span>
+                <span id="bestScore" class="detail-value">0</span>
+            </div>
+        </div>
     </div>
 
     <div class="ai-core">
-
         <div class="core-ring r1"></div>
         <div class="core-ring r2"></div>
         <div class="core-ring r3"></div>
         <div class="scan-line"></div>
         <div class="core-energy"></div>
-
     </div>
-
 </section>
 
 <section class="section">
-
     <div class="section-title">
-
         <h2>Combat Statistics</h2>
-
         <span>LIVE PLAYER DATA</span>
-
     </div>
 
     <div class="stats">
-
         <div class="stat">
-
             <div class="stat-label">SCORE</div>
-
             <div id="score" class="stat-value">--</div>
-
-            <div class="stat-unit">
-                CURRENT SCORE
-            </div>
-
+            <div class="stat-unit">CURRENT SCORE</div>
         </div>
 
         <div class="stat">
-
             <div class="stat-label">KILLS</div>
-
             <div id="kills" class="stat-value">--</div>
-
-            <div class="stat-unit">
-                ELIMINATIONS
-            </div>
-
+            <div class="stat-unit">ELIMINATIONS</div>
         </div>
 
         <div class="stat">
-
-            <div class="stat-label">DEATHS</div>
-
+            <div class="stat-label">DEATHS / HITS</div>
             <div id="deaths" class="stat-value">--</div>
-
-            <div class="stat-unit">
-                LOSSES
-            </div>
-
+            <div class="stat-unit">PLAYER HITS</div>
         </div>
 
         <div class="stat">
-
             <div class="stat-label">ACCURACY</div>
-
             <div id="accuracy" class="stat-value">--</div>
-
-            <div class="stat-unit">
-                AIM PRECISION
-            </div>
-
+            <div class="stat-unit">AIM PRECISION</div>
         </div>
 
         <div class="stat">
-
             <div class="stat-label">REACTION TIME</div>
-
             <div id="reaction" class="stat-value">--</div>
-
-            <div class="stat-unit">
-                RESPONSE SPEED
-            </div>
-
+            <div class="stat-unit">RESPONSE SPEED</div>
         </div>
-
     </div>
-
 </section>
 
 <section class="section">
-
     <div class="section-title">
-
         <h2>Gameplay Statistics</h2>
-
-        <span>LAST 4 GAMES • SCALE 0–100</span>
-
+        <span>LAST 4 GAMES • ACTUAL SCORES</span>
     </div>
 
     <div class="performance">
-
         <div class="graph-heading">
-
-            <strong>Performance Score</strong>
-
-            <span>MAXIMUM = 100</span>
-
+            <strong>Actual Game Scores</strong>
+            <span>GAME HISTORY</span>
         </div>
 
         <div class="graph">
-
             <div class="guide g1"></div>
             <div class="guide g2"></div>
             <div class="guide g3"></div>
@@ -1472,1421 +1087,999 @@ footer::before{
             <div class="guide g5"></div>
 
             <div class="game">
-
                 <div class="bar-area">
-
                     <div id="bar1" class="bar" style="height:8%">
-
-                        <div id="barValue1" class="bar-value">
-                            --
-                        </div>
-
+                        <div id="barValue1" class="bar-value">--</div>
                     </div>
-
                 </div>
-
                 <div class="game-name">GAME 01</div>
-
                 <div class="game-info">
-
-                    Score:
-                    <span id="gameScore1">--</span>
-
-                    <br>
-
-                    Accuracy:
-                    <span id="gameAccuracy1">--</span>
-
-                    <br>
-
-                    <span id="gameDifficulty1" class="difficulty-tag">
-                        --
-                    </span>
-
+                    Score: <span id="gameScore1">--</span><br>
+                    Accuracy: <span id="gameAccuracy1">--</span><br>
+                    <span id="gameDifficulty1" class="difficulty-tag">--</span>
                 </div>
-
             </div>
 
             <div class="game">
-
                 <div class="bar-area">
-
                     <div id="bar2" class="bar" style="height:8%">
-
-                        <div id="barValue2" class="bar-value">
-                            --
-                        </div>
-
+                        <div id="barValue2" class="bar-value">--</div>
                     </div>
-
                 </div>
-
                 <div class="game-name">GAME 02</div>
-
                 <div class="game-info">
-
-                    Score:
-                    <span id="gameScore2">--</span>
-
-                    <br>
-
-                    Accuracy:
-                    <span id="gameAccuracy2">--</span>
-
-                    <br>
-
-                    <span id="gameDifficulty2" class="difficulty-tag">
-                        --
-                    </span>
-
+                    Score: <span id="gameScore2">--</span><br>
+                    Accuracy: <span id="gameAccuracy2">--</span><br>
+                    <span id="gameDifficulty2" class="difficulty-tag">--</span>
                 </div>
-
             </div>
 
             <div class="game">
-
                 <div class="bar-area">
-
                     <div id="bar3" class="bar" style="height:8%">
-
-                        <div id="barValue3" class="bar-value">
-                            --
-                        </div>
-
+                        <div id="barValue3" class="bar-value">--</div>
                     </div>
-
                 </div>
-
                 <div class="game-name">GAME 03</div>
-
                 <div class="game-info">
-
-                    Score:
-                    <span id="gameScore3">--</span>
-
-                    <br>
-
-                    Accuracy:
-                    <span id="gameAccuracy3">--</span>
-
-                    <br>
-
-                    <span id="gameDifficulty3" class="difficulty-tag">
-                        --
-                    </span>
-
+                    Score: <span id="gameScore3">--</span><br>
+                    Accuracy: <span id="gameAccuracy3">--</span><br>
+                    <span id="gameDifficulty3" class="difficulty-tag">--</span>
                 </div>
-
             </div>
 
             <div class="game">
-
                 <div class="bar-area">
-
                     <div id="bar4" class="bar" style="height:8%">
-
-                        <div id="barValue4" class="bar-value">
-                            --
-                        </div>
-
+                        <div id="barValue4" class="bar-value">--</div>
                     </div>
-
                 </div>
-
                 <div class="game-name">GAME 04</div>
-
                 <div class="game-info">
-
-                    Score:
-                    <span id="gameScore4">--</span>
-
-                    <br>
-
-                    Accuracy:
-                    <span id="gameAccuracy4">--</span>
-
-                    <br>
-
-                    <span id="gameDifficulty4" class="difficulty-tag">
-                        --
-                    </span>
-
+                    Score: <span id="gameScore4">--</span><br>
+                    Accuracy: <span id="gameAccuracy4">--</span><br>
+                    <span id="gameDifficulty4" class="difficulty-tag">--</span>
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
 <section class="lower-grid">
 
     <div class="core-panel">
-
         <div class="section-title">
-
             <h2>Performance</h2>
-
             <span>AI EVALUATION</span>
-
         </div>
 
         <div class="core-content">
-
-            <div class="score-circle">
-
+            <div class="score-circle" id="scoreCircle">
+                <div class="circle-light"></div>
                 <div class="score-content">
-
-                    <div id="performanceScore" class="score-number">
-                        --
-                    </div>
-
-                    <div class="score-label">
-                        PERFORMANCE
-                    </div>
-
+                    <div id="performanceScore" class="score-number">--</div>
+                    <div class="score-label">PERFORMANCE</div>
+                    <div class="score-status" id="scoreStatus">ANALYZING</div>
                 </div>
-
             </div>
 
             <div>
-
-                <div id="skillLevel" class="skill">
-                    WAITING
-                </div>
-
+                <div id="skillLevel" class="skill">WAITING</div>
                 <p id="skillDescription" class="skill-desc">
-                    Your AI coach will evaluate your recent gameplay.
+                    Your AI coach will check your recent gameplay.
                 </p>
-
             </div>
-
         </div>
-
     </div>
 
     <div class="coach">
-
         <div class="section-title">
-
             <h2>AI Coach</h2>
-
-            <span>YOUR GAMEPLAY GUIDE</span>
-
+            <span>DETAILED GAMEPLAY ANALYSIS</span>
         </div>
 
-        <div id="coachMessage" class="coach-message">
+        <div class="coach-feedback">
+            <div class="coach-feedback-box good">
+                <h3>WHAT YOU DID WELL</h3>
+                <ul id="performancePoints">
+                    <li>Play a game to see your results.</li>
+                </ul>
+            </div>
 
-            Waiting for your latest gameplay analysis...
-
+            <div class="coach-feedback-box improve">
+                <h3>WHAT TO IMPROVE</h3>
+                <ul id="improvementPoints">
+                    <li>Your improvement tips will appear after a game.</li>
+                </ul>
+            </div>
         </div>
-
-        <div class="ranking">
-
-            <div class="rank-row">
-
-                <div class="rank-number">#01</div>
-
-                <div class="rank-name">Aim</div>
-
-                <div class="rank-track">
-
-                    <div id="aimBar"
-                         class="rank-fill"
-                         style="width:0%">
-                    </div>
-
-                </div>
-
-                <div id="aimScore" class="rank-score">
-                    0
-                </div>
-
-            </div>
-
-            <div class="rank-row">
-
-                <div class="rank-number">#02</div>
-
-                <div class="rank-name">Reaction</div>
-
-                <div class="rank-track">
-
-                    <div id="reactionBar"
-                         class="rank-fill"
-                         style="width:0%">
-                    </div>
-
-                </div>
-
-                <div id="reactionScore" class="rank-score">
-                    0
-                </div>
-
-            </div>
-
-            <div class="rank-row">
-
-                <div class="rank-number">#03</div>
-
-                <div class="rank-name">Combat</div>
-
-                <div class="rank-track">
-
-                    <div id="combatBar"
-                         class="rank-fill"
-                         style="width:0%">
-                    </div>
-
-                </div>
-
-                <div id="combatScore" class="rank-score">
-                    0
-                </div>
-
-            </div>
-
-            <div class="rank-row">
-
-                <div class="rank-number">#04</div>
-
-                <div class="rank-name">Survival</div>
-
-                <div class="rank-track">
-
-                    <div id="survivalBar"
-                         class="rank-fill"
-                         style="width:0%">
-                    </div>
-
-                </div>
-
-                <div id="survivalScore" class="rank-score">
-                    0
-                </div>
-
-            </div>
-
-            <div class="rank-row">
-
-                <div class="rank-number">#05</div>
-
-                <div class="rank-name">Decision Making</div>
-
-                <div class="rank-track">
-
-                    <div id="decisionBar"
-                         class="rank-fill"
-                         style="width:0%">
-                    </div>
-
-                </div>
-
-                <div id="decisionScore" class="rank-score">
-                    0
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
 </section>
 
+<!-- LEVEL RECOMMENDATION SECTION -->
+
 <section class="difficulty">
 
+    <!-- This small light travels around the outer boundary -->
+    <span class="difficulty-border-light" aria-hidden="true"></span>
+
     <div class="difficulty-current">
-
         <div>
-
-            <h3 id="recommendedDifficulty">
-                MEDIUM
-            </h3>
-
-            <p>
-                Recommended difficulty for your next game
-            </p>
-
+            <h3>LEVEL RECOMMENDATION</h3>
+            <p>AI recommended difficulty for your next game</p>
         </div>
 
-        <div id="difficultyDescription">
-            Level 2 / 5
-        </div>
-
+        <div id="difficultyDescription">AI RECOMMENDATION: --</div>
     </div>
 
-    <div class="difficulty-levels">
-
-        <div class="level" data-level="1">
-            EASY
-        </div>
-
-        <div class="level active" data-level="2">
-            MEDIUM
-        </div>
-
-        <div class="level" data-level="3">
-            HARD
-        </div>
-
-        <div class="level" data-level="4">
-            EXPERT
-        </div>
-
-        <div class="level" data-level="5">
-            EXTREME
-        </div>
-
+    <!-- All five possible levels are always displayed. Only the AI-recommended one is highlighted. -->
+    <div class="difficulty-levels" role="list" aria-label="All difficulty levels">
+        <div class="level" data-level="1" role="listitem">EASY</div>
+        <div class="level" data-level="2" role="listitem">MEDIUM</div>
+        <div class="level" data-level="3" role="listitem">HARD</div>
+        <div class="level" data-level="4" role="listitem">EXPERT</div>
+        <div class="level" data-level="5" role="listitem">EXTREME</div>
     </div>
+
+    <p id="playedDifficultyText">
+        ACTUAL PLAYED DIFFICULTY: --
+    </p>
 
 </section>
 
 <footer>
-
     <span>AI GAMING COACH</span>
-
-    <span>
-        PLAYER INTELLIGENCE SYSTEM • v1.0
-    </span>
-
+    <span>PLAYER INTELLIGENCE SYSTEM • v1.0</span>
 </footer>
 
 </main>
 
 <script>
 
-/* =========================================================
-   DASHBOARD CONFIGURATION
-========================================================= */
-
 const API_BASE = "http://127.0.0.1:5000";
 
+function number(value, fallback = 0) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
+}
 
-/* =========================================================
-   FETCH SESSIONS
-========================================================= */
+function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+}
 
-async function getSessions(){
+function firstAvailable(object, keys) {
+    for (const key of keys) {
+        const value = object?.[key];
 
-    const response =
-        await fetch(
-            API_BASE + "/api/sessions",
-            {
-                cache:"no-store"
+        if (value !== undefined && value !== null && value !== "") {
+            return value;
+        }
+    }
+
+    return null;
+}
+
+function getSavedValue(keys) {
+    try {
+        for (const key of keys) {
+            const value = localStorage.getItem(key);
+
+            if (value && value.trim()) {
+                return value.trim();
             }
-        );
+        }
+    } catch (error) {
+        console.warn("Unable to read player information.");
+    }
 
-    if(!response.ok){
+    return "";
+}
+
+async function getSessions(playerId) {
+
+    const response = await fetch(
+        API_BASE + "/api/player/" +
+        encodeURIComponent(playerId) +
+        "/sessions",
+        {
+            cache: "no-store",
+            credentials: "include"
+        }
+    );
+
+    if (!response.ok) {
         throw new Error(
-            "Sessions API returned " +
-            response.status
+            "Player sessions API returned " + response.status
         );
     }
 
-    const data =
-        await response.json();
+    const data = await response.json();
 
-    if(!data.success){
+    if (!data.success) {
         throw new Error(
-            data.message ||
-            "Unable to load sessions"
+            data.message || "Unable to load sessions"
         );
     }
 
-    return Array.isArray(data.sessions)
+    const sessions = Array.isArray(data.sessions)
         ? data.sessions
         : [];
+
+    sessions.sort((a, b) => Number(a.id) - Number(b.id));
+
+    return {
+        sessions: sessions,
+        player: data.player || null
+    };
 }
 
+function updatePlayerDetails(player) {
 
-/* =========================================================
-   NUMBER HELPERS
-========================================================= */
+    const savedId = getSavedValue(["player_id", "playerId"]);
+    const savedName = getSavedValue(["player_name", "playerName"]);
 
-function number(value, fallback=0){
+    document.getElementById("playerId").textContent =
+        player?.player_id || savedId || "ID NOT AVAILABLE";
 
-    const n = Number(value);
-
-    return Number.isFinite(n)
-        ? n
-        : fallback;
+    document.getElementById("playerName").textContent =
+        player?.player_name || savedName || "Player name not available";
 }
 
-
-function clamp(value,min,max){
-
-    return Math.min(
-        max,
-        Math.max(min,value)
-    );
-
+function getGameScore(game) {
+    return number(firstAvailable(game, [
+        "score", "final_score", "finalScore", "points"
+    ]), 0);
 }
 
+function getKills(game) {
+    return Math.max(0, number(firstAvailable(game, [
+        "kills",
+        "enemiesDefeated",
+        "enemies_defeated",
+        "eliminations"
+    ]), 0));
+}
 
-/* =========================================================
-   REACTION TIME
-========================================================= */
+function getDeaths(game) {
+    return Math.max(0, number(firstAvailable(game, [
+        "deaths",
+        "playerHits",
+        "player_hits",
+        "hits_taken"
+    ]), 0));
+}
 
-function getReactionTime(game){
+function getAccuracy(game) {
 
-    let value =
-        game.reaction_time ??
-        game.reactionTime ??
-        game.response_time ??
-        game.responseTime;
+    const value = firstAvailable(game, [
+        "accuracy",
+        "aim_accuracy",
+        "aimAccuracy"
+    ]);
 
-    value = Number(value);
+    if (value === null) return 0;
 
-    /*
-     * If the backend/game did not provide a usable
-     * reaction time, calculate a reasonable estimate
-     * from combat performance.
-     *
-     * This prevents the dashboard from staying "--".
-     */
+    let accuracy = Number(value);
 
-    if(
-        !Number.isFinite(value) ||
-        value <= 0
-    ){
+    if (!Number.isFinite(accuracy)) return 0;
 
-        const accuracy =
-            clamp(
-                number(game.accuracy,50),
-                0,
-                100
-            );
-
-        const kills =
-            Math.max(
-                0,
-                number(game.kills,0)
-            );
-
-        const deaths =
-            Math.max(
-                0,
-                number(game.deaths,0)
-            );
-
-        /*
-         * Better accuracy and more kills
-         * produce faster estimated response.
-         */
-
-        value =
-            0.90
-            - accuracy * 0.0025
-            - Math.min(kills,20) * 0.012
-            + Math.min(deaths,10) * 0.025;
-
+    if (accuracy > 0 && accuracy <= 1) {
+        accuracy *= 100;
     }
 
-    return clamp(
-        value,
-        0.18,
-        1.50
-    );
-
+    return Math.max(0, Math.min(100, accuracy));
 }
 
+function getReactionTime(game) {
 
-function formatReaction(game){
+    const value = firstAvailable(game, [
+        "reaction_time",
+        "reactionTime",
+        "response_time",
+        "responseTime"
+    ]);
 
-    const value =
-        getReactionTime(game);
+    if (value === null) return null;
 
-    return value.toFixed(2) + "s";
+    const reaction = Number(value);
 
-}
-
-
-/* =========================================================
-   PLAYER
-========================================================= */
-
-function updatePlayer(game){
-
-    document.getElementById(
-        "playerId"
-    ).textContent =
-        game.player_id ||
-        game.playerId ||
-        "P001";
-
-}
-
-
-/* =========================================================
-   STATISTICS
-========================================================= */
-
-function updateStatistics(game){
-
-    document.getElementById(
-        "score"
-    ).textContent =
-        number(game.score,0);
-
-    document.getElementById(
-        "kills"
-    ).textContent =
-        number(game.kills,0);
-
-    document.getElementById(
-        "deaths"
-    ).textContent =
-        number(game.deaths,0);
-
-    document.getElementById(
-        "accuracy"
-    ).textContent =
-        clamp(
-            number(game.accuracy,0),
-            0,
-            100
-        ).toFixed(1) + "%";
-
-    document.getElementById(
-        "reaction"
-    ).textContent =
-        formatReaction(game);
-
-}
-
-
-/* =========================================================
-   GRAPH
-========================================================= */
-
-function getPerformanceValue(game){
-
-    /*
-     * The graph is intentionally normalized to 0–100.
-     *
-     * If score is already 0–100, use it directly.
-     *
-     * If the score is larger, normalize it using
-     * combat statistics instead of allowing the bar
-     * to disappear beyond the graph.
-     */
-
-    let score =
-        Number(game.score);
-
-    if(
-        Number.isFinite(score) &&
-        score >= 0 &&
-        score <= 100
-    ){
-
-        return score;
-
+    if (!Number.isFinite(reaction) || reaction <= 0) {
+        return null;
     }
 
-    const accuracy =
-        clamp(
-            number(game.accuracy,0),
+    return reaction;
+}
+
+function getSurvivalTime(game) {
+    return number(firstAvailable(game, [
+        "survival_time",
+        "survivalTime",
+        "time_survived",
+        "timeSurvived"
+    ]), 0);
+}
+
+function getPlayedDifficulty(game) {
+
+    return firstAvailable(game, [
+        "difficulty",
+        "played_difficulty",
+        "playedDifficulty",
+        "actual_difficulty",
+        "actualDifficulty",
+        "selected_difficulty",
+        "selectedDifficulty"
+    ]);
+}
+
+function updatePlayerSummary(sessions) {
+
+    let bestScore = 0;
+
+    sessions.forEach(game => {
+        bestScore = Math.max(
+            bestScore,
+            getGameScore(game)
+        );
+    });
+
+    document.getElementById("totalGames").textContent =
+        sessions.length;
+
+    document.getElementById("bestScore").textContent =
+        bestScore;
+}
+
+function updateStatistics(game) {
+
+    const accuracy = getAccuracy(game);
+    const reaction = getReactionTime(game);
+
+    document.getElementById("score").textContent =
+        getGameScore(game);
+
+    document.getElementById("kills").textContent =
+        getKills(game);
+
+    document.getElementById("deaths").textContent =
+        getDeaths(game);
+
+    document.getElementById("accuracy").textContent =
+        accuracy.toFixed(1) + "%";
+
+    document.getElementById("reaction").textContent =
+        reaction === null
+            ? "N/A"
+            : reaction.toFixed(2) + "s";
+}
+
+function getPerformanceValue(game) {
+
+    const accuracy = getAccuracy(game);
+    const kills = getKills(game);
+    const deaths = getDeaths(game);
+    const reaction = getReactionTime(game);
+
+    const accuracyScore = accuracy;
+
+    const reactionScore = reaction === null
+        ? 50
+        : clamp(
+            100 - ((reaction - 0.18) / (1.50 - 0.18)) * 100,
             0,
             100
         );
 
-    const kills =
-        clamp(
-            number(game.kills,0),
-            0,
-            20
-        );
-
-    const deaths =
-        clamp(
-            number(game.deaths,0),
-            0,
-            10
-        );
-
-    const reaction =
-        getReactionTime(game);
-
-    const reactionScore =
-        clamp(
-            100 -
-            ((reaction - 0.18) /
-            (1.50 - 0.18)) *
-            100,
-            0,
-            100
-        );
-
-    return clamp(
-        accuracy * 0.45 +
-        (kills / 20) * 100 * 0.25 +
-        Math.max(0,100 - deaths * 10) * 0.15 +
-        reactionScore * 0.15,
+    const combatScore = clamp(
+        kills * 10 - deaths * 5 + 50,
         0,
         100
     );
 
-}
-
-
-function updateGames(games){
-
-    for(let i=1;i<=4;i++){
-
-        const bar =
-            document.getElementById(
-                "bar" + i
-            );
-
-        const value =
-            document.getElementById(
-                "barValue" + i
-            );
-
-        const scoreElement =
-            document.getElementById(
-                "gameScore" + i
-            );
-
-        const accuracyElement =
-            document.getElementById(
-                "gameAccuracy" + i
-            );
-
-        const difficultyElement =
-            document.getElementById(
-                "gameDifficulty" + i
-            );
-
-        if(bar){
-            bar.style.height = "0%";
-        }
-
-        if(value){
-            value.textContent = "--";
-        }
-
-        if(scoreElement){
-            scoreElement.textContent = "--";
-        }
-
-        if(accuracyElement){
-            accuracyElement.textContent = "--";
-        }
-
-        if(difficultyElement){
-            difficultyElement.textContent = "--";
-        }
-
-    }
-
-
-    games.forEach(
-        (game,index)=>{
-
-            if(index >= 4){
-                return;
-            }
-
-            const n =
-                index + 1;
-
-            const performance =
-                getPerformanceValue(game);
-
-            const bar =
-                document.getElementById(
-                    "bar" + n
-                );
-
-            const value =
-                document.getElementById(
-                    "barValue" + n
-                );
-
-            const scoreElement =
-                document.getElementById(
-                    "gameScore" + n
-                );
-
-            const accuracyElement =
-                document.getElementById(
-                    "gameAccuracy" + n
-                );
-
-            const difficultyElement =
-                document.getElementById(
-                    "gameDifficulty" + n
-                );
-
-            if(bar){
-
-                bar.style.height =
-                    performance + "%";
-
-            }
-
-            if(value){
-
-                value.textContent =
-                    Math.round(performance);
-
-            }
-
-            if(scoreElement){
-
-                scoreElement.textContent =
-                    game.score ?? 0;
-
-            }
-
-            if(accuracyElement){
-
-                accuracyElement.textContent =
-                    number(
-                        game.accuracy,
-                        0
-                    ).toFixed(1) + "%";
-
-            }
-
-            if(difficultyElement){
-
-                difficultyElement.textContent =
-                    formatDifficulty(
-                        game.difficulty
-                    );
-
-            }
-
-        }
+    const survivalScore = clamp(
+        100 - deaths * 12,
+        0,
+        100
     );
 
+    return clamp(
+        accuracyScore * 0.35 +
+        reactionScore * 0.20 +
+        combatScore * 0.25 +
+        survivalScore * 0.20,
+        0,
+        100
+    );
 }
 
-
-/* =========================================================
-   DIFFICULTY
-========================================================= */
-
-function formatDifficulty(value){
-
-    if(value === null || value === undefined){
-        return "MEDIUM";
-    }
-
-    const text =
-        String(value).toLowerCase();
-
-    if(text.includes("easy")){
-        return "EASY";
-    }
-
-    if(text.includes("medium")){
-        return "MEDIUM";
-    }
-
-    if(text.includes("hard")){
-        return "HARD";
-    }
-
-    if(text.includes("expert")){
-        return "EXPERT";
-    }
-
-    if(text.includes("extreme")){
-        return "EXTREME";
-    }
-
-    const n =
-        Number(value);
-
-    if(Number.isFinite(n)){
-
-        if(n < 1.5) return "EASY";
-        if(n < 2.5) return "MEDIUM";
-        if(n < 3.5) return "HARD";
-        if(n < 4.5) return "EXPERT";
-
-        return "EXTREME";
-
-    }
-
-    return "MEDIUM";
-
+function getSkillLevel(score) {
+    if (score >= 90) return "ELITE";
+    if (score >= 75) return "ADVANCED";
+    if (score >= 60) return "INTERMEDIATE";
+    if (score >= 40) return "DEVELOPING";
+    return "BEGINNER";
 }
 
+function formatDifficulty(value) {
 
-/* =========================================================
-   PERFORMANCE ANALYSIS
-========================================================= */
+    if (value === null || value === undefined || value === "") {
+        return "--";
+    }
 
-function calculatePerformance(game){
+    const text = String(value).trim().toLowerCase();
 
-    const accuracy =
-        clamp(
-            number(game.accuracy,50),
-            0,
-            100
-        );
+    if (text === "easy") return "EASY";
+    if (text === "medium") return "MEDIUM";
+    if (text === "hard") return "HARD";
+    if (text === "expert") return "EXPERT";
+    if (text === "extreme") return "EXTREME";
 
-    const kills =
-        clamp(
-            number(game.kills,0),
-            0,
-            20
-        );
+    return String(value).toUpperCase();
+}
 
-    const deaths =
-        clamp(
-            number(game.deaths,0),
-            0,
-            10
-        );
+/* Find the AI recommendation without confusing it with the difficulty
+   the player actually selected for the game. */
+function getRecommendedDifficulty(game) {
 
-    const reaction =
-        getReactionTime(game);
+    const possibleValues = [
+        game?.recommended_difficulty,
+        game?.recommendedDifficulty,
+        game?.predicted_difficulty,
+        game?.predictedDifficulty,
+        game?.difficulty_recommendation,
+        game?.difficultyRecommendation,
+        game?.ai_prediction?.recommended_difficulty,
+        game?.ai_prediction?.recommendedDifficulty,
+        game?.ai_prediction?.difficulty,
+        game?.prediction?.recommended_difficulty,
+        game?.prediction?.recommendedDifficulty,
+        game?.prediction?.difficulty,
+        game?.ml_prediction?.recommended_difficulty,
+        game?.ml_prediction?.recommendedDifficulty,
+        game?.ml_prediction?.difficulty,
+        game?.ml_result?.recommended_difficulty,
+        game?.ml_result?.difficulty
+    ];
 
-    const reactionScore =
-        clamp(
-            100 -
-            ((reaction - 0.18) /
-            (1.50 - 0.18)) * 100,
-            0,
-            100
-        );
+    for (const value of possibleValues) {
+        if (value !== undefined && value !== null && value !== "") {
+            const normalized = formatDifficulty(value);
+            if (["EASY", "MEDIUM", "HARD", "EXPERT", "EXTREME"].includes(normalized)) {
+                return normalized;
+            }
+        }
+    }
 
-    const combatScore =
-        clamp(
-            kills * 10 -
-            deaths * 5 +
-            50,
-            0,
-            100
-        );
+    return null;
+}
 
-    const survivalScore =
-        clamp(
-            100 -
-            deaths * 12,
-            0,
-            100
-        );
+/* Display every level and highlight exactly one AI-recommended level. */
+function updateDifficulty(difficulty) {
 
-    const performance =
-        Math.round(
-            accuracy * .35 +
-            reactionScore * .20 +
-            combatScore * .25 +
-            survivalScore * .20
-        );
-
-    return {
-        performance:
-            clamp(
-                performance,
-                0,
-                100
-            ),
-
-        accuracy,
-        reactionScore,
-        combatScore,
-        survivalScore
+    const difficultyMap = {
+        "EASY": 1,
+        "MEDIUM": 2,
+        "HARD": 3,
+        "EXPERT": 4,
+        "EXTREME": 5
     };
 
+    const formatted = difficulty
+        ? formatDifficulty(difficulty)
+        : null;
+
+    const level = formatted ? difficultyMap[formatted] : null;
+
+    const description = document.getElementById("difficultyDescription");
+
+    if (level) {
+        description.textContent =
+            "AI RECOMMENDATION: " + formatted + " (LEVEL " + level + " / 5)";
+    } else {
+        description.textContent = "AI RECOMMENDATION: NOT AVAILABLE";
+    }
+
+    document.querySelectorAll(".difficulty-levels .level").forEach(element => {
+        const isRecommended = level !== null &&
+            Number(element.dataset.level) === level;
+
+        element.classList.toggle("active", isRecommended);
+        element.setAttribute("aria-current", isRecommended ? "true" : "false");
+    });
 }
 
+function updateGames(games) {
 
-/* =========================================================
-   SKILL LEVEL
-========================================================= */
+    const maxScore = Math.max(
+        1,
+        ...games.map(game => getGameScore(game))
+    );
 
-function getSkillLevel(score){
+    document.querySelector(".graph-heading strong").textContent =
+        "Actual Game Scores";
 
-    if(score >= 90){
-        return "ELITE";
+    document.querySelector(".graph-heading span").textContent =
+        "HIGHEST SCORE: " + maxScore;
+
+    for (let i = 1; i <= 4; i++) {
+
+        document.getElementById("barValue" + i).textContent = "--";
+        document.getElementById("gameScore" + i).textContent = "--";
+        document.getElementById("gameAccuracy" + i).textContent = "--";
+        document.getElementById("gameDifficulty" + i).textContent = "--";
+
+        document.getElementById("bar" + i).style.height = "0%";
     }
 
-    if(score >= 75){
-        return "ADVANCED";
-    }
+    games.forEach((game, index) => {
 
-    if(score >= 60){
-        return "INTERMEDIATE";
-    }
+        if (index >= 4) return;
 
-    if(score >= 40){
-        return "DEVELOPING";
-    }
+        const n = index + 1;
+        const actualScore = getGameScore(game);
+        const accuracy = getAccuracy(game);
 
-    return "BEGINNER";
+        const barHeight = actualScore > 0
+            ? Math.max(3, (actualScore / maxScore) * 100)
+            : 0;
 
+        const bar = document.getElementById("bar" + n);
+
+        bar.style.animation = "none";
+        bar.style.height = barHeight + "%";
+
+        void bar.offsetWidth;
+
+        bar.style.animation =
+            "barRise 1.4s cubic-bezier(.2,.8,.2,1)";
+
+        document.getElementById("barValue" + n).textContent =
+            actualScore;
+
+        document.getElementById("gameScore" + n).textContent =
+            actualScore;
+
+        document.getElementById("gameAccuracy" + n).textContent =
+            accuracy.toFixed(1) + "%";
+
+        document.getElementById("gameDifficulty" + n).textContent =
+            formatDifficulty(getPlayedDifficulty(game));
+
+    });
 }
 
+let performanceAnimationId = null;
+let lastAnimatedPerformance = null;
 
-/* =========================================================
-   AI COACH RECOMMENDATIONS
-========================================================= */
+function animatePerformance(score) {
 
-function createRecommendations(game,stats){
+    const circle = document.getElementById("scoreCircle");
+    const scoreElement = document.getElementById("performanceScore");
+    const status = document.getElementById("scoreStatus");
 
-    const recommendations = [];
+    score = clamp(Math.round(score), 0, 100);
 
-    const reaction =
-        getReactionTime(game);
+    if (lastAnimatedPerformance === score) return;
 
-    const accuracy =
-        stats.accuracy;
+    lastAnimatedPerformance = score;
 
-    const deaths =
-        number(game.deaths,0);
-
-    const kills =
-        number(game.kills,0);
-
-
-    if(accuracy < 55){
-
-        recommendations.push(
-            "Focus on aim precision and controlled shots."
-        );
-
-    }
-    else if(accuracy < 75){
-
-        recommendations.push(
-            "Your aim is improving — keep working on precision."
-        );
-
-    }
-    else{
-
-        recommendations.push(
-            "Your aim is strong — maintain your accuracy."
-        );
-
+    if (performanceAnimationId) {
+        cancelAnimationFrame(performanceAnimationId);
     }
 
+    const targetAngle = score * 3.6;
+    const duration = 1600;
+    const startTime = performance.now();
 
-    if(reaction > 0.75){
+    const startingScore = number(scoreElement.textContent, 0);
 
-        recommendations.push(
-            "Work on reaction speed by responding earlier to enemy movement."
+    const startingAngle = number(
+        parseFloat(
+            getComputedStyle(circle).getPropertyValue("--progress")
+        ),
+        0
+    );
+
+    status.textContent = "ANALYZING";
+
+    function animate(currentTime) {
+
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 4);
+
+        const currentScore = Math.round(
+            startingScore + (score - startingScore) * eased
         );
 
-    }
-    else if(reaction > 0.50){
+        const currentAngle =
+            startingAngle + (targetAngle - startingAngle) * eased;
 
-        recommendations.push(
-            "Your reaction speed is decent — try to make your first response faster."
+        scoreElement.textContent = currentScore;
+
+        circle.style.setProperty(
+            "--progress",
+            currentAngle + "deg"
         );
 
-    }
-    else{
+        if (progress < 1) {
 
-        recommendations.push(
-            "Excellent reaction speed — keep anticipating enemy movement."
-        );
+            performanceAnimationId =
+                requestAnimationFrame(animate);
 
-    }
+        } else {
 
+            scoreElement.textContent = score;
 
-    if(deaths > kills){
+            circle.style.setProperty(
+                "--progress",
+                targetAngle + "deg"
+            );
 
-        recommendations.push(
-            "Focus on survival and avoid unnecessary fights."
-        );
-
-    }
-    else if(deaths >= 3){
-
-        recommendations.push(
-            "Use cover more often to reduce unnecessary deaths."
-        );
-
-    }
-    else{
-
-        recommendations.push(
-            "Your survival is solid — continue taking smart fights."
-        );
-
+            status.textContent = "ANALYSIS COMPLETE";
+        }
     }
 
-
-    if(kills >= 8){
-
-        recommendations.push(
-            "Strong combat performance — keep choosing favorable engagements."
-        );
-
-    }
-
-
-    return recommendations.slice(0,3);
-
+    performanceAnimationId = requestAnimationFrame(animate);
 }
 
+function animateSkillLevel(element, text) {
 
-/* =========================================================
-   UPDATE COACH
-========================================================= */
+    if (element.textContent === text) return;
 
-function updateCoach(game){
+    element.style.opacity = "0";
+    element.style.transform = "translateY(12px)";
 
-    const stats =
-        calculatePerformance(game);
+    setTimeout(() => {
 
-    const performance =
-        stats.performance;
+        element.textContent = text;
+
+        element.style.transition =
+            "all .6s cubic-bezier(.2,.8,.2,1)";
+
+        element.style.opacity = "1";
+        element.style.transform = "translateY(0)";
+
+    }, 200);
+}
+
+function showCoachPoints(elementId, points) {
+
+    const list = document.getElementById(elementId);
+
+    list.replaceChildren();
+
+    points.forEach((point, index) => {
+
+        const item = document.createElement("li");
+
+        item.textContent = String(point);
+        item.style.animationDelay = (index * 0.12) + "s";
+
+        list.appendChild(item);
+
+    });
+}
+
+function createCoachFeedback(game) {
+
+    const good = [];
+    const improve = [];
+
+    const score = getGameScore(game);
+    const kills = getKills(game);
+    const deaths = getDeaths(game);
+    const accuracy = getAccuracy(game);
+    const reaction = getReactionTime(game);
+    const survival = getSurvivalTime(game);
+
+    if (kills > 0) {
+        good.push(
+            "You eliminated " + kills +
+            " enemies and scored " + score + " points."
+        );
+    }
+
+    if (accuracy >= 80) {
+        good.push(
+            "Strong shooting accuracy: " +
+            accuracy.toFixed(1) + "%."
+        );
+    } else if (accuracy >= 60) {
+        good.push(
+            "Good shooting accuracy: " +
+            accuracy.toFixed(1) + "%. Keep practising."
+        );
+    }
+
+    if (deaths === 0) {
+        good.push(
+            "Excellent survival: you recorded zero player hits."
+        );
+    }
+
+    if (survival >= 60) {
+        good.push(
+            "You survived the full 60-second game session."
+        );
+    }
+
+    if (good.length === 0) {
+        good.push(
+            "Keep practising to build your combat performance."
+        );
+    }
+
+    const aiRecommendation = firstAvailable(game, [
+        "ai_recommendation",
+        "recommendation",
+        "ml_recommendation"
+    ]);
+
+    if (aiRecommendation) {
+        improve.push(
+            "AI recommendation: " +
+            aiRecommendation
+        );
+    }
+
+    if (accuracy < 60) {
+        improve.push(
+            "Aim improvement: your accuracy is " +
+            accuracy.toFixed(1) +
+            "%. Practise precise targeting."
+        );
+    }
+
+    if (reaction !== null && reaction > 1.5) {
+        improve.push(
+            "Reaction speed: your recorded first-shot reaction time is " +
+            reaction.toFixed(2) +
+            " seconds. Practise responding faster."
+        );
+    }
+
+    if (deaths > 0) {
+        improve.push(
+            "Survival: you received " + deaths +
+            " player hits. Focus on dodging enemy attacks."
+        );
+    }
+
+    if (survival > 0 && survival < 60) {
+        improve.push(
+            "Survival time: you survived for " +
+            survival +
+            " seconds. Work on avoiding enemy attacks."
+        );
+    }
+
+    if (!aiRecommendation && improve.length === 0) {
+        improve.push(
+            "The ML recommendation is not available for this session."
+        );
+    } else if (improve.length === 0) {
+        improve.push(
+            "No major weakness was identified from the recorded values."
+        );
+    }
+
+    return {
+        performancePoints: good.slice(0, 6),
+        improvementPoints: improve.slice(0, 6)
+    };
+}
+
+function updateCoach(game) {
+
+    const performance = Math.round(
+        getPerformanceValue(game)
+    );
 
     const skill =
+        game.predicted_skill_level ||
         game.skill_level ||
         game.skillLevel ||
-        getSkillLevel(
-            performance
-        );
+        getSkillLevel(performance);
 
-    document.getElementById(
-        "performanceScore"
-    ).textContent =
-        performance;
+    animatePerformance(performance);
 
-    document.getElementById(
-        "skillLevel"
-    ).textContent =
-        String(skill).toUpperCase();
+    animateSkillLevel(
+        document.getElementById("skillLevel"),
+        String(skill).toUpperCase()
+    );
 
+    const mlScore = firstAvailable(game, [
+        "ml_performance_score",
+        "performance_score"
+    ]);
 
-    document.getElementById(
-        "skillDescription"
-    ).textContent =
-        "Overall gameplay performance is " +
+    let description =
+        "Your dashboard performance score is " +
         performance +
-        "/100 based on accuracy, combat, survival and reaction speed.";
+        "/100. Your ML skill classification is " +
+        String(skill).toUpperCase() +
+        ". The AI coach has analysed your gameplay data.";
 
-
-    const recommendations =
-        createRecommendations(
-            game,
-            stats
-        );
-
-
-    document.getElementById(
-        "coachMessage"
-    ).textContent =
-        recommendations.join(" • ");
-
-
-    const aim =
-        Math.round(
-            stats.accuracy
-        );
-
-    const reaction =
-        Math.round(
-            stats.reactionScore
-        );
-
-    const combat =
-        Math.round(
-            stats.combatScore
-        );
-
-    const survival =
-        Math.round(
-            stats.survivalScore
-        );
-
-    const decision =
-        Math.round(
-            clamp(
-                performance - 5,
-                0,
-                100
-            )
-        );
-
-
-    setRanking("aim",aim);
-    setRanking("reaction",reaction);
-    setRanking("combat",combat);
-    setRanking("survival",survival);
-    setRanking("decision",decision);
-
-
-    /*
-     * Use backend AI difficulty if available.
-     * Otherwise calculate it from performance.
-     */
-
-    const backendDifficulty =
-        game.difficulty ||
-        game.recommended_difficulty;
-
-    if(backendDifficulty){
-
-        updateDifficulty(
-            backendDifficulty
-        );
-
-    }
-    else{
-
-        if(performance >= 85){
-            updateDifficulty("EXTREME");
-        }
-        else if(performance >= 70){
-            updateDifficulty("EXPERT");
-        }
-        else if(performance >= 55){
-            updateDifficulty("HARD");
-        }
-        else if(performance >= 40){
-            updateDifficulty("MEDIUM");
-        }
-        else{
-            updateDifficulty("EASY");
-        }
-
+    if (mlScore !== null) {
+        description +=
+            " ML performance score: " +
+            number(mlScore).toFixed(2) + ".";
     }
 
+    const descriptionElement =
+        document.getElementById("skillDescription");
+
+    descriptionElement.textContent = description;
+
+    descriptionElement.style.animation = "none";
+    void descriptionElement.offsetWidth;
+    descriptionElement.style.animation =
+        "descriptionFade 1s ease both";
+
+    const feedback = createCoachFeedback(game);
+
+    showCoachPoints(
+        "performancePoints",
+        feedback.performancePoints
+    );
+
+    showCoachPoints(
+        "improvementPoints",
+        feedback.improvementPoints
+    );
+
+    const recommended = getRecommendedDifficulty(game);
+
+    updateDifficulty(recommended);
+
+    const playedDifficulty = getPlayedDifficulty(game);
+
+    const playedText =
+        document.getElementById("playedDifficultyText");
+
+    const actualText =
+        "ACTUAL PLAYED DIFFICULTY: " +
+        formatDifficulty(playedDifficulty);
+
+    if (playedText.textContent !== actualText) {
+        playedText.textContent = actualText;
+    }
+
+    console.log("Actual played difficulty:", playedDifficulty);
+    console.log("AI recommended difficulty:", recommended);
 }
 
+function showEmptyDashboard() {
 
-/* =========================================================
-   RANKING
-========================================================= */
+    document.getElementById("score").textContent = "--";
+    document.getElementById("kills").textContent = "--";
+    document.getElementById("deaths").textContent = "--";
+    document.getElementById("accuracy").textContent = "--";
+    document.getElementById("reaction").textContent = "--";
 
-function setRanking(name,value){
+    document.getElementById("skillLevel").textContent = "WAITING";
+    document.getElementById("performanceScore").textContent = "--";
+    document.getElementById("scoreStatus").textContent =
+        "WAITING FOR DATA";
 
-    value =
-        Math.round(
-            clamp(
-                number(value,0),
-                0,
-                100
-            )
-        );
+    document.getElementById("scoreCircle").style.setProperty(
+        "--progress",
+        "0deg"
+    );
 
-    const bar =
-        document.getElementById(
-            name + "Bar"
-        );
+    lastAnimatedPerformance = null;
 
-    const score =
-        document.getElementById(
-            name + "Score"
-        );
-
-    if(bar){
-        bar.style.width =
-            value + "%";
+    if (performanceAnimationId) {
+        cancelAnimationFrame(performanceAnimationId);
+        performanceAnimationId = null;
     }
 
-    if(score){
-        score.textContent =
-            value;
-    }
+    document.getElementById("skillDescription").textContent =
+        "Your AI coach will analyse your gameplay after your first game.";
 
+    updateGames([]);
+
+    showCoachPoints(
+        "performancePoints",
+        ["Play a game to see your gameplay results."]
+    );
+
+    showCoachPoints(
+        "improvementPoints",
+        ["Your personalised AI recommendations will appear after your first game."]
+    );
+
+    updateDifficulty(null);
+
+    document.getElementById("playedDifficultyText").textContent =
+        "ACTUAL PLAYED DIFFICULTY: --";
 }
 
+let dashboardLoading = false;
 
-/* =========================================================
-   DIFFICULTY UI
-========================================================= */
+async function loadDashboard() {
 
-function updateDifficulty(difficulty){
+    if (dashboardLoading) return;
 
-    const text =
-        String(
-            difficulty || "MEDIUM"
-        ).toLowerCase();
+    dashboardLoading = true;
 
-    let level = 2;
-    let name = "MEDIUM";
+    try {
 
+        const playerId = getSavedValue([
+            "player_id",
+            "playerId"
+        ]);
 
-    if(
-        text.includes("easy") ||
-        text.includes("warm")
-    ){
+        if (!playerId) {
 
-        level = 1;
-        name = "EASY";
+            document.getElementById("playerId").textContent =
+                "ID NOT AVAILABLE";
 
-    }
-    else if(
-        text.includes("medium") ||
-        text.includes("tactical")
-    ){
+            document.getElementById("playerName").textContent =
+                "Please register first";
 
-        level = 2;
-        name = "MEDIUM";
+            document.getElementById("totalGames").textContent = "0";
+            document.getElementById("bestScore").textContent = "0";
 
-    }
-    else if(
-        text.includes("hard") ||
-        text.includes("advanced")
-    ){
+            showEmptyDashboard();
 
-        level = 3;
-        name = "HARD";
-
-    }
-    else if(
-        text.includes("expert") ||
-        text.includes("elite")
-    ){
-
-        level = 4;
-        name = "EXPERT";
-
-    }
-    else if(
-        text.includes("extreme") ||
-        text.includes("nightmare")
-    ){
-
-        level = 5;
-        name = "EXTREME";
-
-    }
-
-
-    document.getElementById(
-        "recommendedDifficulty"
-    ).textContent =
-        name;
-
-    document.getElementById(
-        "difficultyDescription"
-    ).textContent =
-        "Level " +
-        level +
-        " / 5";
-
-
-    document
-        .querySelectorAll(".level")
-        .forEach(
-            element=>{
-
-                element.classList.toggle(
-                    "active",
-                    Number(
-                        element.dataset.level
-                    ) === level
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   MAIN DASHBOARD UPDATE
-========================================================= */
-
-async function loadDashboard(){
-
-    try{
-
-        const sessions =
-            await getSessions();
-
-
-        if(
-            !sessions ||
-            sessions.length === 0
-        ){
-
-            document.getElementById(
-                "skillLevel"
-            ).textContent =
-                "WAITING";
-
-            document.getElementById(
-                "coachMessage"
-            ).textContent =
-                "Play a game to generate your first AI coaching report.";
+            console.warn("No registered player ID found.");
 
             return;
-
         }
 
+        const result = await getSessions(playerId);
 
-        /*
-         * Use newest four sessions for graph.
-         */
+        const sessions = result.sessions;
 
-        const games =
-            sessions.slice(-4);
+        updatePlayerDetails(result.player);
 
+        updatePlayerSummary(sessions);
 
-        const latest =
-            games[games.length - 1];
+        if (sessions.length === 0) {
 
+            showEmptyDashboard();
 
-        updatePlayer(
-            latest
-        );
+            console.log(
+                "No gameplay sessions found for:",
+                playerId
+            );
 
-        updateStatistics(
-            latest
-        );
+            return;
+        }
 
-        updateGames(
-            games
-        );
+        const games = sessions.slice(-4);
 
-        updateCoach(
-            latest
-        );
+        const latest = sessions[sessions.length - 1];
 
+        updateStatistics(latest);
+        updateGames(games);
+        updateCoach(latest);
 
+        console.log("Current player:", playerId);
+        console.log("Total player sessions:", sessions.length);
+        console.log("Latest gameplay:", latest);
         console.log(
-            "Dashboard updated:",
-            latest
+            "Backend AI recommendation:",
+            latest.ai_recommendation
         );
 
+    } catch (error) {
+
+        console.error("Dashboard update error:", error);
+
+    } finally {
+
+        dashboardLoading = false;
+
     }
-
-    catch(error){
-
-        console.error(
-            "Dashboard update error:",
-            error
-        );
-
-    }
-
 }
-
-
-/* =========================================================
-   START
-========================================================= */
 
 loadDashboard();
 
-
-/*
- * Refresh every 2 seconds so a newly completed
- * game appears automatically.
- */
-
-setInterval(
-    loadDashboard,
-    2000
-);
+setInterval(loadDashboard, 5000);
 
 </script>
 
