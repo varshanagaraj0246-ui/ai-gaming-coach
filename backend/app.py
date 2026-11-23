@@ -1,3 +1,4 @@
+
 from flask import (
     Flask,
     jsonify,
@@ -10,7 +11,6 @@ from werkzeug.security import (
     generate_password_hash,
     check_password_hash
 )
-
 import os
 import requests
 import math
@@ -64,6 +64,7 @@ create_tables()
 def log_api_request():
 
     if request.path.startswith("/api/"):
+
         print("\n" + "-" * 55)
         print("API REQUEST")
         print(f"Method : {request.method}")
@@ -79,6 +80,7 @@ def log_api_request():
 def log_api_response(response):
 
     if request.path.startswith("/api/"):
+
         print(f"Response status : {response.status_code}")
         print("-" * 55 + "\n")
 
@@ -93,9 +95,11 @@ def log_api_response(response):
 def disable_game_cache(response):
 
     if request.path.startswith("/game"):
+
         response.headers["Cache-Control"] = (
             "no-store, no-cache, must-revalidate, max-age=0"
         )
+
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "0"
 
@@ -109,6 +113,7 @@ def disable_game_cache(response):
 def get_value(data, keys, default=0):
 
     for key in keys:
+
         value = data.get(key)
 
         if value is not None and value != "":
@@ -120,6 +125,7 @@ def get_value(data, keys, default=0):
 def safe_number(value, default=0):
 
     try:
+
         if value is None or value == "":
             return default
 
@@ -131,6 +137,7 @@ def safe_number(value, default=0):
         return number
 
     except (TypeError, ValueError):
+
         return default
 
 
@@ -201,6 +208,7 @@ def calculate_reaction_time(data):
                 valid_samples.append(value)
 
         if valid_samples:
+
             return round(
                 sum(valid_samples) / len(valid_samples),
                 3
@@ -336,12 +344,14 @@ def print_session_summary(normalized, player, session_id, ml_status):
     print("=" * 60)
 
     print("\nPLAYER DETAILS")
+
     print(f"Player Name          : {player['player_name']}")
     print(f"Email                : {player['email']}")
     print(f"Player ID            : {normalized['player_id']}")
     print(f"Session ID           : {session_id}")
 
     print("\nGAME PERFORMANCE")
+
     print(f"Score                : {normalized['score']}")
     print(f"Kills                : {normalized['kills']}")
     print(f"Deaths               : {normalized['deaths']}")
@@ -351,21 +361,26 @@ def print_session_summary(normalized, player, session_id, ml_status):
     print(f"Damage Received      : {normalized['damage_received']}")
 
     print("\nDIFFICULTY")
+
     print(f"Played Difficulty    : {normalized['difficulty']}")
 
     print("\nAI / ML ANALYSIS")
+
     print(
         f"AI Recommendation    : "
         f"{normalized['ai_recommendation'] or 'Not available'}"
     )
+
     print(
         f"Recommended Level    : "
         f"{normalized['recommended_difficulty'] or 'Not available'}"
     )
+
     print(
         f"Predicted Skill      : "
         f"{normalized['predicted_skill_level'] or 'Not available'}"
     )
+
     print(f"Performance Score    : {normalized['ml_performance_score']}")
     print(f"K/D Ratio            : {normalized['kd_ratio']}")
 
@@ -373,6 +388,11 @@ def print_session_summary(normalized, player, session_id, ml_status):
     print(f"Status               : {ml_status}")
 
     print("\n" + "=" * 60)
+    print("-" * 60)
+    print("API SESSIONS")
+    print("URL : http://127.0.0.1:5000/api/sessions")
+    print("Open this URL in the browser while logged in to view saved sessions.")
+    print("-" * 60)
     print("             SESSION SAVED SUCCESSFULLY")
     print("=" * 60 + "\n")
 
@@ -474,24 +494,28 @@ def api_register():
         password = str(data.get("password") or "")
 
         if not player_name:
+
             return jsonify({
                 "success": False,
                 "message": "Player name is required."
             }), 400
 
         if not email:
+
             return jsonify({
                 "success": False,
                 "message": "Email address is required."
             }), 400
 
         if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
+
             return jsonify({
                 "success": False,
                 "message": "Enter a valid email address."
             }), 400
 
         if len(password) < 8:
+
             return jsonify({
                 "success": False,
                 "message": "Password must contain at least 8 characters."
@@ -506,6 +530,7 @@ def api_register():
         )
 
         if not player:
+
             return jsonify({
                 "success": False,
                 "message": (
@@ -554,6 +579,7 @@ def api_login():
         password = str(data.get("password") or "")
 
         if not email or not password:
+
             return jsonify({
                 "success": False,
                 "message": "Email and password are required."
@@ -562,6 +588,7 @@ def api_login():
         player = get_player_by_email(email)
 
         if not player:
+
             print(f"LOGIN FAILED | Unknown email: {email}")
 
             return jsonify({
@@ -575,6 +602,7 @@ def api_login():
             password_hash,
             password
         ):
+
             print(f"LOGIN FAILED | Incorrect password: {email}")
 
             return jsonify({
@@ -638,6 +666,7 @@ def api_me():
     player = get_logged_in_player()
 
     if not player:
+
         return jsonify({
             "success": False,
             "authenticated": False,
@@ -690,12 +719,14 @@ def api_player(player_id):
         logged_in_player = get_logged_in_player()
 
         if not logged_in_player:
+
             return jsonify({
                 "success": False,
                 "message": "Please log in."
             }), 401
 
         if logged_in_player["player_id"] != player_id:
+
             return jsonify({
                 "success": False,
                 "message": "You cannot access another player's account."
@@ -728,12 +759,14 @@ def api_player_sessions(player_id):
         player = get_logged_in_player()
 
         if not player:
+
             return jsonify({
                 "success": False,
                 "message": "Please log in."
             }), 401
 
         if player["player_id"] != player_id:
+
             return jsonify({
                 "success": False,
                 "message": "You cannot access another player's sessions."
@@ -776,6 +809,7 @@ def api_save_session():
     try:
 
         if not data:
+
             return jsonify({
                 "success": False,
                 "message": "No gameplay data received."
@@ -783,9 +817,11 @@ def api_save_session():
 
         # Do not trust player_id sent by the browser.
         # Always use the authenticated Flask session.
+
         player = get_logged_in_player()
 
         if not player:
+
             return jsonify({
                 "success": False,
                 "message": "Please log in before playing the game."
@@ -852,6 +888,7 @@ def api_save_session():
                 )
 
                 if normalized["predicted_skill_level"]:
+
                     normalized["skill_level"] = (
                         normalized["predicted_skill_level"]
                     )
@@ -879,6 +916,7 @@ def api_save_session():
         session_id = save_game_session(normalized)
 
         if not session_id:
+
             return jsonify({
                 "success": False,
                 "message": "Database did not return a session ID."
@@ -932,6 +970,7 @@ def api_sessions():
         player = get_logged_in_player()
 
         if not player:
+
             return jsonify({
                 "success": False,
                 "message": "Please log in to view gameplay sessions."
@@ -939,26 +978,69 @@ def api_sessions():
 
         sessions = get_player_sessions(player["player_id"])
 
-        print("\n" + "=" * 55)
-        print("             API GAME SESSIONS")
-        print("=" * 55)
-        print(f"Player Name : {player['player_name']}")
-        print(f"Player ID   : {player['player_id']}")
-        print(f"Email       : {player['email']}")
-        print(f"Total Games : {len(sessions)}")
+        # -------------------------------------------------
+        # FORMATTED TERMINAL OUTPUT
+        # -------------------------------------------------
 
-        for game_session in sessions:
+        print("\n")
+        print("=" * 75)
+        print("                 AI GAMING COACH")
+        print("                 PLAYER SESSION REPORT")
+        print("=" * 75)
 
-            print(
-                f"\nSession ID: {game_session['id']} | "
-                f"Score: {game_session['score']} | "
-                f"Kills: {game_session['kills']} | "
-                f"Deaths: {game_session['deaths']} | "
-                f"Accuracy: {game_session['accuracy']}% | "
-                f"Date: {game_session['created_at']}"
+        print("\nPLAYER INFORMATION")
+        print("-" * 75)
+
+        print(f"{'Player Name':<25}: {player['player_name']}")
+        print(f"{'Player ID':<25}: {player['player_id']}")
+        print(f"{'Email':<25}: {player['email']}")
+        print(f"{'Total Game Sessions':<25}: {len(sessions)}")
+
+        print("\nGAMEPLAY SESSION DETAILS")
+        print("-" * 75)
+
+        if sessions:
+
+            headers = (
+                f"{'ID':<8}"
+                f"{'SCORE':<12}"
+                f"{'KILLS':<10}"
+                f"{'DEATHS':<10}"
+                f"{'ACCURACY':<13}"
+                f"{'DATE':<22}"
             )
 
-        print("=" * 55 + "\n")
+            print(headers)
+            print("-" * 75)
+
+            for game_session in sessions:
+
+                print(
+                    f"{str(game_session.get('id', 'N/A')):<8}"
+                    f"{str(game_session.get('score', 'N/A')):<12}"
+                    f"{str(game_session.get('kills', 'N/A')):<10}"
+                    f"{str(game_session.get('deaths', 'N/A')):<10}"
+                    f"{str(game_session.get('accuracy', 'N/A')) + '%':<13}"
+                    f"{str(game_session.get('created_at', 'N/A')):<22}"
+                )
+
+        else:
+
+            print("No gameplay sessions found.")
+
+        print("-" * 75)
+
+        print("\nAPI ENDPOINT")
+        print("-" * 75)
+
+        print("API Sessions : http://127.0.0.1:5000/api/sessions")
+        print("Status       : Successfully retrieved")
+
+        print("=" * 75 + "\n")
+
+        # -------------------------------------------------
+        # JSON RESPONSE - UNCHANGED
+        # -------------------------------------------------
 
         return jsonify({
             "success": True,
@@ -1013,10 +1095,13 @@ if __name__ == "__main__":
     print("\n" + "=" * 55)
     print("             AI GAMING COACH BACKEND")
     print("=" * 55)
-    print("Website    : http://127.0.0.1:5000")
-    print("Dashboard  : http://127.0.0.1:5000/dashboard.html")
-    print("Game       : http://127.0.0.1:5000/game/")
-    print("API Health : http://127.0.0.1:5000/api/health")
+
+    print("Website     : http://127.0.0.1:5000")
+    print("Dashboard   : http://127.0.0.1:5000/dashboard.html")
+    print("Game        : http://127.0.0.1:5000/game/")
+    print("API Health  : http://127.0.0.1:5000/api/health")
+    print("API Sessions: http://127.0.0.1:5000/api/sessions")
+
     print("=" * 55 + "\n")
 
     app.run(
