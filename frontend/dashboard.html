@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -358,8 +359,6 @@ main{
     grid-template-columns:1fr 1fr;gap:25px;
 }
 
-/* PERFORMANCE EVALUATION ANIMATIONS */
-
 .core-panel{
     min-height:390px;padding:30px;
     position:relative;overflow:hidden;
@@ -481,8 +480,6 @@ main{
     to{opacity:1;transform:translateX(0);}
 }
 
-/* AI COACH ANIMATIONS */
-
 .coach{
     min-height:390px;padding:30px;
     position:relative;overflow:hidden;
@@ -576,8 +573,6 @@ main{
     box-shadow:0 0 9px var(--orange);
 }
 
-/* LEVEL RECOMMENDATION SECTION */
-
 .difficulty{
     margin-top:25px;
     padding:30px;
@@ -600,8 +595,6 @@ main{
     to{opacity:1;transform:translateY(0);}
 }
 
-/* Soft golden light inside the recommendation box */
-
 .difficulty::before{
     content:"";
     position:absolute;
@@ -622,8 +615,6 @@ main{
     to{transform:translateX(40%) rotate(0deg);}
 }
 
-/* Soft inner border glow */
-
 .difficulty::after{
     content:"";
     position:absolute;
@@ -638,8 +629,6 @@ main{
     to{box-shadow:inset 0 0 30px rgba(255,216,77,.16);}
 }
 
-/* Small glowing light following the outer boundary */
-
 .difficulty-border-light{
     position:absolute;
     top:0;
@@ -649,19 +638,15 @@ main{
     border-radius:50%;
     z-index:5;
     pointer-events:none;
-
     background:#ffffff;
-
     box-shadow:
         0 0 5px #ffffff,
         0 0 11px var(--yellow),
         0 0 20px var(--orange),
         0 0 28px rgba(255,216,77,.7);
-
     offset-path:inset(0 round 0px);
     offset-distance:0%;
     offset-rotate:0deg;
-
     animation:difficultyBorderTravel 5s linear infinite;
 }
 
@@ -669,8 +654,6 @@ main{
     from{offset-distance:0%;}
     to{offset-distance:100%;}
 }
-
-/* Recommendation heading */
 
 .difficulty-current{
     display:flex;
@@ -723,8 +706,6 @@ main{
     to{opacity:1;text-shadow:0 0 13px rgba(255,155,66,.75);}
 }
 
-/* All five difficulty levels */
-
 .difficulty-levels{
     margin-top:25px;
     display:grid;
@@ -755,17 +736,9 @@ main{
 .level:nth-child(5){animation-delay:.75s;}
 
 @keyframes levelTileEntrance{
-    from{
-        opacity:0;
-        transform:translateY(20px) scale(.92);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
+    from{opacity:0;transform:translateY(20px) scale(.92);}
+    to{opacity:1;transform:translateY(0) scale(1);}
 }
-
-/* Scanning light on each level tile */
 
 .level::before{
     content:"";
@@ -774,19 +747,12 @@ main{
     left:-120%;
     width:80%;
     height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.4),
-        transparent
-    );
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
     transform:skewX(-20deg);
     transition:left .55s ease;
 }
 
-.level:hover::before{
-    left:140%;
-}
+.level:hover::before{left:140%;}
 
 .level:hover{
     color:white;
@@ -794,8 +760,6 @@ main{
     transform:translateY(-5px) scale(1.03);
     box-shadow:0 0 18px rgba(255,190,50,.15);
 }
-
-/* AI-recommended level is highlighted dynamically */
 
 .level.active{
     color:#05070d;
@@ -817,8 +781,6 @@ main{
     }
 }
 
-/* Actual played difficulty remains plain */
-
 #playedDifficultyText{
     margin-top:22px;
     color:var(--text);
@@ -836,8 +798,6 @@ main{
     animation:none;
 }
 
-/* BOTTOM FOOTER ANIMATIONS */
-
 footer{
     margin-top:50px;
     padding-top:25px;
@@ -853,17 +813,9 @@ footer{
 }
 
 @keyframes footerEntrance{
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    from{opacity:0;transform:translateY(25px);}
+    to{opacity:1;transform:translateY(0);}
 }
-
-/* Moving glowing line above footer */
 
 footer::before{
     content:"";
@@ -872,13 +824,7 @@ footer::before{
     left:0;
     width:22%;
     height:2px;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        var(--cyan),
-        var(--purple),
-        transparent
-    );
+    background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);
     box-shadow:0 0 12px var(--cyan);
     animation:footerLineMove 5s ease-in-out infinite alternate;
 }
@@ -893,19 +839,11 @@ footer span{
     animation:footerTextGlow 3s ease-in-out infinite alternate;
 }
 
-footer span:nth-child(2){
-    animation-delay:1.2s;
-}
+footer span:nth-child(2){animation-delay:1.2s;}
 
 @keyframes footerTextGlow{
-    from{
-        color:var(--muted);
-        text-shadow:0 0 0 transparent;
-    }
-    to{
-        color:#b7c8df;
-        text-shadow:0 0 10px rgba(32,234,255,.25);
-    }
+    from{color:var(--muted);text-shadow:0 0 0 transparent;}
+    to{color:#b7c8df;text-shadow:0 0 10px rgba(32,234,255,.25);}
 }
 
 .back-home-button{
@@ -1197,11 +1135,8 @@ footer span:nth-child(2){
 
 </section>
 
-<!-- LEVEL RECOMMENDATION SECTION -->
-
 <section class="difficulty">
 
-    <!-- This small light travels around the outer boundary -->
     <span class="difficulty-border-light" aria-hidden="true"></span>
 
     <div class="difficulty-current">
@@ -1213,7 +1148,6 @@ footer span:nth-child(2){
         <div id="difficultyDescription">AI RECOMMENDATION: --</div>
     </div>
 
-    <!-- All five possible levels are always displayed. Only the AI-recommended one is highlighted. -->
     <div class="difficulty-levels" role="list" aria-label="All difficulty levels">
         <div class="level" data-level="1" role="listitem">EASY</div>
         <div class="level" data-level="2" role="listitem">MEDIUM</div>
@@ -1236,8 +1170,15 @@ footer span:nth-child(2){
 </main>
 
 <script>
+/*
+    AUTHENTICATION AND API CONFIGURATION
 
-const API_BASE = "http://127.0.0.1:5000";
+    The dashboard uses the Flask login session cookie.
+    Keep the website and dashboard on the same origin:
+    http://127.0.0.1:5000
+*/
+
+const API_BASE = window.location.origin;
 
 function number(value, fallback = 0) {
     const n = Number(value);
@@ -1260,45 +1201,50 @@ function firstAvailable(object, keys) {
     return null;
 }
 
-function getSavedValue(keys) {
-    try {
-        for (const key of keys) {
-            const value = localStorage.getItem(key);
-
-            if (value && value.trim()) {
-                return value.trim();
-            }
+/*
+    Get the currently authenticated player from Flask.
+    This replaces the old localStorage-only player lookup.
+*/
+async function getCurrentPlayer() {
+    const response = await fetch(API_BASE + "/api/me", {
+        method: "GET",
+        cache: "no-store",
+        credentials: "include",
+        headers: {
+            "Accept": "application/json"
         }
-    } catch (error) {
-        console.warn("Unable to read player information.");
-    }
+    });
 
-    return "";
-}
+    const data = await response.json().catch(() => ({}));
 
-async function getSessions(playerId) {
-
-    const response = await fetch(
-        API_BASE + "/api/player/" +
-        encodeURIComponent(playerId) +
-        "/sessions",
-        {
-            cache: "no-store",
-            credentials: "include"
-        }
-    );
-
-    if (!response.ok) {
+    if (!response.ok || !data.success || !data.player) {
         throw new Error(
-            "Player sessions API returned " + response.status
+            data.message || "Please log in to view your dashboard."
         );
     }
 
-    const data = await response.json();
+    return data.player;
+}
 
-    if (!data.success) {
+/*
+    Load gameplay sessions belonging to the authenticated player.
+    The backend identifies the player through the session cookie.
+*/
+async function getSessions() {
+    const response = await fetch(API_BASE + "/api/sessions", {
+        method: "GET",
+        cache: "no-store",
+        credentials: "include",
+        headers: {
+            "Accept": "application/json"
+        }
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.success) {
         throw new Error(
-            data.message || "Unable to load sessions"
+            data.message || "Unable to load gameplay sessions."
         );
     }
 
@@ -1306,24 +1252,21 @@ async function getSessions(playerId) {
         ? data.sessions
         : [];
 
-    sessions.sort((a, b) => Number(a.id) - Number(b.id));
+    sessions.sort((a, b) => {
+        const aId = Number(a.id || a.session_id || 0);
+        const bId = Number(b.id || b.session_id || 0);
+        return aId - bId;
+    });
 
-    return {
-        sessions: sessions,
-        player: data.player || null
-    };
+    return sessions;
 }
 
 function updatePlayerDetails(player) {
-
-    const savedId = getSavedValue(["player_id", "playerId"]);
-    const savedName = getSavedValue(["player_name", "playerName"]);
-
     document.getElementById("playerId").textContent =
-        player?.player_id || savedId || "ID NOT AVAILABLE";
+        player?.player_id || player?.id || "ID NOT AVAILABLE";
 
     document.getElementById("playerName").textContent =
-        player?.player_name || savedName || "Player name not available";
+        player?.player_name || player?.name || "Player name not available";
 }
 
 function getGameScore(game) {
@@ -1351,7 +1294,6 @@ function getDeaths(game) {
 }
 
 function getAccuracy(game) {
-
     const value = firstAvailable(game, [
         "accuracy",
         "aim_accuracy",
@@ -1372,7 +1314,6 @@ function getAccuracy(game) {
 }
 
 function getReactionTime(game) {
-
     const value = firstAvailable(game, [
         "reaction_time",
         "reactionTime",
@@ -1401,7 +1342,6 @@ function getSurvivalTime(game) {
 }
 
 function getPlayedDifficulty(game) {
-
     return firstAvailable(game, [
         "difficulty",
         "played_difficulty",
@@ -1414,7 +1354,6 @@ function getPlayedDifficulty(game) {
 }
 
 function updatePlayerSummary(sessions) {
-
     let bestScore = 0;
 
     sessions.forEach(game => {
@@ -1432,7 +1371,6 @@ function updatePlayerSummary(sessions) {
 }
 
 function updateStatistics(game) {
-
     const accuracy = getAccuracy(game);
     const reaction = getReactionTime(game);
 
@@ -1455,7 +1393,6 @@ function updateStatistics(game) {
 }
 
 function getPerformanceValue(game) {
-
     const accuracy = getAccuracy(game);
     const kills = getKills(game);
     const deaths = getDeaths(game);
@@ -1502,7 +1439,6 @@ function getSkillLevel(score) {
 }
 
 function formatDifficulty(value) {
-
     if (value === null || value === undefined || value === "") {
         return "--";
     }
@@ -1518,10 +1454,7 @@ function formatDifficulty(value) {
     return String(value).toUpperCase();
 }
 
-/* Find the AI recommendation without confusing it with the difficulty
-   the player actually selected for the game. */
 function getRecommendedDifficulty(game) {
-
     const possibleValues = [
         game?.recommended_difficulty,
         game?.recommendedDifficulty,
@@ -1545,6 +1478,7 @@ function getRecommendedDifficulty(game) {
     for (const value of possibleValues) {
         if (value !== undefined && value !== null && value !== "") {
             const normalized = formatDifficulty(value);
+
             if (["EASY", "MEDIUM", "HARD", "EXPERT", "EXTREME"].includes(normalized)) {
                 return normalized;
             }
@@ -1554,9 +1488,7 @@ function getRecommendedDifficulty(game) {
     return null;
 }
 
-/* Display every level and highlight exactly one AI-recommended level. */
 function updateDifficulty(difficulty) {
-
     const difficultyMap = {
         "EASY": 1,
         "MEDIUM": 2,
@@ -1590,7 +1522,6 @@ function updateDifficulty(difficulty) {
 }
 
 function updateGames(games) {
-
     const maxScore = Math.max(
         1,
         ...games.map(game => getGameScore(game))
@@ -1603,7 +1534,6 @@ function updateGames(games) {
         "HIGHEST SCORE: " + maxScore;
 
     for (let i = 1; i <= 4; i++) {
-
         document.getElementById("barValue" + i).textContent = "--";
         document.getElementById("gameScore" + i).textContent = "--";
         document.getElementById("gameAccuracy" + i).textContent = "--";
@@ -1613,7 +1543,6 @@ function updateGames(games) {
     }
 
     games.forEach((game, index) => {
-
         if (index >= 4) return;
 
         const n = index + 1;
@@ -1645,7 +1574,6 @@ function updateGames(games) {
 
         document.getElementById("gameDifficulty" + n).textContent =
             formatDifficulty(getPlayedDifficulty(game));
-
     });
 }
 
@@ -1653,7 +1581,6 @@ let performanceAnimationId = null;
 let lastAnimatedPerformance = null;
 
 function animatePerformance(score) {
-
     const circle = document.getElementById("scoreCircle");
     const scoreElement = document.getElementById("performanceScore");
     const status = document.getElementById("scoreStatus");
@@ -1684,7 +1611,6 @@ function animatePerformance(score) {
     status.textContent = "ANALYZING";
 
     function animate(currentTime) {
-
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 4);
@@ -1704,12 +1630,9 @@ function animatePerformance(score) {
         );
 
         if (progress < 1) {
-
             performanceAnimationId =
                 requestAnimationFrame(animate);
-
         } else {
-
             scoreElement.textContent = score;
 
             circle.style.setProperty(
@@ -1725,14 +1648,12 @@ function animatePerformance(score) {
 }
 
 function animateSkillLevel(element, text) {
-
     if (element.textContent === text) return;
 
     element.style.opacity = "0";
     element.style.transform = "translateY(12px)";
 
     setTimeout(() => {
-
         element.textContent = text;
 
         element.style.transition =
@@ -1740,30 +1661,25 @@ function animateSkillLevel(element, text) {
 
         element.style.opacity = "1";
         element.style.transform = "translateY(0)";
-
     }, 200);
 }
 
 function showCoachPoints(elementId, points) {
-
     const list = document.getElementById(elementId);
 
     list.replaceChildren();
 
     points.forEach((point, index) => {
-
         const item = document.createElement("li");
 
         item.textContent = String(point);
         item.style.animationDelay = (index * 0.12) + "s";
 
         list.appendChild(item);
-
     });
 }
 
 function createCoachFeedback(game) {
-
     const good = [];
     const improve = [];
 
@@ -1872,7 +1788,6 @@ function createCoachFeedback(game) {
 }
 
 function updateCoach(game) {
-
     const performance = Math.round(
         getPerformanceValue(game)
     );
@@ -1952,7 +1867,6 @@ function updateCoach(game) {
 }
 
 function showEmptyDashboard() {
-
     document.getElementById("score").textContent = "--";
     document.getElementById("kills").textContent = "--";
     document.getElementById("deaths").textContent = "--";
@@ -1997,86 +1911,108 @@ function showEmptyDashboard() {
         "ACTUAL PLAYED DIFFICULTY: --";
 }
 
+/*
+    If the login session is missing or expired, show a clear message.
+    The user can return to the homepage and log in again.
+*/
+function showLoginRequired() {
+    document.getElementById("playerId").textContent =
+        "LOGIN REQUIRED";
+
+    document.getElementById("playerName").textContent =
+        "Please log in first";
+
+    document.getElementById("totalGames").textContent = "0";
+    document.getElementById("bestScore").textContent = "0";
+
+    showEmptyDashboard();
+
+    showCoachPoints(
+        "performancePoints",
+        ["Log in to view your gameplay performance."]
+    );
+
+    showCoachPoints(
+        "improvementPoints",
+        ["Your previous gameplay sessions will be available after login."]
+    );
+
+    document.getElementById("skillDescription").textContent =
+        "Your dashboard is waiting for an authenticated player.";
+}
+
 let dashboardLoading = false;
 
 async function loadDashboard() {
-
     if (dashboardLoading) return;
 
     dashboardLoading = true;
 
     try {
+        /*
+            STEP 1: Verify the current login session.
+        */
+        const player = await getCurrentPlayer();
 
-        const playerId = getSavedValue([
-            "player_id",
-            "playerId"
-        ]);
+        updatePlayerDetails(player);
 
-        if (!playerId) {
-
-            document.getElementById("playerId").textContent =
-                "ID NOT AVAILABLE";
-
-            document.getElementById("playerName").textContent =
-                "Please register first";
-
-            document.getElementById("totalGames").textContent = "0";
-            document.getElementById("bestScore").textContent = "0";
-
-            showEmptyDashboard();
-
-            console.warn("No registered player ID found.");
-
-            return;
-        }
-
-        const result = await getSessions(playerId);
-
-        const sessions = result.sessions;
-
-        updatePlayerDetails(result.player);
+        /*
+            STEP 2: Load sessions for this logged-in player.
+        */
+        const sessions = await getSessions();
 
         updatePlayerSummary(sessions);
 
         if (sessions.length === 0) {
-
             showEmptyDashboard();
 
             console.log(
                 "No gameplay sessions found for:",
-                playerId
+                player.player_id
             );
 
             return;
         }
 
+        /*
+            STEP 3: Update dashboard with the latest gameplay.
+        */
         const games = sessions.slice(-4);
-
         const latest = sessions[sessions.length - 1];
 
         updateStatistics(latest);
         updateGames(games);
         updateCoach(latest);
 
-        console.log("Current player:", playerId);
+        console.log("Authenticated player:", player);
         console.log("Total player sessions:", sessions.length);
         console.log("Latest gameplay:", latest);
-        console.log(
-            "Backend AI recommendation:",
-            latest.ai_recommendation
-        );
 
     } catch (error) {
-
         console.error("Dashboard update error:", error);
 
+        if (
+            error.message.toLowerCase().includes("log in") ||
+            error.message.toLowerCase().includes("login") ||
+            error.message.toLowerCase().includes("unauthorized") ||
+            error.message.toLowerCase().includes("authentication") ||
+            error.message.includes("401") ||
+            error.message.includes("403")
+        ) {
+            showLoginRequired();
+        } else {
+            document.getElementById("skillDescription").textContent =
+                "Unable to load dashboard data. Please check that the backend server is running.";
+        }
+
     } finally {
-
         dashboardLoading = false;
-
     }
 }
 
+/*
+    Initial dashboard load and automatic refresh.
+*/
 loadDashboard();
 
 setInterval(loadDashboard, 5000);

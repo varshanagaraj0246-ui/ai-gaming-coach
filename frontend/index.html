@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,8 +31,6 @@ body{
 
 a{color:inherit;text-decoration:none}
 a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
-
-/* BACKGROUND */
 
 #spaceCanvas,#flightCanvas{
     position:fixed;
@@ -108,7 +105,6 @@ a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
 }
 
 .beam.b1{left:12%;top:-20%}
-
 .beam.b2{
     left:85%;
     top:-20%;
@@ -116,7 +112,6 @@ a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
     box-shadow:0 0 16px var(--purple);
     animation-delay:3s
 }
-
 .beam.b3{left:60%;top:-20%;animation-delay:5s}
 
 @keyframes beamTravel{
@@ -132,8 +127,6 @@ a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
     opacity:.12;
     background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(120,190,255,.12) 4px)
 }
-
-/* SPACESHIP */
 
 #spaceship{
     position:fixed;
@@ -157,8 +150,6 @@ a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
     filter:blur(24px);
     opacity:.3
 }
-
-/* NAVIGATION */
 
 .topbar{
     position:relative;
@@ -250,8 +241,6 @@ a:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
 .logout-btn{border-color:rgba(255,61,186,.7)}
 .logout-btn:hover{background:rgba(255,61,186,.12)}
 
-/* MAIN HERO */
-
 main{
     position:relative;
     z-index:1;
@@ -336,8 +325,6 @@ h1{
 
 .description strong{color:white}
 
-/* WELCOME AND PLAYER DETAILS */
-
 .player-welcome{
     max-width:700px;
     margin:22px auto 0;
@@ -373,8 +360,6 @@ h1{
     margin:0 auto;
     pointer-events:none
 }
-
-/* HUD PANELS */
 
 .hud-stats{
     max-width:850px;
@@ -414,8 +399,6 @@ h1{
 .hud-value{margin-top:9px;color:var(--cyan);font-size:17px;font-weight:900;letter-spacing:1px}
 .hud-value.purple{color:#c49aff}
 .hud-value.pink{color:#ff83cf}
-
-/* ABOUT AI GAMING COACH */
 
 .about-section{
     max-width:900px;
@@ -473,10 +456,7 @@ h1{
     box-shadow:0 0 20px rgba(0,245,255,.08)
 }
 
-.about-icon{
-    font-size:25px;
-    margin-bottom:12px
-}
+.about-icon{font-size:25px;margin-bottom:12px}
 
 .about-card h3{
     color:var(--cyan);
@@ -485,13 +465,7 @@ h1{
     letter-spacing:.5px
 }
 
-.about-card p{
-    color:#9eafc9;
-    font-size:12px;
-    line-height:1.7
-}
-
-/* ACTION BUTTONS */
+.about-card p{color:#9eafc9;font-size:12px;line-height:1.7}
 
 .actions{
     display:none;
@@ -546,9 +520,7 @@ h1{
     animation:playGlow 2.5s ease-in-out infinite alternate
 }
 
-.play-btn:hover{
-    box-shadow:0 0 30px rgba(0,245,255,.45),0 0 55px rgba(0,100,255,.2)
-}
+.play-btn:hover{box-shadow:0 0 30px rgba(0,245,255,.45),0 0 55px rgba(0,100,255,.2)}
 
 @keyframes playGlow{
     to{box-shadow:0 0 28px rgba(0,245,255,.35),inset 0 0 18px rgba(255,255,255,.2)}
@@ -577,8 +549,6 @@ h1{
 
 .return-note strong{color:var(--cyan)}
 
-/* LOGOUT POP-UP NOTIFICATION */
-
 .toast{
     position:fixed;
     top:100px;
@@ -600,11 +570,7 @@ h1{
     transition:opacity .35s ease,transform .35s ease,visibility .35s
 }
 
-.toast.show{
-    opacity:1;
-    visibility:visible;
-    transform:translateX(0)
-}
+.toast.show{opacity:1;visibility:visible;transform:translateX(0)}
 
 .toast-icon{
     width:35px;
@@ -619,21 +585,8 @@ h1{
     font-weight:900
 }
 
-.toast-title{
-    color:#00ff9d;
-    font-size:13px;
-    font-weight:900;
-    letter-spacing:1px
-}
-
-.toast-message{
-    margin-top:5px;
-    color:#c2d5d0;
-    font-size:12px;
-    line-height:1.5
-}
-
-/* FOOTER */
+.toast-title{color:#00ff9d;font-size:13px;font-weight:900;letter-spacing:1px}
+.toast-message{margin-top:5px;color:#c2d5d0;font-size:12px;line-height:1.5}
 
 footer{
     position:relative;
@@ -651,8 +604,6 @@ footer{
 }
 
 .footer-accent{color:var(--cyan)}
-
-/* REGISTRATION MODAL */
 
 .modal{
     display:none;
@@ -672,6 +623,8 @@ footer{
     position:relative;
     width:100%;
     max-width:420px;
+    max-height:90vh;
+    overflow-y:auto;
     padding:35px;
     background:#0a1120;
     border:1px solid rgba(0,245,255,.5);
@@ -747,17 +700,27 @@ footer{
 
 .submit-btn:disabled{opacity:.6;cursor:not-allowed}
 
-.message{
-    margin-top:15px;
+.message{margin-top:15px;text-align:center;font-size:13px;line-height:1.5}
+
+.auth-switch{
+    margin-top:20px;
     text-align:center;
-    font-size:13px;
-    line-height:1.5
+    color:#9aa8bd;
+    font-size:13px
 }
 
-/* RESPONSIVE DESIGN */
+.auth-switch button{
+    border:none;
+    background:none;
+    color:var(--cyan);
+    font-weight:800;
+    cursor:pointer;
+    margin-left:4px
+}
+
+.auth-switch button:hover{text-decoration:underline}
 
 @media(max-width:650px){
-
     .topbar{min-height:72px;padding:13px 5%;gap:10px}
     .brand{gap:9px}
     .brand-logo{width:38px;height:38px;font-size:20px}
@@ -766,47 +729,28 @@ footer{
     .system-status{font-size:8px;letter-spacing:.5px}
     .nav-actions{gap:7px}
     .nav-btn{padding:9px 10px;font-size:9px}
-
     main{width:90%;padding-top:22px}
-
     h1{font-size:clamp(37px,9vw,54px);letter-spacing:-1px}
     .tagline{font-size:10px;letter-spacing:2px}
     .description{font-size:14px}
-
     .flight-area{height:75px}
     #spaceship{width:62px;height:62px}
-
     .hud-stats{gap:7px}
     .hud-card{padding:14px 5px}
     .hud-label{font-size:8px;letter-spacing:.7px}
     .hud-value{font-size:12px}
-
     .player-welcome{padding:15px 12px}
     .welcome-heading{font-size:15px}
     .player-details{font-size:12px}
-
     .about-section{padding:19px 15px}
     .about-heading{font-size:16px}
     .about-cards{grid-template-columns:1fr;gap:12px}
     .about-card{padding:17px}
-
     .actions{flex-direction:column;gap:12px}
     .action-btn{width:100%;min-width:0}
-
-    footer{
-        flex-direction:column;
-        align-items:center;
-        text-align:center;
-        line-height:1.8
-    }
-
+    footer{flex-direction:column;align-items:center;text-align:center;line-height:1.8}
     .register-box{padding:30px 22px}
-
-    .toast{
-        top:85px;
-        right:15px;
-        width:calc(100% - 30px)
-    }
+    .toast{top:85px;right:15px;width:calc(100% - 30px)}
 }
 
 @media(max-width:360px){
@@ -830,8 +774,6 @@ footer{
 
 <body>
 
-<!-- BACKGROUND -->
-
 <div class="background" aria-hidden="true">
     <div class="ambient one"></div>
     <div class="ambient two"></div>
@@ -846,11 +788,8 @@ footer{
 <canvas id="spaceCanvas" aria-hidden="true"></canvas>
 <canvas id="flightCanvas" aria-hidden="true"></canvas>
 
-<!-- SPACESHIP -->
-
 <div id="spaceship" aria-hidden="true">
     <div class="ship-halo"></div>
-
     <svg viewBox="0 0 100 100">
         <defs>
             <linearGradient id="hull" x1="0" y1="0" x2="1" y2="1">
@@ -859,18 +798,15 @@ footer{
                 <stop offset=".7" stop-color="#2189ff"/>
                 <stop offset="1" stop-color="#713dff"/>
             </linearGradient>
-
             <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#00f5ff"/>
                 <stop offset="1" stop-color="#a855f7"/>
             </linearGradient>
-
             <radialGradient id="cockpit">
                 <stop offset="0" stop-color="#fff"/>
                 <stop offset=".35" stop-color="#00f5ff"/>
                 <stop offset="1" stop-color="#1677ff"/>
             </radialGradient>
-
             <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#fff"/>
                 <stop offset=".35" stop-color="#00f5ff"/>
@@ -879,48 +815,26 @@ footer{
         </defs>
 
         <path d="M40 64 L43 91 L51 73 Z" fill="url(#flame)">
-            <animate attributeName="d"
-                values="M40 64 L43 91 L51 73 Z;M40 64 L46 98 L51 73 Z;M40 64 L43 91 L51 73 Z"
-                dur=".22s" repeatCount="indefinite"/>
+            <animate attributeName="d" values="M40 64 L43 91 L51 73 Z;M40 64 L46 98 L51 73 Z;M40 64 L43 91 L51 73 Z" dur=".22s" repeatCount="indefinite"/>
         </path>
-
         <path d="M51 69 L56 94 L62 65 Z" fill="url(#flame)">
-            <animate attributeName="d"
-                values="M51 69 L56 94 L62 65 Z;M51 69 L60 100 L62 65 Z;M51 69 L56 94 L62 65 Z"
-                dur=".3s" repeatCount="indefinite"/>
+            <animate attributeName="d" values="M51 69 L56 94 L62 65 Z;M51 69 L60 100 L62 65 Z;M51 69 L56 94 L62 65 Z" dur=".3s" repeatCount="indefinite"/>
         </path>
-
-        <path d="M48 49 L8 68 L28 39 L42 27 Z"
-            fill="url(#wing)" stroke="#8afaff" stroke-width="1.5"/>
-
-        <path d="M54 48 L90 58 L72 30 L60 25 Z"
-            fill="url(#wing)" stroke="#8afaff" stroke-width="1.5"/>
-
-        <path d="M49 7 Q57 21 62 37 L65 58 L52 75 L38 58 L39 37 Q42 20 49 7Z"
-            fill="url(#hull)" stroke="#d5ffff" stroke-width="1.5"/>
-
-        <path d="M50 23 Q57 31 57 43 L50 51 L44 42 Q44 31 50 23Z"
-            fill="url(#cockpit)" stroke="#fff" stroke-width="1"/>
-
-        <path d="M42 54 L51 63 L59 54"
-            fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/>
-
-        <path d="M24 49 L35 43 M66 42 L77 48"
-            stroke="#fff" stroke-width="1.5" opacity=".8"/>
-
+        <path d="M48 49 L8 68 L28 39 L42 27 Z" fill="url(#wing)" stroke="#8afaff" stroke-width="1.5"/>
+        <path d="M54 48 L90 58 L72 30 L60 25 Z" fill="url(#wing)" stroke="#8afaff" stroke-width="1.5"/>
+        <path d="M49 7 Q57 21 62 37 L65 58 L52 75 L38 58 L39 37 Q42 20 49 7Z" fill="url(#hull)" stroke="#d5ffff" stroke-width="1.5"/>
+        <path d="M50 23 Q57 31 57 43 L50 51 L44 42 Q44 31 50 23Z" fill="url(#cockpit)" stroke="#fff" stroke-width="1"/>
+        <path d="M42 54 L51 63 L59 54" fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/>
+        <path d="M24 49 L35 43 M66 42 L77 48" stroke="#fff" stroke-width="1.5" opacity=".8"/>
         <circle cx="32" cy="57" r="2" fill="#00f5ff"/>
         <circle cx="69" cy="53" r="2" fill="#ff3dba"/>
         <path d="M49 7 L50 1 L52 8" fill="#fff"/>
     </svg>
 </div>
 
-<!-- NAVIGATION -->
-
 <header class="topbar">
-
     <a class="brand" href="/" aria-label="AI Gaming Coach home">
         <div class="brand-logo">✦</div>
-
         <div>
             <div class="brand-name">AI GAMING <span>COACH</span></div>
             <div class="brand-caption">NEXT-GEN COMBAT TRAINING</div>
@@ -928,7 +842,6 @@ footer{
     </a>
 
     <div class="nav-actions">
-
         <div class="system-status">
             <span class="status-dot"></span>
             ARENA READY
@@ -938,31 +851,19 @@ footer{
             REGISTER
         </button>
 
-        <button class="nav-btn logout-btn" id="logoutButton"
-                onclick="logoutPlayer()" style="display:none">
+        <button class="nav-btn logout-btn" id="logoutButton" onclick="logoutPlayer()" style="display:none">
             LOGOUT
         </button>
-
     </div>
-
 </header>
 
-<!-- LOGOUT POP-UP -->
-
 <div class="toast" id="logoutToast" role="status" aria-live="polite">
-
     <div class="toast-icon">✓</div>
-
     <div>
         <div class="toast-title">LOGGED OUT SUCCESSFULLY!</div>
-        <div class="toast-message">
-            You have been logged out of AI Gaming Coach.
-        </div>
+        <div class="toast-message">You have been logged out of AI Gaming Coach.</div>
     </div>
-
 </div>
-
-<!-- MAIN CONTENT -->
 
 <main>
 <section class="hero">
@@ -983,52 +884,34 @@ footer{
         Review your match performance from your AI coach dashboard.
     </p>
 
-    <!-- WELCOME AND PLAYER DETAILS -->
-
     <div class="player-welcome" id="welcomePlayer">
-
         <div class="welcome-heading" id="welcomeHeading">
             WELCOME TO AI GAMING COACH
         </div>
-
         <div class="player-details" id="playerDetails">
             Register to create your personal gaming profile.
         </div>
-
     </div>
-
-    <!-- SPACESHIP FLIGHT AREA -->
 
     <div class="flight-area" aria-hidden="true"></div>
 
-    <!-- HUD PANELS -->
-
     <section class="hud-stats" aria-label="Game features">
-
         <div class="hud-card">
             <div class="hud-label">GAME MODE</div>
             <div class="hud-value">COMBAT</div>
         </div>
-
         <div class="hud-card">
             <div class="hud-label">TRAINING AI</div>
             <div class="hud-value purple">ASSISTED</div>
         </div>
-
         <div class="hud-card">
             <div class="hud-label">MISSION STATUS</div>
             <div class="hud-value pink">READY</div>
         </div>
-
     </section>
 
-    <!-- ABOUT AI GAMING COACH -->
-
     <section class="about-section">
-
-        <h2 class="about-heading">
-            <span>//</span> ABOUT AI GAMING COACH
-        </h2>
+        <h2 class="about-heading"><span>//</span> ABOUT AI GAMING COACH</h2>
 
         <p class="about-intro">
             AI Gaming Coach uses interactive gameplay and AI analysis
@@ -1036,65 +919,36 @@ footer{
         </p>
 
         <div class="about-cards">
-
             <div class="about-card">
-
                 <div class="about-icon">🎮</div>
-
                 <h3>INTERACTIVE GAMEPLAY</h3>
-
-                <p>
-                    Play combat games, defeat enemies, and test your skills.
-                </p>
-
+                <p>Play combat games, defeat enemies, and test your skills.</p>
             </div>
 
             <div class="about-card">
-
                 <div class="about-icon">🤖</div>
-
                 <h3>AI-POWERED ANALYSIS</h3>
-
-                <p>
-                    AI analyzes gameplay data to identify your performance level.
-                </p>
-
+                <p>AI analyzes gameplay data to identify your performance level.</p>
             </div>
 
             <div class="about-card">
-
                 <div class="about-icon">📊</div>
-
                 <h3>PERFORMANCE TRACKING</h3>
-
-                <p>
-                    Track scores, accuracy, kills, and previous game sessions.
-                </p>
-
+                <p>Track scores, accuracy, kills, and previous game sessions.</p>
             </div>
-
         </div>
-
     </section>
 
-    <!-- ACTION BUTTONS -->
-
     <nav class="actions" id="actionButtons" aria-label="Main navigation">
-
         <a class="action-btn play-btn" href="/game/" onclick="return playGame()">
             <span class="btn-icon" aria-hidden="true">▶</span>
             PLAY GAME
         </a>
 
-        <a class="action-btn dashboard-btn"
-           href="/dashboard.html"
-           onclick="return openDashboard()">
-
+        <a class="action-btn dashboard-btn" href="/dashboard.html" onclick="return openDashboard()">
             <span class="btn-icon" aria-hidden="true">◈</span>
             VIEW MY DASHBOARD
-
         </a>
-
     </nav>
 
     <p class="return-note">
@@ -1105,42 +959,68 @@ footer{
 </section>
 </main>
 
-<!-- FOOTER -->
-
 <footer>
     <span>AI GAMING COACH <span class="footer-accent">//</span> ARENA SYSTEM</span>
     <span>COMBAT TRAINING SIMULATION</span>
 </footer>
 
-<!-- REGISTRATION MODAL -->
+<!-- REGISTER / LOGIN MODAL -->
 
 <div class="modal" id="registerModal">
-
     <div class="register-box">
 
-        <button class="close" onclick="closeRegister()" aria-label="Close registration">
-            ×
-        </button>
+        <button class="close" onclick="closeRegister()" aria-label="Close registration">×</button>
 
-        <h2>PLAYER REGISTRATION</h2>
+        <h2 id="authHeading">PLAYER REGISTRATION</h2>
 
-        <p class="modal-description">
-            Register to create your personal gaming profile.
+        <p class="modal-description" id="authDescription">
+            Create your account to save and access your gameplay sessions.
         </p>
 
         <form id="registerForm">
 
-            <label for="playerName">Player Name</label>
+            <div id="nameField">
+                <label for="playerName">Player Name</label>
+                <input
+                    type="text"
+                    id="playerName"
+                    placeholder="Enter your name"
+                    minlength="2"
+                    maxlength="50"
+                    autocomplete="name"
+                >
+            </div>
 
+            <label for="playerEmail">Email Address</label>
             <input
-                type="text"
-                id="playerName"
-                placeholder="Enter your name"
+                type="email"
+                id="playerEmail"
+                placeholder="Enter your email"
                 required
-                minlength="2"
-                maxlength="50"
-                autocomplete="name"
+                maxlength="120"
+                autocomplete="email"
             >
+
+            <label for="playerPassword">Password</label>
+            <input
+                type="password"
+                id="playerPassword"
+                placeholder="Enter your password"
+                required
+                minlength="8"
+                autocomplete="new-password"
+            >
+
+            <div id="confirmPasswordField">
+                <label for="confirmPassword">Confirm Password</label>
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                    minlength="8"
+                    autocomplete="new-password"
+                >
+            </div>
 
             <button type="submit" class="submit-btn" id="registerButton">
                 REGISTER PLAYER
@@ -1150,23 +1030,41 @@ footer{
 
         <div class="message" id="registerMessage" role="status"></div>
 
-    </div>
+        <div class="auth-switch">
+            <span id="authSwitchText">Already have an account?</span>
+            <button type="button" id="authSwitchButton" onclick="switchAuthMode()">
+                LOGIN
+            </button>
+        </div>
 
+    </div>
 </div>
 
 <script>
 
 /* =====================================
-   PLAYER REGISTRATION
+   AUTHENTICATION AND API CONFIGURATION
 ===================================== */
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = window.location.origin;
 
 const registerModal = document.getElementById("registerModal");
 const registerForm = document.getElementById("registerForm");
 const registerMessage = document.getElementById("registerMessage");
 const registerButton = document.getElementById("registerButton");
+
 const playerNameInput = document.getElementById("playerName");
+const playerEmailInput = document.getElementById("playerEmail");
+const playerPasswordInput = document.getElementById("playerPassword");
+const confirmPasswordInput = document.getElementById("confirmPassword");
+
+const nameField = document.getElementById("nameField");
+const confirmPasswordField = document.getElementById("confirmPasswordField");
+
+const authHeading = document.getElementById("authHeading");
+const authDescription = document.getElementById("authDescription");
+const authSwitchText = document.getElementById("authSwitchText");
+const authSwitchButton = document.getElementById("authSwitchButton");
 
 const welcomeHeading = document.getElementById("welcomeHeading");
 const playerDetails = document.getElementById("playerDetails");
@@ -1174,13 +1072,58 @@ const playerDetails = document.getElementById("playerDetails");
 const logoutButton = document.getElementById("logoutButton");
 const registerNavButton = document.getElementById("registerNavButton");
 const actionButtons = document.getElementById("actionButtons");
-
 const logoutToast = document.getElementById("logoutToast");
 
 let toastTimeout;
+let currentPlayer = null;
+let authMode = "register";
 
 
-/* SHOW LOGOUT POP-UP */
+/* =====================================
+   API REQUEST HELPER
+===================================== */
+
+async function apiRequest(endpoint, options = {}) {
+
+    const response = await fetch(API_URL + endpoint, {
+
+        ...options,
+
+        credentials: "include",
+
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+
+    });
+
+    let data = {};
+
+    try {
+        data = await response.json();
+    } catch (error) {
+        data = {};
+    }
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.error ||
+            data.message ||
+            "Request failed. Please try again."
+        );
+
+    }
+
+    return data;
+
+}
+
+
+/* =====================================
+   LOGOUT NOTIFICATION
+===================================== */
 
 function showLogoutToast() {
 
@@ -1189,19 +1132,24 @@ function showLogoutToast() {
     logoutToast.classList.add("show");
 
     toastTimeout = setTimeout(function() {
-
         logoutToast.classList.remove("show");
-
     }, 3500);
 
 }
 
 
-/* OPEN REGISTRATION */
+/* =====================================
+   OPEN REGISTRATION
+===================================== */
 
 function openRegister() {
 
+    authMode = "register";
+
+    updateAuthMode();
+
     registerModal.classList.add("active");
+
     registerMessage.textContent = "";
 
     playerNameInput.focus();
@@ -1209,7 +1157,104 @@ function openRegister() {
 }
 
 
-/* CLOSE REGISTRATION */
+/* =====================================
+   OPEN LOGIN
+===================================== */
+
+function openLogin() {
+
+    authMode = "login";
+
+    updateAuthMode();
+
+    registerModal.classList.add("active");
+
+    registerMessage.textContent = "";
+
+    playerEmailInput.focus();
+
+}
+
+
+/* =====================================
+   SWITCH BETWEEN REGISTER AND LOGIN
+===================================== */
+
+function switchAuthMode() {
+
+    authMode = authMode === "register" ? "login" : "register";
+
+    updateAuthMode();
+
+}
+
+
+/* =====================================
+   UPDATE AUTHENTICATION FORM
+===================================== */
+
+function updateAuthMode() {
+
+    registerForm.reset();
+
+    registerMessage.textContent = "";
+
+    if (authMode === "register") {
+
+        authHeading.textContent = "PLAYER REGISTRATION";
+
+        authDescription.textContent =
+            "Create your account to save and access your gameplay sessions.";
+
+        nameField.style.display = "block";
+
+        confirmPasswordField.style.display = "block";
+
+        playerNameInput.required = true;
+
+        confirmPasswordInput.required = true;
+
+        playerPasswordInput.autocomplete = "new-password";
+
+        confirmPasswordInput.autocomplete = "new-password";
+
+        registerButton.textContent = "REGISTER PLAYER";
+
+        authSwitchText.textContent = "Already have an account?";
+
+        authSwitchButton.textContent = "LOGIN";
+
+    } else {
+
+        authHeading.textContent = "PLAYER LOGIN";
+
+        authDescription.textContent =
+            "Login with your registered email and password to access your profile.";
+
+        nameField.style.display = "none";
+
+        confirmPasswordField.style.display = "none";
+
+        playerNameInput.required = false;
+
+        confirmPasswordInput.required = false;
+
+        playerPasswordInput.autocomplete = "current-password";
+
+        registerButton.textContent = "LOGIN";
+
+        authSwitchText.textContent = "Don't have an account?";
+
+        authSwitchButton.textContent = "REGISTER";
+
+    }
+
+}
+
+
+/* =====================================
+   CLOSE MODAL
+===================================== */
 
 function closeRegister() {
 
@@ -1218,40 +1263,53 @@ function closeRegister() {
 }
 
 
-/* GET REGISTERED PLAYER */
+/* =====================================
+   SAFE HTML DISPLAY
+===================================== */
 
-function getCurrentPlayer() {
+function escapeHTML(value) {
 
-    const playerId = localStorage.getItem("player_id");
-    const playerName = localStorage.getItem("player_name");
+    return String(value).replace(/[&<>"']/g, function(character) {
 
-    if (!playerId || !playerName) {
-        return null;
-    }
+        const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        };
 
-    return {
-        player_id: playerId,
-        player_name: playerName
-    };
+        return entities[character];
+
+    });
 
 }
 
 
-/* UPDATE WELCOME AND PLAYER DETAILS */
+/* =====================================
+   UPDATE WELCOME DETAILS
+===================================== */
 
 function updateWelcome() {
 
-    const player = getCurrentPlayer();
+    if (currentPlayer) {
 
-    if (player) {
+        const playerName =
+            currentPlayer.player_name || currentPlayer.name || "Player";
+
+        const playerId =
+            currentPlayer.player_id || currentPlayer.id || "";
 
         welcomeHeading.textContent =
-            "WELCOME, " + player.player_name.toUpperCase();
+            "WELCOME, " + playerName.toUpperCase();
 
         playerDetails.innerHTML =
             "<strong>PLAYER DETAILS</strong><br>" +
-            "PLAYER NAME: " + escapeHTML(player.player_name) +
-            "<br>PLAYER ID: " + escapeHTML(player.player_id);
+            "PLAYER NAME: " + escapeHTML(playerName) +
+            "<br>PLAYER ID: " + escapeHTML(playerId) +
+            (currentPlayer.email
+                ? "<br>EMAIL: " + escapeHTML(currentPlayer.email)
+                : "");
 
         logoutButton.style.display = "inline-block";
 
@@ -1278,112 +1336,211 @@ function updateWelcome() {
 }
 
 
-/* SAFE HTML DISPLAY */
+/* =====================================
+   CHECK CURRENT LOGIN SESSION
+===================================== */
 
-function escapeHTML(value) {
+async function checkLoginSession() {
 
-    return String(value).replace(/[&<>"']/g, function(character) {
+    try {
 
-        const entities = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;"
-        };
+        const data = await apiRequest("/api/me", {
+            method: "GET"
+        });
 
-        return entities[character];
+        currentPlayer = data.player || data;
 
-    });
+        if (
+            currentPlayer &&
+            (currentPlayer.player_id || currentPlayer.id)
+        ) {
+
+            updateWelcome();
+
+            console.log(
+                "LOGIN SESSION RESTORED:",
+                currentPlayer.player_id || currentPlayer.id
+            );
+
+        } else {
+
+            currentPlayer = null;
+
+            updateWelcome();
+
+        }
+
+    } catch (error) {
+
+        currentPlayer = null;
+
+        updateWelcome();
+
+        console.log("No active login session.");
+
+    }
 
 }
 
 
-/* REGISTER PLAYER */
+/* =====================================
+   REGISTER OR LOGIN FORM SUBMISSION
+===================================== */
 
 registerForm.addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
+    const email = playerEmailInput.value.trim().toLowerCase();
+
+    const password = playerPasswordInput.value;
+
     const playerName = playerNameInput.value.trim();
 
-    if (playerName.length < 2) {
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (!email || !password) {
 
         registerMessage.style.color = "#ff5577";
 
         registerMessage.textContent =
-            "Please enter a valid player name.";
+            "Please enter your email and password.";
 
         return;
 
     }
 
+    if (password.length < 8) {
+
+        registerMessage.style.color = "#ff5577";
+
+        registerMessage.textContent =
+            "Password must contain at least 8 characters.";
+
+        return;
+
+    }
+
+    if (authMode === "register") {
+
+        if (playerName.length < 2) {
+
+            registerMessage.style.color = "#ff5577";
+
+            registerMessage.textContent =
+                "Please enter a valid player name.";
+
+            return;
+
+        }
+
+        if (password !== confirmPassword) {
+
+            registerMessage.style.color = "#ff5577";
+
+            registerMessage.textContent =
+                "Passwords do not match.";
+
+            return;
+
+        }
+
+    }
+
     registerButton.disabled = true;
 
-    registerButton.textContent = "REGISTERING...";
+    registerButton.textContent =
+        authMode === "register" ? "REGISTERING..." : "LOGGING IN...";
 
     registerMessage.style.color = "#00f5ff";
 
     registerMessage.textContent =
-        "Creating your player profile...";
+        authMode === "register"
+            ? "Creating your account..."
+            : "Verifying your login details...";
 
     try {
 
-        const response = await fetch(API_URL + "/api/register", {
+        let data;
 
-            method: "POST",
+        if (authMode === "register") {
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+            data = await apiRequest("/api/register", {
 
-            body: JSON.stringify({
-                player_name: playerName
-            })
+                method: "POST",
 
-        });
+                body: JSON.stringify({
 
-        const data = await response.json();
+                    player_name: playerName,
 
-        if (!response.ok) {
+                    email: email,
 
-            throw new Error(
-                data.error || data.message || "Registration failed."
-            );
+                    password: password
+
+                })
+
+            });
+
+        } else {
+
+            data = await apiRequest("/api/login", {
+
+                method: "POST",
+
+                body: JSON.stringify({
+
+                    email: email,
+
+                    password: password
+
+                })
+
+            });
 
         }
 
-        const playerId =
-            data.player_id ||
-            (data.player && data.player.player_id);
+        currentPlayer = data.player || data;
 
-        const savedPlayerName =
-            data.player_name ||
-            (data.player && data.player.player_name) ||
-            playerName;
+        const playerId =
+            currentPlayer.player_id || currentPlayer.id;
 
         if (!playerId) {
 
             throw new Error(
-                "Player ID was not returned by the server."
+                "The server did not return the player information."
             );
 
         }
 
-        localStorage.setItem("player_id", String(playerId));
+        await checkLoginSession();
 
-        localStorage.setItem("player_name", String(savedPlayerName));
+        if (!currentPlayer) {
+
+            throw new Error(
+                "Authentication succeeded, but the login session could not be verified. Check the backend session configuration."
+            );
+
+        }
 
         registerMessage.style.color = "#00ff9d";
 
         registerMessage.textContent =
-            "Registration successful!";
-
-        updateWelcome();
+            authMode === "register"
+                ? "Registration successful!"
+                : "Login successful!";
 
         registerForm.reset();
 
         closeRegister();
+
+        updateWelcome();
+
+        console.log(
+            authMode === "register"
+                ? "PLAYER REGISTERED SUCCESSFULLY"
+                : "PLAYER LOGGED IN SUCCESSFULLY",
+            currentPlayer
+        );
 
     } catch (error) {
 
@@ -1391,31 +1548,33 @@ registerForm.addEventListener("submit", async function(event) {
 
         registerMessage.textContent = error.message;
 
+        console.error("AUTHENTICATION ERROR:", error);
+
     } finally {
 
         registerButton.disabled = false;
 
-        registerButton.textContent = "REGISTER PLAYER";
+        updateAuthMode();
 
     }
 
 });
 
 
-/* PLAY GAME */
+/* =====================================
+   PLAY GAME
+===================================== */
 
 function playGame() {
 
-    const player = getCurrentPlayer();
+    if (!currentPlayer) {
 
-    if (!player) {
-
-        openRegister();
+        openLogin();
 
         registerMessage.style.color = "#ffbb55";
 
         registerMessage.textContent =
-            "Please register before starting the game.";
+            "Please login before starting the game.";
 
         return false;
 
@@ -1426,20 +1585,20 @@ function playGame() {
 }
 
 
-/* OPEN DASHBOARD */
+/* =====================================
+   OPEN DASHBOARD
+===================================== */
 
 function openDashboard() {
 
-    const player = getCurrentPlayer();
+    if (!currentPlayer) {
 
-    if (!player) {
-
-        openRegister();
+        openLogin();
 
         registerMessage.style.color = "#ffbb55";
 
         registerMessage.textContent =
-            "Please register before viewing your dashboard.";
+            "Please login before viewing your dashboard.";
 
         return false;
 
@@ -1450,22 +1609,47 @@ function openDashboard() {
 }
 
 
-/* LOGOUT PLAYER */
+/* =====================================
+   LOGOUT PLAYER
+===================================== */
 
-function logoutPlayer() {
+async function logoutPlayer() {
 
-    localStorage.removeItem("player_id");
+    logoutButton.disabled = true;
 
-    localStorage.removeItem("player_name");
+    try {
 
-    updateWelcome();
+        await apiRequest("/api/logout", {
+            method: "POST",
+            body: JSON.stringify({})
+        });
 
-    showLogoutToast();
+        currentPlayer = null;
+
+        updateWelcome();
+
+        showLogoutToast();
+
+        console.log("PLAYER LOGGED OUT SUCCESSFULLY.");
+
+    } catch (error) {
+
+        console.error("LOGOUT ERROR:", error);
+
+        alert("Logout failed: " + error.message);
+
+    } finally {
+
+        logoutButton.disabled = false;
+
+    }
 
 }
 
 
-/* CLOSE MODAL WHEN CLICKING OUTSIDE */
+/* =====================================
+   CLOSE MODAL OUTSIDE
+===================================== */
 
 registerModal.addEventListener("click", function(event) {
 
@@ -1476,7 +1660,9 @@ registerModal.addEventListener("click", function(event) {
 });
 
 
-/* CLOSE MODAL WITH ESCAPE KEY */
+/* =====================================
+   ESCAPE KEY
+===================================== */
 
 document.addEventListener("keydown", function(event) {
 
@@ -1487,9 +1673,13 @@ document.addEventListener("keydown", function(event) {
 });
 
 
-/* LOAD PLAYER INFORMATION */
+/* =====================================
+   INITIALIZE LOGIN SESSION
+===================================== */
 
 updateWelcome();
+
+checkLoginSession();
 
 
 /* =====================================
@@ -1557,11 +1747,8 @@ updateWelcome();
         }
 
         if (t - last < 30) {
-
             frame = requestAnimationFrame(draw);
-
             return;
-
         }
 
         last = t;
@@ -1575,11 +1762,8 @@ updateWelcome();
             s.p += .018;
 
             if (s.y < -4) {
-
                 s.y = h + 4;
-
                 s.x = Math.random() * w;
-
             }
 
             ctx.beginPath();
@@ -1609,9 +1793,7 @@ updateWelcome();
     function start(){
 
         if (!document.hidden && !reduced.matches && !frame) {
-
             frame = requestAnimationFrame(draw);
-
         }
 
     }
@@ -1627,19 +1809,14 @@ updateWelcome();
     }
 
     document.addEventListener("visibilitychange", () => {
-
         document.hidden ? stop() : start();
-
     });
 
     reduced.addEventListener("change", () => {
-
         stop();
-
         if (!reduced.matches) {
             start();
         }
-
     });
 
     window.addEventListener("resize", resize);
@@ -1691,21 +1868,17 @@ updateWelcome();
         h = innerHeight;
 
         canvas.width = Math.round(w * dpr);
-
         canvas.height = Math.round(h * dpr);
 
         canvas.style.width = w + "px";
-
         canvas.style.height = h + "px";
 
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         x = Math.min(x, w - 60);
-
         y = Math.min(y, h - 60);
 
         targetX = Math.min(targetX, w - 60);
-
         targetY = Math.min(targetY, h - 60);
 
     }
@@ -1731,30 +1904,23 @@ updateWelcome();
         for (let i = 1; i < trail.length; i++) {
 
             const a = trail[i - 1];
-
             const b = trail[i];
 
             const alpha = i / trail.length;
 
             ctx.beginPath();
-
             ctx.moveTo(a.x, a.y);
-
             ctx.lineTo(b.x, b.y);
 
             ctx.strokeStyle =
                 `rgba(0,245,255,${alpha * .48})`;
 
             ctx.lineWidth = alpha * 4;
-
             ctx.shadowBlur = 12;
-
             ctx.shadowColor = "#00f5ff";
-
             ctx.stroke();
 
             ctx.beginPath();
-
             ctx.arc(b.x, b.y, alpha * 2.3, 0, Math.PI * 2);
 
             ctx.fillStyle =
@@ -1788,15 +1954,12 @@ updateWelcome();
         lastTime = time;
 
         const dx = targetX - x;
-
         const dy = targetY - y;
 
         const distance = Math.hypot(dx, dy);
 
         if (distance < 24 || time - lastTarget > 6500) {
-
             newDestination();
-
         }
 
         const desiredAngle = Math.atan2(dy, dx);
@@ -1813,19 +1976,14 @@ updateWelcome();
         );
 
         x += Math.cos(angle) * speed;
-
         y += Math.sin(angle) * speed;
 
         x = Math.max(12, Math.min(w - 12, x));
-
         y = Math.max(12, Math.min(h - 12, y));
 
         trail.push({
-
             x: x - Math.cos(angle) * 22,
-
             y: y - Math.sin(angle) * 22
-
         });
 
         if (trail.length > 32) {
@@ -1845,11 +2003,8 @@ updateWelcome();
     function start(){
 
         if (!document.hidden && !reduce.matches && !frame) {
-
             lastTime = 0;
-
             frame = requestAnimationFrame(animate);
-
         }
 
     }
@@ -1865,9 +2020,7 @@ updateWelcome();
     }
 
     document.addEventListener("visibilitychange", () => {
-
         document.hidden ? stop() : start();
-
     });
 
     reduce.addEventListener("change", () => {
@@ -1897,13 +2050,9 @@ updateWelcome();
     newDestination();
 
     if (!reduce.matches) {
-
         start();
-
     } else {
-
         ship.style.display = "none";
-
     }
 
 })();

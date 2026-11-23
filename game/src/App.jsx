@@ -5,27 +5,19 @@ import './App.css'
 function App() {
   const dataSentRef = useRef(false)
 
-  // REACTION TIME REFERENCES
-  const gameStartedAtRef = useRef(null)
-  const firstShotRecordedRef = useRef(false)
-
-  const [reactionTime, setReactionTime] = useState(null)
+  // Reaction-time tracking
+  const reactionSamplesRef = useRef([])
+  const appearanceSequenceRef = useRef(0)
+  const recordedAppearancesRef = useRef(new Set())
 
   const [playerX, setPlayerX] = useState(375)
   const [playerY, setPlayerY] = useState(275)
-
   const [bullets, setBullets] = useState([])
-
-  const [enemies, setEnemies] = useState([
-    { x: 100, y: 50, speed: 2 },
-    { x: 380, y: 100, speed: 3 },
-    { x: 650, y: 50, speed: 4 }
-  ])
+  const [enemies, setEnemies] = useState([])
 
   const [score, setScore] = useState(0)
   const [health, setHealth] = useState(3)
   const [time, setTime] = useState(60)
-
   const [difficulty, setDifficulty] = useState('Medium')
 
   const [bulletsFired, setBulletsFired] = useState(0)
@@ -33,11 +25,23 @@ function App() {
   const [playerHits, setPlayerHits] = useState(0)
 
   const [gameStarted, setGameStarted] = useState(false)
-
   const [explosions, setExplosions] = useState([])
+  const [gameRunId, setGameRunId] = useState(0)
 
-  const gameOver =
-    gameStarted && (health === 0 || time === 0)
+  // Live game values used by timers.
+  const playerRef = useRef({ x: 375, y: 275 })
+  const bulletsRef = useRef([])
+  const enemiesRef = useRef([])
+  const scoreRef = useRef(0)
+  const healthRef = useRef(3)
+  const timeRef = useRef(60)
+  const bulletsFiredRef = useRef(0)
+  const enemiesDefeatedRef = useRef(0)
+  const playerHitsRef = useRef(0)
+  const gameStartedRef = useRef(false)
+  const difficultyRef = useRef('Medium')
+
+  const gameOver = gameStarted && (health === 0 || time === 0)
 
   const difficultySpeeds = {
     Easy: [1, 1.5, 2],
@@ -45,372 +49,450 @@ function App() {
     Hard: [3, 4, 5]
   }
 
+  const createEnemyAppearance = (enemy, speed = enemy.speed) => {
+    appearanceSequenceRef.current += 1
+
+    return {
+      ...enemy,
+      speed,
+      visibleAt: performance.now(),
+      appearanceId: appearanceSequenceRef.current
+    }
+  }
+
+  const isColliding = (bullet, enemy) => (
+    bullet.x < enemy.x + 40 &&
+    bullet.x + 5 > enemy.x &&
+    bullet.y < enemy.y + 40 &&
+    bullet.y + 15 > enemy.y
+  )
+
+  const isPlayerHit = (currentPlayerX, currentPlayerY, enemy) => (
+    currentPlayerX < enemy.x + 40 &&
+    currentPlayerX + 40 > enemy.x &&
+    currentPlayerY < enemy.y + 40 &&
+    currentPlayerY + 40 > enemy.y
+  )
+
   const changeDifficulty = (level) => {
+    difficultyRef.current = level
     setDifficulty(level)
 
     const speeds = difficultySpeeds[level]
+    const updatedEnemies = enemiesRef.current.map((enemy, index) => ({
+      ...enemy,
+      speed: speeds[index] ?? speeds[0]
+    }))
 
-    setEnemies((oldEnemies) =>
-      oldEnemies.map((enemy, index) => ({
-        ...enemy,
-        speed: speeds[index]
-      }))
-    )
+    enemiesRef.current = updatedEnemies
+    setEnemies(updatedEnemies)
   }
 
+  // START / RESTART GAME
   const startGame = () => {
-    // Reset session submission status
     dataSentRef.current = false
+    reactionSamplesRef.current = []
+    recordedAppearancesRef.current.clear()
+    appearanceSequenceRef.current = 0
 
-    // RESET REACTION TIME FOR THE NEW GAME
-    gameStartedAtRef.current = performance.now()
-    firstShotRecordedRef.current = false
-    setReactionTime(null)
+    const speeds = difficultySpeeds[difficultyRef.current]
 
-    const speeds = difficultySpeeds[difficulty]
+    const initialEnemies = [
+      createEnemyAppearance({ id: 1, x: 100, y: 50 }, speeds[0]),
+      createEnemyAppearance({ id: 2, x: 380, y: 100 }, speeds[1]),
+      createEnemyAppearance({ id: 3, x: 650, y: 50 }, speeds[2])
+    ]
+
+    playerRef.current = { x: 375, y: 275 }
+    bulletsRef.current = []
+    enemiesRef.current = initialEnemies
+    scoreRef.current = 0
+    healthRef.current = 3
+    timeRef.current = 60
+    bulletsFiredRef.current = 0
+    enemiesDefeatedRef.current = 0
+    playerHitsRef.current = 0
+    gameStartedRef.current = true
 
     setPlayerX(375)
     setPlayerY(275)
-
     setBullets([])
-
-    setEnemies([
-      { x: 100, y: 50, speed: speeds[0] },
-      { x: 380, y: 100, speed: speeds[1] },
-      { x: 650, y: 50, speed: speeds[2] }
-    ])
-
+    setEnemies(initialEnemies)
     setScore(0)
     setHealth(3)
     setTime(60)
-
     setBulletsFired(0)
     setEnemiesDefeated(0)
     setPlayerHits(0)
-
     setExplosions([])
-
     setGameStarted(true)
+    setGameRunId((id) => id + 1)
   }
 
+  // PLAYER MOVEMENT AND SHOOTING
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (!gameStarted || gameOver) return
+      if (!gameStartedRef.current || healthRef.current <= 0 || timeRef.current <= 0) {
+        return
+      }
 
       if (
-        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(
-          event.key
-        )
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)
       ) {
         event.preventDefault()
       }
 
+      const player = playerRef.current
+
       if (event.key === 'ArrowLeft') {
-        setPlayerX((x) => Math.max(0, x - 10))
+        const nextX = Math.max(0, player.x - 10)
+        playerRef.current = { ...player, x: nextX }
+        setPlayerX(nextX)
       }
 
       if (event.key === 'ArrowRight') {
-        setPlayerX((x) => Math.min(760, x + 10))
+        const nextX = Math.min(760, player.x + 10)
+        playerRef.current = { ...player, x: nextX }
+        setPlayerX(nextX)
       }
 
       if (event.key === 'ArrowUp') {
-        setPlayerY((y) => Math.max(0, y - 10))
+        const nextY = Math.max(0, player.y - 10)
+        playerRef.current = { ...player, y: nextY }
+        setPlayerY(nextY)
       }
 
       if (event.key === 'ArrowDown') {
-        setPlayerY((y) => Math.min(560, y + 10))
+        const nextY = Math.min(560, player.y + 10)
+        playerRef.current = { ...player, y: nextY }
+        setPlayerY(nextY)
       }
 
-      if (event.code === 'Space') {
+      if (event.code === 'Space' && !event.repeat) {
+        const shotTime = performance.now()
+        const currentPlayer = playerRef.current
+        const bulletX = currentPlayer.x + 17
+        const bulletY = currentPlayer.y - 15
 
-        // CALCULATE FIRST-SHOT REACTION TIME ONLY ONCE
-        if (
-          !firstShotRecordedRef.current &&
-          gameStartedAtRef.current !== null
-        ) {
-          const elapsedMilliseconds =
-            performance.now() - gameStartedAtRef.current
+        const possibleTargets = enemiesRef.current
+          .filter((enemy) => (
+            bulletX < enemy.x + 40 &&
+            bulletX + 5 > enemy.x &&
+            enemy.y < bulletY &&
+            enemy.visibleAt !== undefined &&
+            enemy.appearanceId !== undefined
+          ))
+          .sort((a, b) => b.y - a.y)
 
-          const reactionSeconds =
-            elapsedMilliseconds / 1000
+        const target = possibleTargets[0] ?? null
+        let reactionSeconds = null
+        let targetAppearanceId = null
 
-          const calculatedReactionTime =
-            Number(reactionSeconds.toFixed(2))
+        if (target) {
+          const measuredTime = (shotTime - target.visibleAt) / 1000
 
-          setReactionTime(calculatedReactionTime)
-
-          firstShotRecordedRef.current = true
-
-          console.log(
-            'FIRST-SHOT REACTION TIME:',
-            calculatedReactionTime,
-            'seconds'
-          )
+          if (Number.isFinite(measuredTime) && measuredTime > 0) {
+            reactionSeconds = measuredTime
+            targetAppearanceId = target.appearanceId
+          }
         }
 
         const newBullet = {
-          x: playerX + 17,
-          y: playerY - 15
+          id: `${shotTime}-${Math.random()}`,
+          x: bulletX,
+          y: bulletY,
+          targetAppearanceId,
+          reactionSeconds
         }
 
-        setBullets((oldBullets) => [
-          ...oldBullets,
-          newBullet
-        ])
+        const updatedBullets = [...bulletsRef.current, newBullet]
+        bulletsRef.current = updatedBullets
+        setBullets(updatedBullets)
 
-        setBulletsFired((oldCount) => oldCount + 1)
+        bulletsFiredRef.current += 1
+        setBulletsFired(bulletsFiredRef.current)
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [playerX, playerY, gameStarted, gameOver])
-
+  // STABLE GAME LOOP
   useEffect(() => {
-    const bulletTimer = setInterval(() => {
-      if (!gameStarted || gameOver) return
+    if (!gameStarted) return undefined
 
-      setBullets((oldBullets) => {
-        const newBullets = []
+    let lastTick = performance.now()
+    let enemyElapsed = 0
+    let collisionElapsed = 0
+    let countdownElapsed = 0
 
-        oldBullets.forEach((bullet) => {
-          const hitEnemyIndex = enemies.findIndex((enemy) =>
-            isColliding(bullet, enemy)
-          )
+    const gameTimer = setInterval(() => {
+      const now = performance.now()
+      const delta = Math.min(now - lastTick, 100)
+      lastTick = now
 
-          if (hitEnemyIndex !== -1) {
-            const hitEnemy = enemies[hitEnemyIndex]
+      if (
+        !gameStartedRef.current ||
+        healthRef.current <= 0 ||
+        timeRef.current <= 0
+      ) {
+        return
+      }
 
-            setScore((oldScore) => oldScore + 1)
+      enemyElapsed += delta
+      collisionElapsed += delta
+      countdownElapsed += delta
 
-            setEnemiesDefeated((oldCount) => oldCount + 1)
+      const currentEnemies = [...enemiesRef.current]
+      const nextBullets = []
+      const usedEnemySlots = new Set()
+      const newExplosions = []
+      let newKills = 0
 
-            setExplosions((oldExplosions) => [
-              ...oldExplosions,
-              {
-                id: Date.now() + Math.random(),
-                x: hitEnemy.x,
-                y: hitEnemy.y
-              }
-            ])
+      bulletsRef.current.forEach((bullet) => {
+        let hitIndex = -1
 
-            setTimeout(() => {
-              setExplosions((oldExplosions) =>
-                oldExplosions.slice(1)
-              )
-            }, 350)
+        for (let index = 0; index < currentEnemies.length; index += 1) {
+          if (usedEnemySlots.has(index)) continue
 
-            setEnemies((oldEnemies) =>
-              oldEnemies.map((enemy, index) => {
-                if (index === hitEnemyIndex) {
-                  return {
-                    ...enemy,
-                    x: Math.floor(Math.random() * 760),
-                    y: 50
-                  }
-                }
-
-                return enemy
-              })
-            )
-          } else if (bullet.y > -15) {
-            newBullets.push({
-              ...bullet,
-              y: bullet.y - 10
-            })
+          if (isColliding(bullet, currentEnemies[index])) {
+            hitIndex = index
+            break
           }
-        })
+        }
 
-        return newBullets
-      })
-    }, 30)
+        if (hitIndex !== -1) {
+          const hitEnemy = currentEnemies[hitIndex]
 
-    return () => {
-      clearInterval(bulletTimer)
-    }
-  }, [enemies, gameStarted, gameOver])
+          const isIntendedTarget =
+            bullet.targetAppearanceId !== null &&
+            bullet.targetAppearanceId !== undefined &&
+            bullet.targetAppearanceId === hitEnemy.appearanceId
 
-  useEffect(() => {
-    const enemyTimer = setInterval(() => {
-      if (!gameStarted || gameOver) return
+          if (
+            isIntendedTarget &&
+            bullet.reactionSeconds !== null &&
+            Number.isFinite(bullet.reactionSeconds) &&
+            bullet.reactionSeconds > 0 &&
+            !recordedAppearancesRef.current.has(hitEnemy.appearanceId)
+          ) {
+            reactionSamplesRef.current.push(bullet.reactionSeconds)
+            recordedAppearancesRef.current.add(hitEnemy.appearanceId)
 
-      setEnemies((oldEnemies) =>
-        oldEnemies.map((enemy) => {
-          if (enemy.y >= 500) {
-            return {
-              ...enemy,
+            console.log(
+              'CONFIRMED REACTION TIME:',
+              bullet.reactionSeconds.toFixed(3),
+              'seconds'
+            )
+          }
+
+          usedEnemySlots.add(hitIndex)
+          newKills += 1
+
+          newExplosions.push({
+            id: `${now}-${Math.random()}`,
+            x: hitEnemy.x,
+            y: hitEnemy.y
+          })
+
+          currentEnemies[hitIndex] = createEnemyAppearance(
+            {
+              ...hitEnemy,
+              x: Math.floor(Math.random() * 760),
               y: 50
-            }
-          }
+            },
+            hitEnemy.speed
+          )
+        } else if (bullet.y > -15) {
+          nextBullets.push({ ...bullet, y: bullet.y - 10 })
+        }
+      })
 
-          return {
-            ...enemy,
-            y: enemy.y + enemy.speed
-          }
-        })
-      )
-    }, 100)
+      bulletsRef.current = nextBullets
+      setBullets(nextBullets)
 
-    return () => {
-      clearInterval(enemyTimer)
-    }
-  }, [gameStarted, gameOver])
+      if (newKills > 0) {
+        enemiesRef.current = currentEnemies
+        setEnemies(currentEnemies)
 
-  useEffect(() => {
-    const collisionTimer = setInterval(() => {
-      if (!gameStarted || gameOver) return
+        scoreRef.current += newKills
+        enemiesDefeatedRef.current += newKills
+        setScore(scoreRef.current)
+        setEnemiesDefeated(enemiesDefeatedRef.current)
+      }
 
-      setEnemies((oldEnemies) =>
-        oldEnemies.map((enemy) => {
-          if (isPlayerHit(playerX, playerY, enemy)) {
-            setHealth((oldHealth) =>
-              Math.max(0, oldHealth - 1)
+      if (newExplosions.length > 0) {
+        setExplosions((oldExplosions) => [...oldExplosions, ...newExplosions])
+
+        newExplosions.forEach((explosion) => {
+          window.setTimeout(() => {
+            setExplosions((oldExplosions) =>
+              oldExplosions.filter((item) => item.id !== explosion.id)
             )
+          }, 350)
+        })
+      }
 
-            setPlayerHits((oldCount) => oldCount + 1)
+      if (enemyElapsed >= 100) {
+        const steps = Math.floor(enemyElapsed / 100)
+        enemyElapsed %= 100
 
-            return {
-              ...enemy,
-              y: 50,
-              x: Math.floor(Math.random() * 760)
-            }
+        const movedEnemies = enemiesRef.current.map((enemy) => {
+          const nextY = enemy.y + enemy.speed * steps
+
+          if (nextY >= 500) {
+            return createEnemyAppearance(
+              { ...enemy, x: enemy.x, y: 50 },
+              enemy.speed
+            )
+          }
+
+          return { ...enemy, y: nextY }
+        })
+
+        enemiesRef.current = movedEnemies
+        setEnemies(movedEnemies)
+      }
+
+      if (collisionElapsed >= 500) {
+        collisionElapsed %= 500
+        const player = playerRef.current
+        let damageCount = 0
+
+        const updatedEnemies = enemiesRef.current.map((enemy) => {
+          if (isPlayerHit(player.x, player.y, enemy)) {
+            damageCount += 1
+
+            return createEnemyAppearance(
+              {
+                ...enemy,
+                x: Math.floor(Math.random() * 760),
+                y: 50
+              },
+              enemy.speed
+            )
           }
 
           return enemy
         })
-      )
-    }, 500)
 
-    return () => {
-      clearInterval(collisionTimer)
-    }
-  }, [playerX, playerY, gameStarted, gameOver])
+        if (damageCount > 0) {
+          enemiesRef.current = updatedEnemies
+          setEnemies(updatedEnemies)
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!gameStarted || gameOver) return
-
-      setTime((oldTime) => {
-        if (oldTime <= 0) {
-          return 0
+          healthRef.current = Math.max(0, healthRef.current - damageCount)
+          playerHitsRef.current += damageCount
+          setHealth(healthRef.current)
+          setPlayerHits(playerHitsRef.current)
         }
+      }
 
-        return oldTime - 1
-      })
-    }, 1000)
+      if (countdownElapsed >= 1000) {
+        const secondsToSubtract = Math.floor(countdownElapsed / 1000)
+        countdownElapsed %= 1000
 
-    return () => {
-      clearInterval(timer)
-    }
-  }, [gameStarted, gameOver])
+        timeRef.current = Math.max(0, timeRef.current - secondsToSubtract)
+        setTime(timeRef.current)
+      }
+    }, 30)
+
+    return () => clearInterval(gameTimer)
+  }, [gameStarted, gameRunId])
 
   // SEND COMPLETED GAME DATA TO FLASK
   useEffect(() => {
-    if (!gameOver || dataSentRef.current) {
-      return
-    }
+    if (!gameOver || dataSentRef.current) return
 
-    // Prevent duplicate submissions
     dataSentRef.current = true
 
-    const accuracy =
-      bulletsFired > 0
-        ? Math.round((enemiesDefeated / bulletsFired) * 100)
-        : 0
+    const finalScore = scoreRef.current
+    const finalKills = enemiesDefeatedRef.current
+    const finalHits = playerHitsRef.current
+    const finalBullets = bulletsFiredRef.current
+    const finalTime = timeRef.current
+    const finalDifficulty = difficultyRef.current
+
+    const accuracy = finalBullets > 0
+      ? Math.round((finalKills / finalBullets) * 100)
+      : 0
+
+    const samples = [...reactionSamplesRef.current]
+
+    const reactionTime = samples.length > 0
+      ? Number((
+          samples.reduce((total, value) => total + value, 0) / samples.length
+        ).toFixed(3))
+      : null
 
     const gameData = {
-      score: score,
-      accuracy: accuracy,
-      kills: enemiesDefeated,
-      deaths: playerHits,
-
-      // FIRST-SHOT REACTION TIME IN SECONDS
-      // null means the player did not fire any shot
+      score: finalScore,
+      accuracy,
+      kills: finalKills,
+      deaths: finalHits,
       reaction_time: reactionTime,
-
-      survival_time: 60 - time,
-      damage_received: playerHits,
-      difficulty: difficulty,
-      skill_level:
-        enemiesDefeated >= 10
-          ? 'Advanced'
-          : enemiesDefeated >= 5
+      reaction_times: samples,
+      survival_time: 60 - finalTime,
+      damage_received: finalHits,
+      difficulty: finalDifficulty,
+      skill_level: finalKills >= 10
+        ? 'Advanced'
+        : finalKills >= 5
           ? 'Intermediate'
           : 'Beginner'
     }
 
-    console.log('🎮 GAME DATA BEING SENT TO BACKEND')
+    console.log('FINAL GAME DATA')
     console.table(gameData)
+    console.log('CONFIRMED REACTION SAMPLES:', samples.length, samples)
 
-    fetch('http://127.0.0.1:5000/api/session', {
+    fetch(`${window.location.origin}/api/session`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(gameData)
     })
       .then(async (response) => {
-        const data = await response.json()
+        let data = {}
+
+        try {
+          data = await response.json()
+        } catch (error) {
+          throw new Error('Invalid response from Flask server')
+        }
 
         if (!response.ok) {
           throw new Error(
-            data.error || 'Server returned an error'
+            data.error ||
+            data.message ||
+            `Server returned HTTP ${response.status}`
           )
         }
 
         return data
       })
       .then((data) => {
-        console.log('✅ GAME DATA SAVED SUCCESSFULLY')
-        console.log(data)
+        console.log('GAME DATA SAVED SUCCESSFULLY')
+        console.log('SAVED REACTION TIME:', reactionTime)
+        console.log('SAVED GAME SESSION:', data)
       })
       .catch((error) => {
-        console.error('❌ FAILED TO SEND GAME DATA')
+        console.error('FAILED TO SEND GAME DATA')
         console.error(error)
 
-        // Allow another attempt if the server was unavailable
         dataSentRef.current = false
       })
-  }, [
-    gameOver,
-    score,
-    bulletsFired,
-    enemiesDefeated,
-    playerHits,
-    time,
-    difficulty,
-    reactionTime
-  ])
-
-  const isColliding = (bullet, enemy) => {
-    return (
-      bullet.x < enemy.x + 40 &&
-      bullet.x + 5 > enemy.x &&
-      bullet.y < enemy.y + 40 &&
-      bullet.y + 15 > enemy.y
-    )
-  }
-
-  const isPlayerHit = (playerX, playerY, enemy) => {
-    return (
-      playerX < enemy.x + 40 &&
-      playerX + 40 > enemy.x &&
-      playerY < enemy.y + 40 &&
-      playerY + 40 > enemy.y
-    )
-  }
+  }, [gameOver])
 
   const restartGame = () => {
     startGame()
   }
 
-  const accuracy =
-    bulletsFired > 0
-      ? Math.round((enemiesDefeated / bulletsFired) * 100)
-      : 0
+  const accuracy = bulletsFired > 0
+    ? Math.round((enemiesDefeated / bulletsFired) * 100)
+    : 0
 
   if (!gameStarted) {
     return (
@@ -445,7 +527,9 @@ function App() {
 
             <div className="difficulty-buttons">
               <button
-                className={difficulty === 'Easy' ? 'active easy' : 'easy'}
+                className={
+                  difficulty === 'Easy' ? 'active easy' : 'easy'
+                }
                 onClick={() => changeDifficulty('Easy')}
               >
                 <span>●</span>
@@ -465,7 +549,9 @@ function App() {
               </button>
 
               <button
-                className={difficulty === 'Hard' ? 'active hard' : 'hard'}
+                className={
+                  difficulty === 'Hard' ? 'active hard' : 'hard'
+                }
                 onClick={() => changeDifficulty('Hard')}
               >
                 <span>●</span>
@@ -483,7 +569,9 @@ function App() {
             <div className="mission-header">
               <span className="mission-status-dot"></span>
               <h2>MISSION BRIEFING</h2>
-              <span className="mission-tag">OPERATION: SURVIVAL</span>
+              <span className="mission-tag">
+                OPERATION: SURVIVAL
+              </span>
             </div>
 
             <div className="mission-instruction">
@@ -510,7 +598,9 @@ function App() {
               <span className="mission-detail">
                 Protect your health and defeat enemies
               </span>
-              <span className="mission-objective">OBJECTIVE</span>
+              <span className="mission-objective">
+                OBJECTIVE
+              </span>
             </div>
           </div>
         </div>
@@ -583,7 +673,9 @@ function App() {
 
         <div className="difficulty-buttons">
           <button
-            className={difficulty === 'Easy' ? 'active easy' : 'easy'}
+            className={
+              difficulty === 'Easy' ? 'active easy' : 'easy'
+            }
             onClick={() => changeDifficulty('Easy')}
           >
             <span>●</span>
@@ -603,7 +695,9 @@ function App() {
           </button>
 
           <button
-            className={difficulty === 'Hard' ? 'active hard' : 'hard'}
+            className={
+              difficulty === 'Hard' ? 'active hard' : 'hard'
+            }
             onClick={() => changeDifficulty('Hard')}
           >
             <span>●</span>
@@ -642,9 +736,9 @@ function App() {
             <div className="player-direction"></div>
           </div>
 
-          {bullets.map((bullet, index) => (
+          {bullets.map((bullet) => (
             <div
-              key={index}
+              key={bullet.id}
               className="bullet"
               style={{
                 left: `${bullet.x}px`,
@@ -657,7 +751,7 @@ function App() {
 
           {enemies.map((enemy, index) => (
             <div
-              key={index}
+              key={enemy.id}
               className={`enemy enemy-${index + 1}`}
               style={{
                 left: `${enemy.x}px`,
@@ -730,7 +824,6 @@ function App() {
                   ↻ PLAY AGAIN
                 </button>
 
-                {/* HOME AND DASHBOARD NAVIGATION */}
                 <div
                   style={{
                     display: 'flex',
@@ -771,7 +864,8 @@ function App() {
                       alignItems: 'center',
                       padding: '12px 16px',
                       color: '#ffffff',
-                      background: 'linear-gradient(135deg, #1677ff, #9b5cff)',
+                      background:
+                        'linear-gradient(135deg, #1677ff, #9b5cff)',
                       border: '1px solid #1677ff',
                       borderRadius: '8px',
                       textDecoration: 'none',
@@ -785,7 +879,6 @@ function App() {
                     📊 VIEW DASHBOARD
                   </a>
                 </div>
-                {/* END HOME AND DASHBOARD NAVIGATION */}
               </div>
             </div>
           )}

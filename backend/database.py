@@ -1,4 +1,3 @@
-
 import sqlite3
 import os
 from datetime import datetime
@@ -21,6 +20,7 @@ def get_connection():
 
     connection = sqlite3.connect(DATABASE)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys = ON")
 
     return connection
 
@@ -34,80 +34,141 @@ def create_tables():
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS players (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            player_id TEXT UNIQUE NOT NULL,
-            player_name TEXT
-        )
-    """)
-
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS sessions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            player_id TEXT NOT NULL,
-            score REAL DEFAULT 0,
-            accuracy REAL DEFAULT 0,
-            kills INTEGER DEFAULT 0,
-            deaths INTEGER DEFAULT 0,
-            reaction_time REAL DEFAULT 0,
-            average_enemy_speed REAL DEFAULT 0,
-            survival_time REAL DEFAULT 0,
-            damage_received REAL DEFAULT 0,
-            difficulty TEXT DEFAULT 'Medium',
-            skill_level TEXT DEFAULT 'Beginner',
-            created_at TEXT NOT NULL,
-            FOREIGN KEY (player_id) REFERENCES players(player_id)
-        )
-    """)
-
-    # Add missing columns to existing databases.
-    # Existing records are preserved.
-
-    cursor.execute("PRAGMA table_info(sessions)")
-
-    existing_columns = {
-        row["name"] for row in cursor.fetchall()
-    }
-
-    new_columns = {
-        "average_enemy_speed": "REAL DEFAULT 0",
-        "ai_recommendation": "TEXT DEFAULT ''",
-        "recommended_difficulty": "TEXT DEFAULT ''",
-        "predicted_skill_level": "TEXT DEFAULT ''",
-        "ml_performance_score": "REAL DEFAULT 0",
-        "kd_ratio": "REAL DEFAULT 0"
-    }
-
-    for column_name, column_type in new_columns.items():
-
-        if column_name not in existing_columns:
-
-            cursor.execute(
-                f"ALTER TABLE sessions ADD COLUMN "
-                f"{column_name} {column_type}"
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS players (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                player_id TEXT UNIQUE NOT NULL,
+                player_name TEXT,
+                email TEXT,
+                password_hash TEXT
             )
+        """)
 
-    cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_sessions_player
-        ON sessions(player_id)
-    """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                player_id TEXT NOT NULL,
+                score REAL DEFAULT 0,
+                accuracy REAL DEFAULT 0,
+                kills INTEGER DEFAULT 0,
+                deaths INTEGER DEFAULT 0,
+                reaction_time REAL DEFAULT 0,
+                average_enemy_speed REAL DEFAULT 0,
+                survival_time REAL DEFAULT 0,
+                damage_received REAL DEFAULT 0,
+                difficulty TEXT DEFAULT 'Medium',
+                skill_level TEXT DEFAULT 'Beginner',
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (player_id) REFERENCES players(player_id)
+            )
+        """)
 
-    connection.commit()
-    connection.close()
+        # -------------------------------------------------
+        # MIGRATE EXISTING PLAYERS TABLE
+        # -------------------------------------------------
+
+        cursor.execute("PRAGMA table_info(players)")
+
+        existing_player_columns = {
+            row["name"] for row in cursor.fetchall()
+        }
+
+        player_columns = {
+            "email": "TEXT",
+            "password_hash": "TEXT"
+        }
+
+        for column_name, column_type in player_columns.items():
+
+            if column_name not in existing_player_columns:
+                cursor.execute(
+                    f"ALTER TABLE players ADD COLUMN "
+                    f"{column_name} {column_type}"
+                )
+
+        # Unique email index. Multiple NULL values are allowed
+        # for existing accounts that have not been upgraded.
+        cursor.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_players_email
+            ON players(email COLLATE NOCASE)
+            WHERE email IS NOT NULL
+        """)
+
+        # -------------------------------------------------
+        # MIGRATE EXISTING SESSIONS TABLE
+        # -------------------------------------------------
+
+        cursor.execute("PRAGMA table_info(sessions)")
+
+        existing_session_columns = {
+            row["name"] for row in cursor.fetchall()
+        }
+
+        new_columns = {
+            "average_enemy_speed": "REAL DEFAULT 0",
+            "ai_recommendation": "TEXT DEFAULT ''",
+            "recommended_difficulty": "TEXT DEFAULT ''",
+            "predicted_skill_level": "TEXT DEFAULT ''",
+            "ml_performance_score": "REAL DEFAULT 0",
+            "kd_ratio": "REAL DEFAULT 0"
+        }
+
+        for column_name, column_type in new_columns.items():
+
+            if column_name not in existing_session_columns:
+                cursor.execute(
+                    f"ALTER TABLE sessions ADD COLUMN "
+                    f"{column_name} {column_type}"
+                )
+
+        cursor.execute("""
+            CREATE INDEX IF NOT EXISTS idx_sessions_player
+            ON sessions(player_id)
+        """)
+
+        connection.commit()
+
+        print("\nDATABASE READY")
+        print(f"Database location: {DATABASE}")
+        print("Player email/password columns verified.")
+        print("Existing gameplay sessions preserved.\n")
+
+    except Exception:
+        connection.rollback()
+        raise
+
+    finally:
+        connection.close()
 
 
 # =========================================================
 # REGISTER PLAYER
 # =========================================================
 
-def register_player(player_name):
+def register_player(player_name, email, password_hash):
 
     connection = get_connection()
     cursor = connection.cursor()
 
     try:
+        player_name = str(player_name).strip()
+        email = str(email).strip().lower()
 
+        if not player_name or not email or not password_hash:
+            return None
+
+        # Check whether email already exists.
+        cursor.execute("""
+            SELECT player_id
+            FROM players
+            WHERE email = ? COLLATE NOCASE
+        """, (email,))
+
+        if cursor.fetchone():
+            return None
+
+        # Generate the next available player ID.
         cursor.execute("""
             SELECT player_id
             FROM players
@@ -118,14 +179,12 @@ def register_player(player_name):
         last_player = cursor.fetchone()
 
         if last_player:
-
             last_id = last_player["player_id"]
 
             try:
                 number = int(last_id.replace("P", "")) + 1
             except (ValueError, AttributeError):
                 number = 1
-
         else:
             number = 1
 
@@ -146,21 +205,70 @@ def register_player(player_name):
             player_id = f"P{number:03d}"
 
         cursor.execute("""
-            INSERT INTO players (player_id, player_name)
-            VALUES (?, ?)
-        """, (player_id, player_name))
+            INSERT INTO players (
+                player_id,
+                player_name,
+                email,
+                password_hash
+            )
+            VALUES (?, ?, ?, ?)
+        """, (
+            player_id,
+            player_name,
+            email,
+            password_hash
+        ))
 
         connection.commit()
 
+        print(
+            f"\nPLAYER REGISTERED | "
+            f"ID: {player_id} | "
+            f"Name: {player_name} | "
+            f"Email: {email}"
+        )
+
         return {
             "player_id": player_id,
-            "player_name": player_name
+            "player_name": player_name,
+            "email": email
         }
 
     except sqlite3.IntegrityError:
-
         connection.rollback()
         return None
+
+    except Exception:
+        connection.rollback()
+        raise
+
+    finally:
+        connection.close()
+
+
+# =========================================================
+# GET PLAYER BY EMAIL - USED FOR LOGIN
+# =========================================================
+
+def get_player_by_email(email):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT
+                player_id,
+                player_name,
+                email,
+                password_hash
+            FROM players
+            WHERE email = ? COLLATE NOCASE
+        """, (str(email).strip().lower(),))
+
+        row = cursor.fetchone()
+
+        return dict(row) if row else None
 
     finally:
         connection.close()
@@ -175,26 +283,30 @@ def get_players():
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
-        SELECT
-            p.player_id,
-            p.player_name,
-            COUNT(s.id) AS total_games,
-            COALESCE(MAX(s.score), 0) AS highest_score
-        FROM players p
-        LEFT JOIN sessions s
-            ON p.player_id = s.player_id
-        GROUP BY p.player_id, p.player_name
-        ORDER BY p.id ASC
-    """)
+    try:
+        cursor.execute("""
+            SELECT
+                p.player_id,
+                p.player_name,
+                p.email,
+                COUNT(s.id) AS total_games,
+                COALESCE(MAX(s.score), 0) AS highest_score
+            FROM players p
+            LEFT JOIN sessions s
+                ON p.player_id = s.player_id
+            GROUP BY
+                p.player_id,
+                p.player_name,
+                p.email
+            ORDER BY p.id ASC
+        """)
 
-    players = [
-        dict(row) for row in cursor.fetchall()
-    ]
+        return [
+            dict(row) for row in cursor.fetchall()
+        ]
 
-    connection.close()
-
-    return players
+    finally:
+        connection.close()
 
 
 # =========================================================
@@ -206,17 +318,22 @@ def get_player(player_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
-        SELECT *
-        FROM players
-        WHERE player_id = ?
-    """, (player_id,))
+    try:
+        cursor.execute("""
+            SELECT
+                player_id,
+                player_name,
+                email
+            FROM players
+            WHERE player_id = ?
+        """, (player_id,))
 
-    row = cursor.fetchone()
+        row = cursor.fetchone()
 
-    connection.close()
+        return dict(row) if row else None
 
-    return dict(row) if row else None
+    finally:
+        connection.close()
 
 
 # =========================================================
@@ -229,7 +346,6 @@ def save_session(data):
     cursor = connection.cursor()
 
     try:
-
         player_id = data.get("player_id")
 
         if not player_id:
@@ -242,7 +358,6 @@ def save_session(data):
         """, (player_id,))
 
         if cursor.fetchone() is None:
-
             raise ValueError(
                 f"Player {player_id} is not registered."
             )
@@ -297,7 +412,8 @@ def save_session(data):
         connection.commit()
 
         print(
-            f"GAME DATA SAVED | Player: {player_id} | "
+            f"GAME DATA SAVED | "
+            f"Player: {player_id} | "
             f"Session: {session_id} | "
             f"Score: {data.get('score', 0)}"
         )
@@ -305,7 +421,6 @@ def save_session(data):
         return session_id
 
     except Exception:
-
         connection.rollback()
         raise
 
@@ -322,19 +437,19 @@ def get_sessions():
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
-        SELECT *
-        FROM sessions
-        ORDER BY id DESC
-    """)
+    try:
+        cursor.execute("""
+            SELECT *
+            FROM sessions
+            ORDER BY id DESC
+        """)
 
-    sessions = [
-        dict(row) for row in cursor.fetchall()
-    ]
+        return [
+            dict(row) for row in cursor.fetchall()
+        ]
 
-    connection.close()
-
-    return sessions
+    finally:
+        connection.close()
 
 
 # =========================================================
@@ -346,17 +461,17 @@ def get_player_sessions(player_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
-        SELECT *
-        FROM sessions
-        WHERE player_id = ?
-        ORDER BY id DESC
-    """, (player_id,))
+    try:
+        cursor.execute("""
+            SELECT *
+            FROM sessions
+            WHERE player_id = ?
+            ORDER BY id DESC
+        """, (player_id,))
 
-    sessions = [
-        dict(row) for row in cursor.fetchall()
-    ]
+        return [
+            dict(row) for row in cursor.fetchall()
+        ]
 
-    connection.close()
-
-    return sessions
+    finally:
+        connection.close()
